@@ -144,11 +144,11 @@ model Workspace {
 model File {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  url        String
+  url        String   @unique
   type       String
   size       Int
-  metadata   Json
   mime_type  String
+  metadata   Json?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
