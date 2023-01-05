@@ -23,9 +23,9 @@ model Interaction {
   publication_id String
   // Publication    Publication @relation(fields: [publication_id], references: [id])
   page_id        String
-  Page           Page     @relation(fields: [page_id], references: [id])
+  // Page           Page     @relation(fields: [page_id], references: [id])
   user_id        String
-  User           User     @relation(fields: [user_id], references: [id])
+  // User           User     @relation(fields: [user_id], references: [id])
 
   @@map("interactions2")
 }
@@ -69,27 +69,27 @@ model Template {
 }
 
 model User {
-  id                             String      @id @default(auto()) @map("_id") @db.ObjectId
-  email                          String      @unique
-  password                       String
+  id                             String    @id @default(auto()) @map("_id") @db.ObjectId
+  email                          String?   @unique
+  password                       String?
+  type                           String    @default("visitant")
+  email_verified                 Boolean   @default(false)
+  password_reset_token_attempts  Int       @default(0)
   name                           String?
   avatar_url                     String?
-  type                           String
   stripe_customer_id             String?
-  email_verified                 Boolean     @default(false)
   email_activation_token         String?
   email_activation_token_expires DateTime?
   password_reset_token           String?
   password_reset_token_expires   DateTime?
-  password_reset_token_attempts  Int         @default(0)
   last_login                     DateTime?
-  tokens                         UserToken[]
+  // tokens                         UserToken[]
 
-  Workspace    Workspace?    @relation(fields: [workspace_id], references: [id])
-  workspace_id String?       @db.ObjectId
-  Interaction  Interaction[]
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
+  // Workspace    Workspace?    @relation(fields: [workspace_id], references: [id])
+  workspace_id String?  @db.ObjectId
+  // Interaction Interaction[]
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   @@map("users2")
 }
@@ -99,7 +99,7 @@ model UserToken {
   token         String   @unique
   refresh_token String?
   expires_at    DateTime
-  User          User?    @relation(fields: [user_id], references: [id])
+  // User          User?    @relation(fields: [user_id], references: [id])
   user_id       String?  @db.ObjectId
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
@@ -108,22 +108,24 @@ model UserToken {
 }
 
 model Page {
-  id                  String        @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
   name                String
-  url                 String        @unique
+  url                 String  @unique
   avatar_url          String?
   background_url      String?
-  is_stripe_active    Boolean       @default(false)
+  is_stripe_active    Boolean @default(false)
   stripe_id           String?
   facebook_pixel_id   String?
   google_analytics_id String?
   // templates           Template[]
-  Workspace           Workspace?    @relation(fields: [workspace_id], references: [id])
-  workspace_id        String?       @db.ObjectId
-  Interaction         Interaction[]
-  created_at          DateTime      @default(now())
-  updated_at          DateTime      @updatedAt
+
+  // Interaction Interaction[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   // Publication         Publication[]
+
+  // Workspace           Workspace?    @relation(fields: [workspace_id], references: [id])
+  workspace_id String? @db.ObjectId
 
   @@map("pages2")
 }
@@ -133,8 +135,8 @@ model Workspace {
   name       String
   avatar_url String?
   services   Json[]
-  users      User[]
-  Page       Page[]
+  // users      User[]
+  // Page       Page[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
