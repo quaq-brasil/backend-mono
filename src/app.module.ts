@@ -4,9 +4,10 @@ import { TemplateModule } from './template/template.module';
 import { FileModule } from './file/file.module';
 import { UserModule } from './user/user.module';
 import { PageModule } from './page/page.module';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 @Module({
-  imports: [PublicationModule, TemplateModule, FileModule, UserModule, PageModule],
+  imports: [PublicationModule, TemplateModule, FileModule, UserModule, PageModule, WorkspaceModule],
   controllers: [],
   providers: [],
 })

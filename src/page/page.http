@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
     "name": "page 1",
-    "url": "url/url1",
+    "url": "url/url12",
     "workspace_id": "63b34032485edc50f1bdfa72",
     "avatar_url": "url/url",
     "background_url": "url/url"
@@ -40,12 +40,12 @@ GET http://localhost:3000/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PATCH http://localhost:3000/page/63b75045a43fc9f320321e9f
+PATCH http://localhost:3000/page/63b754987d02f98b8692255e
 Content-Type: application/json
 
 {
-    "name": "page 1",
-    "url": "url21",
+    "name": "page 12",
+    "url": "url221",
     "workspace_id": "63b34032485edc50f1bdfa72",
     "avatar_url": "url/url1",
     "background_url": "url/url",
