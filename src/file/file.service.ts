@@ -22,7 +22,6 @@ export class FileService {
   }
 
   findOneByUrl(url: string) {
-    console.log('url', url);
     return this.prismaService.file.findMany({
       where: {
         url,
