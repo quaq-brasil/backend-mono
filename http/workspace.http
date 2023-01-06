@@ -1,0 +1,45 @@
+# find one
+
+GET https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
+
+###
+
+# create one
+
+POST https://bff.quaq.com.br/workspace
+Content-Type: application/json
+
+{
+  "name": "My Workspace",
+  "avatar_url": "http://example.com/avatar.png",
+  "services": [
+    {
+      "name": "My Service",
+      "description": "My Service Description"
+    }
+  ]
+}
+
+###
+
+# update one
+
+PATCH  https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
+Content-Type: application/json
+
+{
+  "name": "My Workspace2",
+  "avatar_url": "http://example.com/avatar2.png",
+  "services": [
+    {
+      "name": "My Service2",
+      "description": "My Service Description"
+    }
+  ]
+}
+
+###
+
+# delete one
+
+DELETE https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d

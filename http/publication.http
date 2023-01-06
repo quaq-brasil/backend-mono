@@ -1,0 +1,47 @@
+# get publication
+
+GET https://bff.quaq.com.br/publication/63ae052efbbce66bbc152487
+
+###
+
+# create publication
+
+POST https://bff.quaq.com.br/publication
+Content-Type: application/json
+
+{
+    "title": "title",
+    "blocks": {},
+    "template_id": "1",
+    "page_id": "1"
+}
+
+###
+
+# get many publication by template id
+
+GET https://bff.quaq.com.br/publication/template/1
+
+###
+
+# get many publication by page id
+
+GET https://bff.quaq.com.br/publication/page/1
+
+###
+
+# update publication
+
+PUT https://bff.quaq.com.br/publication/63920eab9b5c95524c8205ed
+Content-Type: application/json
+
+{
+    "title": "title1",
+    "blocks": {
+        "1": {
+            "id": "1",
+            "type": "type",
+            "content": "content"
+        }
+    }
+}

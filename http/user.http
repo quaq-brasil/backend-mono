@@ -1,0 +1,57 @@
+# find one
+
+GET https://bff.quaq.com.br/user/63b6ed226e2cf11afe9f163c
+
+###
+
+# create one
+
+POST https://bff.quaq.com.br/user
+Content-Type: application/json
+
+{
+
+
+}
+
+###
+
+# update one
+
+PATCH https://bff.quaq.com.br/user/63b6eb776e2cf11afe9f163a
+Content-Type: application/json
+
+{
+    "email": "email",
+    "password": "password",
+    "type": "registered",
+    "email_verified": true,
+    "password_reset_token_attempts": 5,
+    "name": "string",
+    "avatar_url": "string",
+    "stripe_customer_id": "string",
+    "email_activation_token": "string",
+    "password_reset_token": "string",
+    "email_activation_token_expires": "2018-01-01T00:00:00.000Z",
+    "password_reset_token_expires": "2018-01-01T00:00:00.000Z",
+    "last_login": "2018-01-01T00:00:00.000Z"
+}
+
+
+###
+
+# delete one
+
+DELETE https://bff.quaq.com.br/user/63b6ed226e2cf11afe9f163c
+
+###
+
+# login
+
+POST https://bff.quaq.com.br/user/login
+Content-Type: application/json
+
+{
+    "email": "email",
+    "password": "password"
+}

@@ -1,0 +1,63 @@
+# find one
+
+GET https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
+
+
+###
+
+# create one
+
+POST https://bff.quaq.com.br/page
+Content-Type: application/json
+
+{
+    "name": "page 1",
+    "url": "url/url12",
+    "workspace_id": "63b34032485edc50f1bdfa72",
+    "avatar_url": "url/url",
+    "background_url": "url/url"
+}
+
+###
+
+# find all
+
+GET https://bff.quaq.com.br/page
+
+###
+
+# find one by url
+
+GET https://bff.quaq.com.br/page/url/url21
+
+###
+
+# find all by workspace
+
+GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
+
+###
+
+# update one
+
+PATCH https://bff.quaq.com.br/page/63b754987d02f98b8692255e
+Content-Type: application/json
+
+{
+    "name": "page 12",
+    "url": "url221",
+    "workspace_id": "63b34032485edc50f1bdfa72",
+    "avatar_url": "url/url1",
+    "background_url": "url/url",
+    "is_stripe_active": true,
+    "facebook_pixel_id": "123456789",
+    "google_analytics_id": "123456789"
+}
+
+###
+
+# delete one
+
+DELETE https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
+
+

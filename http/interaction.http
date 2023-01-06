@@ -1,0 +1,70 @@
+# find one
+
+GET https://bff.quaq.com.br/interaction/1
+
+###
+
+# create one
+POST https://bff.quaq.com.br/interaction
+Content-Type: application/json
+
+{
+    "blocks": [
+        {
+            "type": "text",
+            "text": "Hello world"
+        }
+    ],
+    "data": ["some data"],
+    "events": [
+        {
+            "type": "text",
+            "text": "Hello world"
+        }
+    ],
+    "metadata": {
+        "some": "data"
+    },
+    "last_block_id": "some block id",
+    "depth": 1,
+    "locations": [
+        {
+            "type": "text",
+            "text": "Hello world"
+        }
+    ],
+    "template_id": "63b75045a43fc9f320321e9f",
+    "publication_id": "63b75045a43fc9f320321e9f",
+    "page_id": "63b75045a43fc9f320321e9f",
+    "user_id": "63b75045a43fc9f320321e9f"
+}
+
+###
+
+# find one by user id
+GET https://bff.quaq.com.br/interaction/user/63b75045a43fc9f320321e9f
+
+###
+
+# find one by page id
+GET https://bff.quaq.com.br/interaction/page/63b75045a43fc9f320321e9f
+
+
+###
+
+# find one by publication id
+GET https://bff.quaq.com.br/interaction/publication/63b75045a43fc9f320321e9f
+
+###
+
+PATCH https://bff.quaq.com.br/interaction/63b758b9aca8210f48db934b
+Content-Type: application/json
+
+{
+    "blocks": [
+        {
+            "type": "text2",
+            "text": "Hello world2"
+        }
+    ]
+}

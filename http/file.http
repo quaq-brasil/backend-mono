@@ -1,0 +1,51 @@
+# find one
+
+GET https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+
+###
+
+# create one
+
+POST https://bff.quaq.com.br/file
+Content-Type: application/json
+
+{
+    "name": "test",
+    "url": "1",
+    "type": "image",
+    "size": 1000,
+    "mime_type": "image/jpeg",
+    "metadata": {
+        "key": "value"
+    }
+}
+
+###
+
+# find one by url
+
+GET https://bff.quaq.com.br/file/url/1
+
+###
+
+# update one
+
+PATCH https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+Content-Type: application/json
+
+{
+    "name": "test2",
+    "url": "2",
+    "type": "image2",
+    "size": 2000,
+    "mime_type": "image/png",
+    "metadata": {
+        "key": "value2"
+    }
+}
+
+###
+
+# delete one
+
+DELETE https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72

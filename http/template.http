@@ -1,0 +1,55 @@
+# get template
+
+GET https://bff.quaq.com.br/template/63ae050ffbbce66bbc152486
+
+###
+
+POST https://bff.quaq.com.br/template
+Content-Type: application/json
+
+{
+    "name": "name",
+    "url": "url",
+    "shortcut_image": "shortcutImage",
+    "shortcut_size": "shortcutSize",
+    "current_publication_id": "1",
+    "number_of_new_interactions": 1,
+    "facebook_pixel_id": "1",
+    "page_id": "1"
+}
+
+###
+
+# get template by url
+
+GET https://bff.quaq.com.br/template/url/url
+
+###
+
+# get many template by page id
+
+GET https://bff.quaq.com.br/template/page/1
+
+###
+
+PUT https://bff.quaq.com.br/template/180faab0-4854-4aec-b921-0b26c30d6256
+Content-Type: application/json
+
+{
+    "title": "title",
+    "url": "url",
+    "shortcutImage": "shortcutImage",
+    "shortcutSize": "shortcutSize",
+    "numberOfNewInteractions": 1,
+    "publication_id": "1",
+    "id_facebook_pixel": "1"
+}
+
+###
+
+# delete one template
+
+DELETE https://bff.quaq.com.br/template/1ead50e3-c81b-4a64-87da-a1ff0f2e6b54
+
+###
+
