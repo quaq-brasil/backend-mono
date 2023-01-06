@@ -1,9 +1,6 @@
 {
   "regions": ["gru1"],
   "version": 2,
-  "env": {
-    "DATABASE_URL": "@DATABASE_URL"
-  },
   "builds": [
     {
       "src": "src/main.ts",
