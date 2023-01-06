@@ -1,6 +1,9 @@
 {
   "regions": ["gru1"],
   "version": 2,
+  "env": {
+    "MONGO_URI": "@DATABASE_URL"
+  },
   "builds": [
     {
       "src": "src/main.ts",

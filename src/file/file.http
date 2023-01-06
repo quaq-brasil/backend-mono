@@ -1,6 +1,6 @@
 # find one
 
-GET http://localhost:3000/file/63b34032485edc50f1bdfa72
+GET https://backend-mono-5iqbtergc-danrigoni.vercel.app/file/63b34032485edc50f1bdfa72
 
 ###
 
