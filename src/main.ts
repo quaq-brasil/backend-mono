@@ -9,14 +9,8 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
 
   app.enableCors({
-    origin: [
-      'http://localhost:3000/',
-      'http://localhost:3000',
-      'http://localhost:3000/pt',
-      'http://localhost:3000/en',
-    ],
-    allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
+    allowedHeaders: '*',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
