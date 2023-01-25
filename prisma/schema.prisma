@@ -52,7 +52,7 @@ model Template {
   url                        String
   shortcut_image             String
   shortcut_size              String
-  current_publication_id     String
+  current_publication_id     String        @db.ObjectId
   number_of_new_interactions Int           @default(0)
   page_id                    String        @db.ObjectId
   facebook_pixel_id          String?

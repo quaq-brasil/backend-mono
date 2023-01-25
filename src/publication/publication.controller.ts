@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CreatePublicationRequest } from './dto/create-publication-request';
 import { UpdatePublicationRequest } from './dto/update-publication-request';
 import { PublicationService } from './publication.service';
@@ -17,7 +17,7 @@ export class PublicationController {
     return this.publicationService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updatePublicationDto: UpdatePublicationRequest,

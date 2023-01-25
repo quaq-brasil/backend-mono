@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
@@ -35,7 +35,7 @@ export class TemplateController {
     return this.templateService.findManyByPageId(page_id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateTemplateDto: UpdateTemplateRequest,

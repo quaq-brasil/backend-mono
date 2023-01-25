@@ -57,7 +57,7 @@ GET http://localhost:3000/interaction/publication/63b75045a43fc9f320321e9f
 
 ###
 
-PATCH http://localhost:3000/interaction/63b758b9aca8210f48db934b
+PUT http://localhost:3000/interaction/63b758b9aca8210f48db934b
 Content-Type: application/json
 
 {

@@ -40,7 +40,7 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PATCH https://bff.quaq.com.br/page/63b754987d02f98b8692255e
+PUT https://bff.quaq.com.br/page/63b754987d02f98b8692255e
 Content-Type: application/json
 
 {

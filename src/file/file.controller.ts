@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -30,7 +30,7 @@ export class FileController {
     return this.fileService.findOneByUrl(url);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
     return this.fileService.updateOne(id, updateFileDto);
   }

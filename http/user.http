@@ -18,7 +18,7 @@ Content-Type: application/json
 
 # update one
 
-PATCH https://bff.quaq.com.br/user/63b6eb776e2cf11afe9f163a
+PUT https://bff.quaq.com.br/user/63b6eb776e2cf11afe9f163a
 Content-Type: application/json
 
 {

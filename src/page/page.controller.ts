@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CreatePageDto } from './dto/create-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
@@ -40,7 +40,7 @@ export class PageController {
     return this.pageService.findAllByWorkspaceId(workspace_id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updatePageDto: UpdatePageDto) {
     return this.pageService.update(id, updatePageDto);
   }

@@ -57,7 +57,7 @@ GET https://bff.quaq.com.br/interaction/publication/63b75045a43fc9f320321e9f
 
 ###
 
-PATCH https://bff.quaq.com.br/interaction/63b758b9aca8210f48db934b
+PUT https://bff.quaq.com.br/interaction/63b758b9aca8210f48db934b
 Content-Type: application/json
 
 {

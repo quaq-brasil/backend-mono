@@ -30,7 +30,7 @@ GET https://bff.quaq.com.br/file/url/1
 
 # update one
 
-PATCH https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+PUT https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
 Content-Type: application/json
 
 {
