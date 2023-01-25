@@ -15,6 +15,10 @@ async function bootstrap() {
       'http://localhost:3000/pt',
       'http://localhost:3000/en',
     ],
+    allowedHeaders:
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
   });
 
   await app.listen(3000);
