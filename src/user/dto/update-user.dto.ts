@@ -3,8 +3,7 @@ import {
   IsEmail,
   IsNumber,
   IsOptional,
-  IsString,
-  IsStrongPassword,
+  IsString
 } from 'class-validator';
 
 export class UpdateUserDto {
@@ -13,7 +12,6 @@ export class UpdateUserDto {
   email: string;
 
   @IsOptional()
-  @IsStrongPassword()
   password: string;
 
   @IsOptional()
