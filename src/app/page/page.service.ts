@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePageDto } from './dto/create-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
@@ -9,7 +9,7 @@ export class PageService {
 
   async create(createPageDto: CreatePageDto) {
     if (await this.checkIfUrlAlreadyUsed(createPageDto.url)) {
-      throw new Error('Url already used');
+      throw new ConflictException('Url already used');
     }
 
     return this.prismaService.page.create({

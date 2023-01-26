@@ -1,6 +1,6 @@
 # find one
 
-GET https://bff.quaq.com.br/user/63b6ed226e2cf11afe9f163c
+GET http://localhost:3000/api/v1/users/63b6eb776e2cf11afe9f163a
 
 ###
 
@@ -18,12 +18,12 @@ Content-Type: application/json
 
 # update one
 
-PUT https://bff.quaq.com.br/user/63b6eb776e2cf11afe9f163a
+PUT https://bff.quaq.com.br/user/63d2d14b899934098c70fee0
 Content-Type: application/json
 
 {
-    "email": "email",
-    "password": "password",
+    "email": "icarlosrigoni@gmail.com",
+    "password": "1234578",
     "type": "registered",
     "email_verified": true,
     "password_reset_token_attempts": 5,
@@ -43,15 +43,3 @@ Content-Type: application/json
 # delete one
 
 DELETE https://bff.quaq.com.br/user/63b6ed226e2cf11afe9f163c
-
-###
-
-# login
-
-POST https://bff.quaq.com.br/user/login
-Content-Type: application/json
-
-{
-    "email": "email",
-    "password": "password"
-}

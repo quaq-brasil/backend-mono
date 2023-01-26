@@ -1,6 +1,6 @@
 # find one
 
-GET https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+GET http://localhost:3000/file/63d2b1a166402037076c063d
 
 ###
 

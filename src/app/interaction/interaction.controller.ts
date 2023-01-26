@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { CreateInteractionDto } from './dto/create-interaction.dto';
 import { UpdateInteractionDto } from './dto/update-interaction.dto';
 import { InteractionService } from './interaction.service';
 
-@Controller('interaction')
+@Controller('api/v1/interactions')
 export class InteractionController {
   constructor(private readonly interactionService: InteractionService) {}
 
@@ -13,7 +14,7 @@ export class InteractionController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.interactionService.findOne(id);
   }
 
@@ -34,7 +35,7 @@ export class InteractionController {
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseObjectIdPipe) id: string,
     @Body() updateInteractionDto: UpdateInteractionDto,
   ) {
     return this.interactionService.update(id, updateInteractionDto);

@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { CreatePublicationRequest } from './dto/create-publication-request';
 import { UpdatePublicationRequest } from './dto/update-publication-request';
 import { PublicationService } from './publication.service';
 
-@Controller('publication')
+@Controller('api/v1/publications')
 export class PublicationController {
   constructor(private readonly publicationService: PublicationService) {}
 
@@ -13,13 +14,13 @@ export class PublicationController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.publicationService.findOne(id);
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseObjectIdPipe) id: string,
     @Body() updatePublicationDto: UpdatePublicationRequest,
   ) {
     return this.publicationService.updateOne(id, updatePublicationDto);

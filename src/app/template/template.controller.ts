@@ -7,11 +7,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
 import { TemplateService } from './template.service';
 
-@Controller('template')
+@Controller('api/v1/templates')
 export class TemplateController {
   constructor(private readonly templateService: TemplateService) {}
 
@@ -21,7 +22,7 @@ export class TemplateController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.templateService.findOne(id);
   }
 
@@ -37,14 +38,14 @@ export class TemplateController {
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseObjectIdPipe) id: string,
     @Body() updateTemplateDto: UpdateTemplateRequest,
   ) {
     return this.templateService.updateOne(id, updateTemplateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.templateService.removeOne(id);
   }
 }

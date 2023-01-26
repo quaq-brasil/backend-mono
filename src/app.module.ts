@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { FileModule } from './file/file.module';
-import { InteractionModule } from './interaction/interaction.module';
-import { PageModule } from './page/page.module';
-import { PublicationModule } from './publication/publication.module';
-import { TemplateModule } from './template/template.module';
-import { UserModule } from './user/user.module';
-import { WorkspaceModule } from './workspace/workspace.module';
-import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './app/auth/auth.module';
+import { FileModule } from './app/file/file.module';
+import { InteractionModule } from './app/interaction/interaction.module';
+import { PageModule } from './app/page/page.module';
+import { PublicationModule } from './app/publication/publication.module';
+import { TemplateModule } from './app/template/template.module';
+import { UserModule } from './app/user/user.module';
+import { WorkspaceModule } from './app/workspace/workspace.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     PublicationModule,
     TemplateModule,
     FileModule,

@@ -3,8 +3,11 @@ import {
   IsEmail,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
+  Matches,
 } from 'class-validator';
+import { MessageHelper } from 'src/helpers/messages.helper';
+import { regexHelper } from 'src/helpers/regex.helper';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -12,6 +15,7 @@ export class UpdateUserDto {
   email: string;
 
   @IsOptional()
+  @Matches(regexHelper.password, { message: MessageHelper.PASSWORD_VALID })
   password: string;
 
   @IsOptional()
