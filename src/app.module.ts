@@ -6,6 +6,7 @@ import { PublicationModule } from './publication/publication.module';
 import { TemplateModule } from './template/template.module';
 import { UserModule } from './user/user.module';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
     PageModule,
     WorkspaceModule,
     InteractionModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
