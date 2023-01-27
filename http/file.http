@@ -1,6 +1,6 @@
 # find one
 
-GET http://localhost:3000/api/v1/files/63d2b1a166402037076c063d
+GET https://backend-mono2.vercel.app/api/v1/files/63d2b1a166402037076c063d
 
 ###
 
