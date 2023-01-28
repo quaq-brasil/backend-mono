@@ -1,84 +1,177 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+import slugify from 'slugify';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePageDto } from './dto/create-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
 
 @Injectable()
 export class PageService {
+  private readonly logger = new Logger(PageService.name);
+  private readonly MAX_ATTEMPTS = 10;
+  private instance: PageService;
+
   constructor(private prismaService: PrismaService) {}
 
-  async create(createPageDto: CreatePageDto) {
-    if (await this.checkIfUrlAlreadyUsed(createPageDto.url)) {
-      throw new ConflictException('Url already used');
+  getInstance() {
+    if (!this.instance) {
+      this.instance = new PageService(this.prismaService);
     }
-
-    return this.prismaService.page.create({
-      data: createPageDto,
-    });
+    return this.instance;
   }
 
-  findAll() {
-    return this.prismaService.page.findMany();
+  async create(createPageDto: CreatePageDto) {
+    let uniqueURL = slugify(createPageDto.url);
+    let attempts = 0;
+
+    while (await this.isURLTaken(uniqueURL)) {
+      attempts++;
+      if (attempts >= this.MAX_ATTEMPTS) {
+        throw new BadRequestException('Could not generate unique URL');
+      }
+      uniqueURL = `${uniqueURL}-${attempts}`;
+    }
+    try {
+      return await this.prismaService.page.create({
+        data: { ...createPageDto, url: uniqueURL },
+      });
+    } catch (error) {
+      this.logger.error(`Error creating page: ${error.message}`);
+      throw error;
+    }
   }
 
-  findOne(id: string) {
-    return this.prismaService.page.findUnique({
-      where: {
-        id,
-      },
-    });
+  async findAll() {
+    try {
+      return await this.prismaService.page.findMany();
+    } catch (error) {
+      this.logger.error(`Error finding all pages: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
   }
 
-  findOneByUrl(url: string) {
-    return this.prismaService.page.findUnique({
-      where: {
-        url,
-      },
-    });
+  async findOne(id: string) {
+    try {
+      return await this.prismaService.page.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error finding page by id: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
   }
 
-  findAllByWorkspaceId(workspace_id: string) {
-    return this.prismaService.page.findMany({
-      where: {
-        workspace_id,
-      },
-    });
+  async findOneByUrl(url: string) {
+    try {
+      return await this.prismaService.page.findUnique({
+        where: {
+          url,
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error finding page by url: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
+  }
+
+  async findAllByWorkspaceId(workspace_id: string) {
+    try {
+      return await this.prismaService.page.findMany({
+        where: {
+          workspace_id,
+        },
+      });
+    } catch (error) {
+      this.logger.error(
+        `Error finding pages by workspace id: ${error.message}`,
+      );
+      throw new BadRequestException({ message: error.message });
+    }
   }
 
   async update(id: string, updatePageDto: UpdatePageDto) {
-    if (await this.checkIfUrlAlreadyUsed(updatePageDto.url)) {
-      throw new Error('Url already used');
+    if (updatePageDto?.url) {
+      let uniqueURL = slugify(updatePageDto.url);
+      let attempts = 0;
+
+      while (await this.isURLTaken(uniqueURL, id)) {
+        attempts++;
+        if (attempts >= this.MAX_ATTEMPTS) {
+          throw new ConflictException('Could not generate unique URL');
+        }
+        uniqueURL = `${uniqueURL}-${attempts}`;
+      }
+
+      try {
+        return await this.prismaService.page.update({
+          where: {
+            id,
+          },
+          data: { ...updatePageDto, url: uniqueURL },
+        });
+      } catch (error) {
+        this.logger.error(`Error updating page: ${error.message}`);
+        throw new BadRequestException({ message: error.message });
+      }
     }
 
-    return this.prismaService.page.update({
-      where: {
-        id,
-      },
-      data: updatePageDto,
-    });
+    try {
+      return await this.prismaService.page.update({
+        where: {
+          id,
+        },
+        data: { ...updatePageDto },
+      });
+    } catch (error) {
+      this.logger.error(`Error updating page: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
   }
 
-  async remove(id: string) {
-    await this.prismaService.page.delete({
-      where: {
-        id,
-      },
-    });
+  async delete(id: string) {
+    try {
+      return await this.prismaService.page.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error deleting page: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
   }
 
-  async checkIfUrlAlreadyUsed(url: string) {
-    if (!url) return false;
+  async isURLTaken(url: string, id?: string) {
+    if (id) {
+      try {
+        const page = await this.prismaService.page.findUnique({
+          where: { url },
+        });
 
-    const page = await this.prismaService.page.findUnique({
-      where: {
-        url,
-      },
-    });
+        if (!page) {
+          return false;
+        }
 
-    if (page) {
-      return true;
-    } else {
-      return false;
+        return page.id !== id;
+      } catch (error) {
+        this.logger.error(`Error checking if URL is taken: ${error.message}`);
+        throw new BadRequestException({ message: error.message });
+      }
+    }
+
+    try {
+      return (
+        (await this.prismaService.page.findMany({ where: { url } })).length > 0
+      );
+    } catch (error) {
+      this.logger.error(`Error checking if URL is taken: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
     }
   }
 }

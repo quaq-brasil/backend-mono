@@ -7,7 +7,7 @@ GET https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
 
 # create one
 
-POST https://bff.quaq.com.br/page
+POST http://localhost:3000/api/v1/pages
 Content-Type: application/json
 
 {
@@ -40,18 +40,15 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PUT https://bff.quaq.com.br/page/63b754987d02f98b8692255e
+PUT http://localhost:3000/api/v1/pages/63d59c0acf99580306310382
 Content-Type: application/json
 
 {
     "name": "page 12",
-    "url": "url221",
-    "workspace_id": "63b34032485edc50f1bdfa72",
+    "url": "url2fsdfsd21d",
     "avatar_url": "url/url1",
     "background_url": "url/url",
-    "is_stripe_active": true,
-    "facebook_pixel_id": "123456789",
-    "google_analytics_id": "123456789"
+    "is_stripe_active": true
 }
 
 ###

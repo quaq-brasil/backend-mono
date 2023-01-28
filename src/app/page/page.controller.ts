@@ -51,11 +51,6 @@ export class PageController {
 
   @Delete(':id')
   remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.pageService.remove(id);
-  }
-
-  @Get('check-url/:url')
-  checkIfUrlAlreadyUsed(@Param('url') url: string) {
-    return this.pageService.checkIfUrlAlreadyUsed(url);
+    return this.pageService.delete(id);
   }
 }

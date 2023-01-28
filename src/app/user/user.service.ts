@@ -1,6 +1,8 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { hashSync } from 'bcrypt';
@@ -9,7 +11,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+  private instance: UserService;
+
   constructor(private prismaService: PrismaService) {}
+
+  getInstance() {
+    if (!this.instance) {
+      this.instance = new UserService(this.prismaService);
+    }
+    return this.instance;
+  }
 
   async create(createUserDto) {
     const user = await this.prismaService.user.create({
@@ -46,6 +58,12 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto?.email) {
+      if (await this.isEmailTaken(updateUserDto?.email, id)) {
+        throw new ConflictException('Email is already in use');
+      }
+    }
+
     let hashPassword: string;
 
     if (updateUserDto?.password) {
@@ -77,5 +95,34 @@ export class UserService {
         id,
       },
     });
+  }
+
+  async isEmailTaken(email: string, id?: string) {
+    if (id) {
+      try {
+        const user = await this.prismaService.user.findUnique({
+          where: { email },
+        });
+
+        if (!user) {
+          return false;
+        }
+
+        return user.id !== id;
+      } catch (error) {
+        this.logger.error(`Error checking if email is taken: ${error.message}`);
+        throw new BadRequestException({ message: error.message });
+      }
+    }
+
+    try {
+      return (
+        (await this.prismaService.user.findMany({ where: { email } })).length >
+        0
+      );
+    } catch (error) {
+      this.logger.error(`Error checking if email is taken: ${error.message}`);
+      throw new BadRequestException({ message: error.message });
+    }
   }
 }
