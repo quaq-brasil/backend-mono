@@ -16,9 +16,11 @@ export class CreateInteractionDto {
   @IsOptional()
   last_block_id: string;
 
+  @IsOptional()
   @IsInt()
   depth: number;
 
+  @IsOptional()
   @IsArray()
   locations: any[];
 

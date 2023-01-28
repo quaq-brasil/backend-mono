@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateTemplateRequest {
   @IsString()
@@ -11,14 +11,16 @@ export class CreateTemplateRequest {
   shortcut_image: string;
 
   @IsString()
+  @IsOptional()
   shortcut_size: string;
 
   @IsString()
+  @IsOptional()
   current_publication_id: string;
 
-  @IsString()
+  @IsArray()
   @IsOptional()
-  facebook_pixel_id: string;
+  trackers: any[];
 
   @IsString()
   page_id: string;

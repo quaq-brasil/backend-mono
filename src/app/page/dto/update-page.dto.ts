@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 import { CreatePageDto } from './create-page.dto';
 
 export class UpdatePageDto extends PartialType(CreatePageDto) {
@@ -7,11 +7,11 @@ export class UpdatePageDto extends PartialType(CreatePageDto) {
   @IsOptional()
   is_stripe_active: boolean;
 
-  @IsString()
+  @IsArray()
   @IsOptional()
-  facebook_pixel_id: string;
+  trackers: any[];
 
   @IsString()
   @IsOptional()
-  google_analytics_id: string;
+  stripe_id: string;
 }

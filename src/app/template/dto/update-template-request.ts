@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateTemplateRequest {
   @IsString()
@@ -24,7 +24,7 @@ export class UpdateTemplateRequest {
   @IsOptional()
   number_of_new_interactions: number;
 
-  @IsString()
+  @IsArray()
   @IsOptional()
-  facebook_pixel_id: string;
+  trackers: any[];
 }

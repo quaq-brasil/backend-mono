@@ -43,21 +43,5 @@ export class UpdateUserDto {
   stripe_customer_id: string;
 
   @IsOptional()
-  @IsString()
-  email_activation_token: string;
-
-  @IsOptional()
-  @IsString()
-  email_activation_token_expires: Date;
-
-  @IsOptional()
-  @IsString()
-  password_reset_token: string;
-
-  @IsOptional()
-  @IsString()
-  password_reset_token_expires: Date;
-
-  @IsOptional()
   last_login: Date;
 }

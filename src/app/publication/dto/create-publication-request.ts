@@ -1,12 +1,14 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreatePublicationRequest {
   @IsString()
   title: string;
 
+  @IsArray()
   blocks: any[];
 
   @IsString()
+  @IsOptional()
   template_id: string;
 
   @IsString()

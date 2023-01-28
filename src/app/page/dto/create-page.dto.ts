@@ -1,14 +1,15 @@
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreatePageDto {
   @IsString()
   name: string;
 
   @IsString()
-  url: string;
+  @IsOptional()
+  description: string;
 
-  @IsUUID()
-  workspace_id: string;
+  @IsString()
+  url: string;
 
   @IsString()
   @IsOptional()
@@ -17,4 +18,7 @@ export class CreatePageDto {
   @IsString()
   @IsOptional()
   background_url: string;
+
+  @IsString()
+  workspace_id: string;
 }
