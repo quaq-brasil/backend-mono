@@ -6,12 +6,12 @@ GET https://bff.quaq.com.br/publication/63ae052efbbce66bbc152487
 
 # create publication
 
-POST https://bff.quaq.com.br/publication
+POST http://localhost:3000/api/v1/publications
 Content-Type: application/json
 
 {
     "title": "title",
-    "blocks": {},
+    "blocks": [{}],
     "template_id": "63ae052efbbce66bbc152487",
     "page_id": "63ae052efbbce66bbc152487"
 }
@@ -32,7 +32,7 @@ GET https://bff.quaq.com.br/publication/page/1
 
 # update publication
 
-PUT https://bff.quaq.com.br/publication/63920eab9b5c95524c8205ed
+PUT http://localhost:3000/api/v1/publications/63d5cd37f090a8a5e12a1a5c
 Content-Type: application/json
 
 {

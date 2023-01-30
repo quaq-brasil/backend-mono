@@ -1,5 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import slugify from 'slugify';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -20,19 +19,8 @@ export class FileService {
   constructor(private prismaService: PrismaService) {}
 
   async createOne(request: CreateFileDto) {
-    let uniqueURL = slugify(request.url);
-    let attempts = 0;
-
-    while (await this.isURLTaken(uniqueURL)) {
-      attempts++;
-      if (attempts >= this.MAX_ATTEMPTS) {
-        throw new BadRequestException('Could not generate unique URL');
-      }
-      uniqueURL = `${uniqueURL}-${attempts}`;
-    }
-
     return this.prismaService.file.create({
-      data: { ...request, url: uniqueURL },
+      data: { ...request },
     });
   }
 
@@ -67,16 +55,5 @@ export class FileService {
         id,
       },
     });
-  }
-
-  async isURLTaken(url: string) {
-    try {
-      return (
-        (await this.prismaService.file.findMany({ where: { url } })).length > 0
-      );
-    } catch (error) {
-      this.logger.error(`Error checking if URL is taken: ${error.message}`);
-      throw new BadRequestException({ message: error.message });
-    }
   }
 }
