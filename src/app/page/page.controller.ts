@@ -7,7 +7,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { CreatePageDto } from './dto/create-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
 import { PageService } from './page.service';
@@ -27,7 +26,7 @@ export class PageController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseObjectIdPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.pageService.findOne(id);
   }
 
@@ -42,15 +41,12 @@ export class PageController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() updatePageDto: UpdatePageDto,
-  ) {
+  update(@Param('id') id: string, @Body() updatePageDto: UpdatePageDto) {
     return this.pageService.update(id, updatePageDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
+  remove(@Param('id') id: string) {
     return this.pageService.delete(id);
   }
 

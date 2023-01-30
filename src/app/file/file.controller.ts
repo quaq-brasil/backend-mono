@@ -7,7 +7,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileService } from './file.service';
@@ -22,7 +21,7 @@ export class FileController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseObjectIdPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.fileService.findOne(id);
   }
 
@@ -32,15 +31,12 @@ export class FileController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() updateFileDto: UpdateFileDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
     return this.fileService.updateOne(id, updateFileDto);
   }
 
   @Delete(':id')
-  deleteOne(@Param('id', ParseObjectIdPipe) id: string) {
+  deleteOne(@Param('id') id: string) {
     return this.fileService.deleteOne(id);
   }
 }
