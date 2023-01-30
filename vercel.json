@@ -1,9 +1,9 @@
 {
   "version": 2,
+  "buildCommand": "npx prisma generate && npm build",
   "builds": [
     {
       "src": "src/main.ts",
-      "buildCommand": "npx prisma generate && npm build",
       "use": "@vercel/node"
     }
   ],
