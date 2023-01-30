@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateTemplateRequest {
   @IsString()
@@ -18,9 +18,9 @@ export class CreateTemplateRequest {
   @IsOptional()
   current_publication_id: string;
 
-  @IsArray()
+  @IsObject()
   @IsOptional()
-  trackers: any[];
+  trackers: any;
 
   @IsString()
   page_id: string;

@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class UpdateTemplateRequest {
   @IsString()
@@ -17,6 +17,7 @@ export class UpdateTemplateRequest {
   @IsOptional()
   shortcut_size: string;
 
+  @IsOptional()
   @IsString()
   current_publication_id: string;
 
@@ -24,7 +25,7 @@ export class UpdateTemplateRequest {
   @IsOptional()
   number_of_new_interactions: number;
 
-  @IsArray()
+  @IsObject()
   @IsOptional()
-  trackers: any[];
+  trackers: any;
 }
