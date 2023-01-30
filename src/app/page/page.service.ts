@@ -1,13 +1,11 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import slugify from 'slugify';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePageDto } from './dto/create-page.dto';
 import { UpdatePageDto } from './dto/update-page.dto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const getSlug = require('speakingurl');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const uniqueSlug = require('unique-slug');
 
 @Injectable()
 export class PageService {
@@ -21,23 +19,20 @@ export class PageService {
     if (!this.instance) {
       this.instance = new PageService(this.prismaService);
     }
+
     return this.instance;
   }
 
   async create(createPageDto: CreatePageDto) {
-    let uniqueURL = slugify(createPageDto.url);
-    let attempts = 0;
-
-    while (await this.isURLTaken(uniqueURL)) {
-      attempts++;
-      if (attempts >= this.MAX_ATTEMPTS) {
-        throw new BadRequestException('Could not generate unique URL');
-      }
-      uniqueURL = `${uniqueURL}-${attempts}`;
+    if (createPageDto.url) {
+      createPageDto.url = await this.generateUniqueSlugByPageName(
+        createPageDto.url,
+      );
     }
+
     try {
       return await this.prismaService.page.create({
-        data: { ...createPageDto, url: uniqueURL },
+        data: createPageDto,
       });
     } catch (error) {
       this.logger.error(`Error creating page: ${error.message}`);
@@ -96,29 +91,10 @@ export class PageService {
   }
 
   async update(id: string, updatePageDto: UpdatePageDto) {
-    if (updatePageDto?.url) {
-      let uniqueURL = slugify(updatePageDto.url);
-      let attempts = 0;
-
-      while (await this.isURLTaken(uniqueURL, id)) {
-        attempts++;
-        if (attempts >= this.MAX_ATTEMPTS) {
-          throw new ConflictException('Could not generate unique URL');
-        }
-        uniqueURL = `${uniqueURL}-${attempts}`;
-      }
-
-      try {
-        return await this.prismaService.page.update({
-          where: {
-            id,
-          },
-          data: { ...updatePageDto, url: uniqueURL },
-        });
-      } catch (error) {
-        this.logger.error(`Error updating page: ${error.message}`);
-        throw new BadRequestException({ message: error.message });
-      }
+    if (updatePageDto.url) {
+      updatePageDto.url = await this.generateUniqueSlugByPageName(
+        updatePageDto.url,
+      );
     }
 
     try {
@@ -126,7 +102,7 @@ export class PageService {
         where: {
           id,
         },
-        data: { ...updatePageDto },
+        data: updatePageDto,
       });
     } catch (error) {
       this.logger.error(`Error updating page: ${error.message}`);
@@ -145,6 +121,26 @@ export class PageService {
       this.logger.error(`Error deleting page: ${error.message}`);
       throw new BadRequestException({ message: error.message });
     }
+  }
+
+  async generateUniqueSlugByPageName(name: string, id?: string) {
+    const slug = getSlug(name);
+
+    let uniqSlug = slug;
+
+    let attempts = 0;
+
+    while (await this.isURLTaken(uniqSlug, id)) {
+      attempts++;
+      if (attempts >= this.MAX_ATTEMPTS) {
+        throw new BadRequestException('Could not generate unique URL');
+      }
+
+      const randomSlug: string = uniqueSlug();
+      uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`;
+    }
+
+    return uniqSlug;
   }
 
   async isURLTaken(url: string, id?: string) {

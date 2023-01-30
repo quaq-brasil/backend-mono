@@ -1,24 +1,24 @@
 # find one
 
-GET http://localhost:3000/api/v1/users/63b6eb776e2cf11afe9f163a
+GET http://localhost:3000/api/v1/users/63d7195b8efd06bc4047296b
 
 ###
 
 # create one
 
-POST https://bff.quaq.com.br/user
+POST http://localhost:3000/api/v1/users/
 Content-Type: application/json
 
 {
-
-
+     "email": "icarlosrigoni@gmail.com",
+     "password": "1234578"
 }
 
 ###
 
 # update one
 
-PUT https://bff.quaq.com.br/user/63d2d14b899934098c70fee0
+PUT http://localhost:3000/api/v1/users/63d7195b8efd06bc4047296b
 Content-Type: application/json
 
 {
@@ -28,13 +28,8 @@ Content-Type: application/json
     "email_verified": true,
     "password_reset_token_attempts": 5,
     "name": "string",
-    "avatar_url": "string",
-    "stripe_customer_id": "string",
-    "email_activation_token": "string",
-    "password_reset_token": "string",
-    "email_activation_token_expires": "2018-01-01T00:00:00.000Z",
-    "password_reset_token_expires": "2018-01-01T00:00:00.000Z",
-    "last_login": "2018-01-01T00:00:00.000Z"
+    "avatar_url": "string"
+
 }
 
 

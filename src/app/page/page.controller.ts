@@ -53,4 +53,9 @@ export class PageController {
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.pageService.delete(id);
   }
+
+  @Post('generate_unique_url')
+  generateUniqueUrlByPageName(@Body() data: { name: string }) {
+    return this.pageService.generateUniqueSlugByPageName(data.name);
+  }
 }
