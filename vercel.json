@@ -1,6 +1,7 @@
 {
   "regions": ["gru1"],
   "version": 2,
+  "buildCommand": "pnpm prisma generate && pnpm build",
   "builds": [
     {
       "src": "src/main.ts",

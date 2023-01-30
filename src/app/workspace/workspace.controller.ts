@@ -26,6 +26,11 @@ export class WorkspaceController {
     return this.workspaceService.findOne(id);
   }
 
+  @Get('/user/:id')
+  findManyByUserId(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.workspaceService.findAllByUserId(id);
+  }
+
   @Put(':id')
   update(
     @Param('id', ParseObjectIdPipe) id: string,
