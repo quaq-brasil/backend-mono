@@ -1,6 +1,8 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
+import { CreateTemplateRequest } from './create-template-request';
 
-export class UpdateTemplateRequest {
+export class UpdateTemplateRequest extends PartialType(CreateTemplateRequest) {
   @IsString()
   @IsOptional()
   name: string;

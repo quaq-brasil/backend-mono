@@ -107,7 +107,7 @@ model Publication {
 model Template {
   id                         String @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
-  url                        String @unique
+  url                        String
   shortcut_image             String
   shortcut_size              String @default("small")
   trackers                   Json?
