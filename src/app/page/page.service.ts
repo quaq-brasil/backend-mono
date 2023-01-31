@@ -12,6 +12,7 @@ export class PageService {
   private readonly logger = new Logger(PageService.name);
   private readonly MAX_ATTEMPTS = 10;
   private instance: PageService;
+  private readonly RESERVED_PAGE_SLUGS = ['me', 'workspace', 'adm', 'terms'];
 
   constructor(private prismaService: PrismaService) {}
 
@@ -144,6 +145,10 @@ export class PageService {
   }
 
   async isURLTaken(url: string, id?: string) {
+    if (this.RESERVED_PAGE_SLUGS.includes(url)) {
+      return true;
+    }
+
     if (id) {
       try {
         const page = await this.prismaService.page.findUnique({

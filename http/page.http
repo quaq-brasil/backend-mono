@@ -63,9 +63,9 @@ DELETE https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
 
 # generate unique url
 
-POST http://localhost:3000/api/v1/pages/generate_unique_url
+POST http://localhost:5000/api/v1/pages/generate_unique_url
 Content-Type: application/json
 
 {
-    "name": "url"
+    "name": "adm1"
 }
