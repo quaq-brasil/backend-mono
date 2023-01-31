@@ -7,7 +7,7 @@ GET https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
 
 # create one
 
-POST http://localhost:3000/api/v1/pages
+POST http://localhost:5000/api/v1/pages
 Content-Type: application/json
 
 {
@@ -40,15 +40,15 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PUT http://localhost:3000/api/v1/pages/63d59c0acf99580306310382
+PUT http://localhost:5000/api/v1/pages/63d59c0acf99580306310382
 Content-Type: application/json
 
 {
-    "name": "page 12",
-    "url": "url2fsdfsd21d",
-    "avatar_url": "url/url1",
-    "background_url": "url/url",
-    "is_stripe_active": true
+    "name": "quaq",
+    "url": "quaq",
+    "avatar_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+    "background_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+    "is_stripe_active": false
 }
 
 ###
@@ -63,9 +63,9 @@ DELETE https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
 
 # generate unique url
 
-POST http://localhost:3000/api/v1/pages/generate_unique_url
+POST http://localhost:5000/api/v1/pages/generate_unique_url
 Content-Type: application/json
 
 {
-    "name": "url"
+    "name": "quaq"
 }
