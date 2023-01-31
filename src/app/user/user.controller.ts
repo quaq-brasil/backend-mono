@@ -9,7 +9,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ParseObjectIdPipe } from 'src/helpers/parseObjectIdPipe.helper';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
@@ -23,21 +22,18 @@ export class UserController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseObjectIdPipe) id: string) {
+  async findOne(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
   @Put(':id')
-  async update(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseObjectIdPipe) id: string) {
+  async remove(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
 }
