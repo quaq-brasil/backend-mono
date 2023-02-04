@@ -19,11 +19,33 @@ export class PublicationService {
 	}
 
 	async findOne(id: string) {
-		return await this.prismaService.publication.findUnique({
+		const publication = await this.prismaService.publication.findUnique({
 			where: {
 				id,
 			},
 		});
+
+		const variablesValues = {
+			title: 'titulo',
+			input__placeholder: 'digite aqui',
+			answer2: 3,
+			outro__template__block1__name__0: [
+				1,
+				2,
+				{
+					test: 'adsda',
+				},
+			],
+			test1: 'teste1',
+			test2: 'teste2',
+		};
+
+		publication.blocks = this.replaceVariablesWithValues(
+			publication.blocks,
+			variablesValues,
+		);
+
+		return publication;
 	}
 
 	async findManyByTemplateId(template_id: string) {
@@ -81,5 +103,22 @@ export class PublicationService {
 		blocks.forEach((item) => extract(item.data));
 
 		return result;
+	}
+
+	replaceVariablesWithValues(input, variablesValues) {
+		if (typeof input === 'object') {
+			return Object.keys(input).reduce((obj, key) => {
+				obj[key] = this.replaceVariablesWithValues(input[key], variablesValues);
+				return obj;
+			}, {});
+		} else if (
+			typeof input === 'string' &&
+			input.startsWith('{{') &&
+			input.endsWith('}}')
+		) {
+			const variable = input.substring(2, input.length - 2);
+			return variablesValues[variable.replace(/\./g, '__')] || undefined;
+		}
+		return input;
 	}
 }
