@@ -12,53 +12,7 @@ Content-Type: application/json
 
 {
     "title": "title",
-    "blocks": [
-			{
-    "type": "text",
-    "data": "{{title}}"
-  },
-  {
-    "type": "textentry",
-    "data": {
-      "description": "description",
-      "placeholder": "{{input.placeholder}}"
-    }
-  },
-  {
-    "type": "textentry",
-    "data": {
-      "description": "{{title}}",
-      "type": "number",
-      "placeholder": "{{input.placeholder}}",
-      "value": 200
-    }
-  },
-  {
-    "type": "text",
-    "data": 1
-  },
-  {
-    "type": "pool",
-    "data": {
-      "question": "uma pergunta",
-      "answers": ["answer1", "{{answer2}}", "{{outro.template.block1.name.0}}"]
-    }
-  },
-	{
-		"type": "outro",
-		"data": {
-			"data": {
-				"ok": {
-					"title": "{{test1}}",
-					"name": [{
-						"test": "{{test2}}"
-					}, "ok"]
-				}
-			}
-		}
-	}
-	
-	],
+    "blocks": [],
     "template_id": "63ae052efbbce66bbc152487",
     "page_id": "63ae052efbbce66bbc152487"
 }

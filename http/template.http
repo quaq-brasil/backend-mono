@@ -28,7 +28,7 @@ GET https://bff.quaq.com.br/template/url/url
 
 # get many template by page id
 
-GET https://bff.quaq.com.br/template/page/1
+GET http://localhost:5000/api/v1/templates/page/63dfc3427d66dd08288f9a1
 
 ###
 

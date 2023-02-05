@@ -105,20 +105,23 @@ export class PublicationService {
 		return result;
 	}
 
-	replaceVariablesWithValues(input, variablesValues) {
-		if (typeof input === 'object') {
-			return Object.keys(input).reduce((obj, key) => {
-				obj[key] = this.replaceVariablesWithValues(input[key], variablesValues);
+	replaceVariablesWithValues(blocks, variablesValues) {
+		if (typeof blocks === 'object') {
+			return Object.keys(blocks).reduce((obj, key) => {
+				obj[key] = this.replaceVariablesWithValues(
+					blocks[key],
+					variablesValues,
+				);
 				return obj;
 			}, {});
 		} else if (
-			typeof input === 'string' &&
-			input.startsWith('{{') &&
-			input.endsWith('}}')
+			typeof blocks === 'string' &&
+			blocks.startsWith('{{') &&
+			blocks.endsWith('}}')
 		) {
-			const variable = input.substring(2, input.length - 2);
+			const variable = blocks.substring(2, blocks.length - 2);
 			return variablesValues[variable.replace(/\./g, '__')] || undefined;
 		}
-		return input;
+		return blocks;
 	}
 }
