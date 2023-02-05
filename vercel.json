@@ -1,7 +1,7 @@
 {
 	"regions": ["gru1"],
 	"version": 2,
-	"buildCommand": "npx prisma generate && npm build",
+	"buildCommand": "npx prisma generate && npm run build",
 	"routes": [
 		{
 			"src": "/(.*)",
