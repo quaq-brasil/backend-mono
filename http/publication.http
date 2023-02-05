@@ -1,13 +1,13 @@
 # get publication
 
-GET  http://localhost:5000/api/v1/publications/63deba6f680774636e724c52
+GET  https://bff.quaq.me/api/v1/publications/63deba6f680774636e724c52
 
 ###
 
 # create publication
 
 
-POST http://bff.quaq.me/api/v1/publications
+POST https://bff.quaq.me/api/v1/publications
 Content-Type: application/json
 
 {
