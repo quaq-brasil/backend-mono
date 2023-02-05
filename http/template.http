@@ -4,18 +4,17 @@ GET https://bff.quaq.com.br/template/63ae050ffbbce66bbc152486
 
 ###
 
-POST https://bff.quaq.com.br/template
+POST http://localhost:5000/api/v1/templates
 Content-Type: application/json
 
 {
   "name": "name",
-  "url": "url",
+  "url": "meutemplate",
   "shortcut_image": "shortcutImage",
   "shortcut_size": "shortcutSize",
-  "current_publication_id": "63ae050ffbbce66bbc152486",
+  "current_publication_id": "63e00c3ca62ce469e303482d",
   "number_of_new_interactions": 1,
-  "page_id": "63ae050ffbbce66bbc152486",
-  "facebook_pixel_id": "1"
+  "page_id": "63e00e16bb60a04fa845a3c8"
 }
 
 ###
@@ -29,6 +28,12 @@ GET https://bff.quaq.com.br/template/url/url
 # get many template by page id
 
 GET http://localhost:5000/api/v1/templates/page/63dfc3427d66dd08288f9a1
+
+###
+
+# get many template by page url and template url
+
+GET http://localhost:5000/api/v1/templates/minhapagina/meutemplate
 
 ###
 

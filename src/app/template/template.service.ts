@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	Logger,
+	NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
@@ -58,6 +63,28 @@ export class TemplateService {
 				page_id,
 			},
 		});
+	}
+
+	async findOneByPageAndTemplateUrl(url: string, page_url: string) {
+		const templates = await this.prismaService.template.findMany({
+			where: {
+				url,
+			},
+			include: {
+				Page: true,
+				Publications: true,
+			},
+		});
+
+		if (templates && templates.length > 0) {
+			const uniqueTemplate = templates.filter(
+				(template) => template.Page.url === page_url,
+			);
+
+			return uniqueTemplate[0];
+		}
+
+		throw new NotFoundException({ message: 'template not found' });
 	}
 
 	async updateOne(id: string, request: UpdateTemplateRequest) {

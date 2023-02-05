@@ -1,6 +1,6 @@
 # find one
 
-GET https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
+GET http://localhost:5000/api/v1/pages/63e00c3ca62ce469e303482d
 
 
 ###
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
     "name": "page 1",
-    "url": "url",
+    "url": "minhapagina",
     "workspace_id": "63b34032485edc50f1bdfa72",
     "avatar_url": "url/url",
     "background_url": "url/url"

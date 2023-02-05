@@ -26,8 +26,8 @@ export class PageController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.pageService.findOne(id);
+	async findOne(@Param('id') id: string) {
+		return await this.pageService.findOne(id);
 	}
 
 	@Get('url/:url')

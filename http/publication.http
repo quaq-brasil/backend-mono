@@ -7,13 +7,13 @@ GET  https://bff.quaq.me/api/v1/publications/63deba6f680774636e724c52
 # create publication
 
 
-POST https://bff.quaq.me/api/v1/publications
+POST http://localhost:5000/api/v1/publications
 Content-Type: application/json
 
 {
     "title": "title",
     "blocks": [],
-    "page_id": "63ae052efbbce66bbc152487"
+    "page_id": "63ae050ffbbce66bbc152486"
 }
 
 ###

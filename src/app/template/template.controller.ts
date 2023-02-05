@@ -35,6 +35,14 @@ export class TemplateController {
 		return this.templateService.findManyByPageId(page_id);
 	}
 
+	@Get(':page_url/:url')
+	findOneByPageAndTemplateUrl(
+		@Param('page_url') page_url: string,
+		@Param('url') url: string,
+	) {
+		return this.templateService.findOneByPageAndTemplateUrl(url, page_url);
+	}
+
 	@Put(':id')
 	update(
 		@Param('id') id: string,
