@@ -1,6 +1,6 @@
 # get publication
 
-GET  https://bff.quaq.me/api/v1/publications/63deba6f680774636e724c52
+GET  https://bff.quaq.me/api/v1/publications/63e059f8a3264c4698093527
 
 ###
 
@@ -11,9 +11,18 @@ POST http://localhost:5000/api/v1/publications
 Content-Type: application/json
 
 {
-    "title": "title",
-    "blocks": [],
-    "page_id": "63ae050ffbbce66bbc152486"
+    "title": "title2",
+    "blocks": [{
+			"id": "1",
+			"type": "text",
+			"data": "{{input__placeholder}}"
+		}, {
+			"id": "2",
+			"type": "text",
+			"data": "<h1>{{input__placeholder}}</h1>"
+		}],
+    "page_id": "63e00e16bb60a04fa845a3c8",
+		"template_id": "63e00e52bb60a04fa845a3c9"
 }
 
 ###

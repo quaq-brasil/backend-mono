@@ -7,6 +7,21 @@ import { UpdatePublicationRequest } from './dto/update-publication-request';
 export class PublicationService {
 	constructor(private prismaService: PrismaService) {}
 
+	variablesValues = {
+		title: 'titulo',
+		input__placeholder: 'digite aqui',
+		answer2: 3,
+		outro__template__block1__name__0: [
+			1,
+			2,
+			{
+				test: 'adsda',
+			},
+		],
+		test1: 'teste1',
+		test2: 'teste2',
+	};
+
 	async createOne(request: CreatePublicationRequest) {
 		if (request.blocks) {
 			const variables = this.extractVariables(request.blocks) || {};
@@ -25,24 +40,9 @@ export class PublicationService {
 			},
 		});
 
-		const variablesValues = {
-			title: 'titulo',
-			input__placeholder: 'digite aqui',
-			answer2: 3,
-			outro__template__block1__name__0: [
-				1,
-				2,
-				{
-					test: 'adsda',
-				},
-			],
-			test1: 'teste1',
-			test2: 'teste2',
-		};
-
 		publication.blocks = this.replaceVariablesWithValues(
 			publication.blocks,
-			variablesValues,
+			this.variablesValues,
 		);
 
 		return publication;

@@ -40,12 +40,12 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PUT http://localhost:5000/api/v1/pages/63d59c0acf99580306310382
+PUT http://localhost:5000/api/v1/pages/63e00e16bb60a04fa845a3c8
 Content-Type: application/json
 
 {
     "name": "quaq",
-    "url": "quaq",
+    "url": "minhapagina",
     "avatar_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
     "background_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
     "is_stripe_active": false

@@ -5,6 +5,7 @@ import {
 	NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { PublicationService } from '../publication/publication.service';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -19,11 +20,17 @@ export class TemplateService {
 	private readonly RESERVED_TEMPLATE_SLUGS = [];
 	private instance: TemplateService;
 
-	constructor(private prismaService: PrismaService) {}
+	constructor(
+		private prismaService: PrismaService,
+		private publicationService: PublicationService,
+	) {}
 
 	getInstance() {
 		if (!this.instance) {
-			this.instance = new TemplateService(this.prismaService);
+			this.instance = new TemplateService(
+				this.prismaService,
+				this.publicationService,
+			);
 		}
 		return this.instance;
 	}
@@ -81,7 +88,23 @@ export class TemplateService {
 				(template) => template.Page.url === page_url,
 			);
 
-			return uniqueTemplate[0];
+			const publication =
+				uniqueTemplate[0].Publications[
+					uniqueTemplate[0]?.Publications?.length - 1
+				] || ({} as any);
+
+			const formattedTemplate = {
+				...uniqueTemplate[0],
+				publication,
+			};
+
+			formattedTemplate.publication.blocks =
+				this.publicationService.replaceVariablesWithValues(
+					formattedTemplate.publication.blocks,
+					this.publicationService.variablesValues,
+				);
+
+			return formattedTemplate;
 		}
 
 		throw new NotFoundException({ message: 'template not found' });
