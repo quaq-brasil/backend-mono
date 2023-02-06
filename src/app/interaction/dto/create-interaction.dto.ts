@@ -1,38 +1,38 @@
 import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateInteractionDto {
-  @IsArray()
-  blocks: any[];
+	@IsArray()
+	blocks: any[];
 
-  @IsArray()
-  data: any[];
+	@IsArray()
+	data: any[];
 
-  @IsArray()
-  events: any[];
+	@IsArray()
+	events: any[];
 
-  @IsOptional()
-  metadata: any;
+	@IsOptional()
+	metadata: any;
 
-  @IsOptional()
-  last_block_id: string;
+	@IsOptional()
+	last_block_id: string;
 
-  @IsOptional()
-  @IsInt()
-  depth: number;
+	@IsOptional()
+	@IsInt()
+	depth: number;
 
-  @IsOptional()
-  @IsArray()
-  locations: any[];
+	@IsOptional()
+	@IsArray()
+	locations: any[];
 
-  @IsString()
-  template_id: string;
+	@IsString()
+	template_id: string;
 
-  @IsString()
-  publication_id: string;
+	@IsString()
+	publication_id: string;
 
-  @IsString()
-  page_id: string;
+	@IsString()
+	page_id: string;
 
-  @IsString()
-  user_id: string;
+	@IsString()
+	user_id: string;
 }

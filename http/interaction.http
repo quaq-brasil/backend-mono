@@ -1,42 +1,48 @@
 # find one
 
-GET https://bff.quaq.com.br/interaction/1
+GET https://bff.quaq.me/api/v1/interactions/63e108d757d857994c68c052
 
 ###
 
 # create one
-POST https://bff.quaq.com.br/interaction
+POST https://bff.quaq.me/api/v1/interactions
 Content-Type: application/json
 
 {
-    "blocks": [
-        {
-            "type": "text",
-            "text": "Hello world"
-        }
-    ],
-    "data": ["some data"],
-    "events": [
-        {
-            "type": "text",
-            "text": "Hello world"
-        }
-    ],
-    "metadata": {
-        "some": "data"
+  "blocks": [
+    {
+      "id": "1",
+      "type": "text",
+      "data": "digite aqui"
     },
-    "last_block_id": "some block id",
-    "depth": 1,
-    "locations": [
-        {
-            "type": "text",
-            "text": "Hello world"
-        }
-    ],
-    "template_id": "63b75045a43fc9f320321e9f",
-    "publication_id": "63b75045a43fc9f320321e9f",
-    "page_id": "63b75045a43fc9f320321e9f",
-    "user_id": "63b75045a43fc9f320321e9f"
+    {
+      "id": "2",
+      "type": "text",
+      "data": "<h1>{{input__placeholder}}ok</h1>"
+    },
+    {
+      "id": "3",
+      "type": "textentry",
+      "data": {
+        "type": "email"
+      }
+    }
+  ],
+  "data": [
+    {
+      "id": "3",
+      "type": "textentry",
+      "data": {
+        "type": "email",
+        "value": "adsadasaaa"
+      }
+    }
+  ],
+  "events": [],
+  "template_id": "63e00e52bb60a04fa845a3c9",
+  "publication_id": "63e103c957d857994c68c04d",
+  "page_id": "63e00e16bb60a04fa845a3c8",
+  "user_id": "63d26f06ea1e68c873e97ab2"
 }
 
 ###

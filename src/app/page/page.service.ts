@@ -71,6 +71,9 @@ export class PageService {
 				where: {
 					url,
 				},
+				include: {
+					templates: true,
+				},
 			});
 		} catch (error) {
 			this.logger.error(`Error finding page by url: ${error.message}`);

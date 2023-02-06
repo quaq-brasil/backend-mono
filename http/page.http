@@ -1,6 +1,6 @@
 # find one
 
-GET http://localhost:5000/api/v1/pages/63e00c3ca62ce469e303482d
+GET http://localhost:5000/api/v1/pages/63e00e16bb60a04fa845a3c8
 
 
 ###
@@ -28,7 +28,7 @@ GET https://bff.quaq.com.br/page
 
 # find one by url
 
-GET https://bff.quaq.com.br/page/url/url21
+GET http://localhost:5000/api/v1/pages/url/minhapagina
 
 ###
 

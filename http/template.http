@@ -17,6 +17,8 @@ Content-Type: application/json
   "page_id": "63e00e16bb60a04fa845a3c8"
 }
 
+
+
 ###
 
 # get template by url
@@ -27,7 +29,7 @@ GET https://bff.quaq.com.br/template/url/url
 
 # get many template by page id
 
-GET http://localhost:5000/api/v1/templates/page/63dfc3427d66dd08288f9a1
+GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
 
 ###
 
@@ -48,7 +50,7 @@ Content-Type: application/json
 
 # delete one template
 
-DELETE https://bff.quaq.com.br/template/1ead50e3-c81b-4a64-87da-a1ff0f2e6b54
+DELETE https://bff.quaq.me/api/v1/templates/63e14a4dcf10c7e6a53b2a10
 
 ###
 
