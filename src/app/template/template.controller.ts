@@ -58,11 +58,12 @@ export class TemplateController {
 
 	@Post('generate_unique_url')
 	generateUniqueUrlByPageName(
-		@Body() data: { title: string; page_id: string },
+		@Body() data: { title: string; page_id: string; id?: string },
 	) {
 		return this.templateService.generateUniqueSlugByTemplateTitle(
 			data.title,
 			data.page_id,
+			data.id,
 		);
 	}
 }

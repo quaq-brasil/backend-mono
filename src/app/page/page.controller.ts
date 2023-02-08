@@ -51,7 +51,7 @@ export class PageController {
 	}
 
 	@Post('generate_unique_url')
-	generateUniqueUrlByPageName(@Body() data: { name: string }) {
-		return this.pageService.generateUniqueSlugByPageName(data.name);
+	generateUniqueUrlByPageName(@Body() data: { name: string; id?: string }) {
+		return this.pageService.generateUniqueSlugByPageName(data.name, data.id);
 	}
 }
