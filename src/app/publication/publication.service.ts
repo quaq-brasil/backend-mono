@@ -25,7 +25,7 @@ export class PublicationService {
 	async createOne(request: CreatePublicationRequest) {
 		if (request.blocks) {
 			const variables = this.extractVariables(request.blocks) || {};
-			request.variables = variables;
+			request.dependencies = { variables };
 		}
 
 		return await this.prismaService.publication.create({
@@ -67,7 +67,7 @@ export class PublicationService {
 	async updateOne(id: string, request: UpdatePublicationRequest) {
 		if (request.blocks) {
 			const variables = this.extractVariables(request.blocks) || {};
-			request.variables = variables;
+			request.dependencies = { variables };
 		}
 
 		return await this.prismaService.publication.update({

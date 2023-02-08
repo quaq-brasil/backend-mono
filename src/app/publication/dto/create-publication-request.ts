@@ -15,5 +15,5 @@ export class CreatePublicationRequest {
 	page_id: string;
 
 	@IsOptional()
-	variables: any;
+	dependencies: any;
 }
