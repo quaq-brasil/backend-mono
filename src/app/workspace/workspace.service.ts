@@ -43,6 +43,14 @@ export class WorkspaceService {
 		});
 	}
 
+	async findOneBySlug(slug: string) {
+		return await this.prismaService.workspace.findUnique({
+			where: {
+				slug,
+			},
+		});
+	}
+
 	async findAllByUserId(user_id: string) {
 		return await this.prismaService.workspace.findMany({
 			where: {

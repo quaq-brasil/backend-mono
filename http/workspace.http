@@ -6,7 +6,7 @@ GET https://bff.quaq.me/api/v1/workspaces/63e3def89fb620ad10c31742
 
 # create one
 
-POST  http://localhost:5000/api/v1/workspaces
+POST  http://bff.quaq.me/api/v1/workspaces
 Content-Type: application/json
 
 {
@@ -45,3 +45,9 @@ Content-Type: application/json
 # delete one
 
 DELETE https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
+
+###
+
+# get may by user id
+
+GET http://localhost:5000/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
