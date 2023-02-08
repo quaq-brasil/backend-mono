@@ -52,5 +52,16 @@ Content-Type: application/json
 
 DELETE https://bff.quaq.me/api/v1/templates/63e14a4dcf10c7e6a53b2a10
 
+
 ###
 
+
+POST https://bff.quaq.me/api/v1/templates/generate_unique_url
+Content-Type: application/json
+
+
+{
+  "title": "name",
+  "page_id": "63e00e16bb60a04fa845a3c8"
+
+}
