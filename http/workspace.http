@@ -1,12 +1,12 @@
 # find one
 
-GET https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
+GET https://bff.quaq.me/api/v1/workspaces/63e3def89fb620ad10c31742
 
 ###
 
 # create one
 
-POST  https://bff.quaq.me/api/v1/workspaces
+POST  http://localhost:5000/api/v1/workspaces
 Content-Type: application/json
 
 {
