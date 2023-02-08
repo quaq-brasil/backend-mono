@@ -6,12 +6,13 @@ GET https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
 
 # create one
 
-POST https://bff.quaq.com.br/workspace
+POST  https://bff.quaq.me/api/v1/workspaces
 Content-Type: application/json
 
 {
   "name": "My Workspace",
   "avatar_url": "http://example.com/avatar.png",
+	"slug": "tesdddasastae",
   "services": [
     {
       "name": "My Service",
@@ -24,12 +25,13 @@ Content-Type: application/json
 
 # update one
 
-PUT  https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
+PUT  https://localhost:5000/workspace/63b7543e7d02f98b8692255d
 Content-Type: application/json
 
 {
   "name": "My Workspace2",
   "avatar_url": "http://example.com/avatar2.png",
+	"slug": "teste",
   "services": [
     {
       "name": "My Service2",
