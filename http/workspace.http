@@ -48,6 +48,13 @@ DELETE https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
 
 ###
 
-# get may by user id
+# get workspace by user id
 
 GET http://localhost:5000/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
+
+
+###
+
+# get workspace by slug
+
+GET https://bff.quaq.me/api/v1/workspaces/slug/tesdddasastae
