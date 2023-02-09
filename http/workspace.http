@@ -58,3 +58,22 @@ GET http://localhost:5000/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
 # get workspace by slug
 
 GET https://bff.quaq.me/api/v1/workspaces/slug/tesdddasastae
+
+
+###
+
+# get workspace by page slug
+
+GET https://bff.quaq.me/api/v1/workspaces/page/slug/quaq
+
+
+###
+
+# generate unique slug workspace
+
+POST http://localhost:5000/api/v1/workspaces/generate_unique_url
+Content-Type: application/json
+
+{
+    "name": "adm1"
+}

@@ -59,6 +59,19 @@ export class WorkspaceService {
 		});
 	}
 
+	async findOneByPageSlug(page_slug: string) {
+		const page = await this.prismaService.page.findUnique({
+			where: {
+				url: page_slug,
+			},
+			include: {
+				Workspace: true,
+			},
+		});
+
+		return page.Workspace;
+	}
+
 	async update(id: string, updateWorkspaceDto: UpdateWorkspaceDto) {
 		if (updateWorkspaceDto.slug) {
 			updateWorkspaceDto.slug = await this.generateUniqueSlugByWorkspaceName(
@@ -131,3 +144,6 @@ export class WorkspaceService {
 		}
 	}
 }
+
+// rota gerar url unica
+// pegar workspace slug da pagina

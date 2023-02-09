@@ -30,9 +30,22 @@ export class WorkspaceController {
 		return this.workspaceService.findAllByUserId(id);
 	}
 
+	@Post('/generate_unique_slug')
+	generateUniqueSlug(@Body() data: { name: string; id?: string }) {
+		return this.workspaceService.generateUniqueSlugByWorkspaceName(
+			data.name,
+			data.id,
+		);
+	}
+
 	@Get('/slug/:slug')
 	findManyBySlug(@Param('slug') slug: string) {
 		return this.workspaceService.findOneBySlug(slug);
+	}
+
+	@Get('/page/slug/:slug')
+	findOneByPageSlug(@Param('slug') slug: string) {
+		return this.workspaceService.findOneByPageSlug(slug);
 	}
 
 	@Put(':id')
