@@ -89,7 +89,7 @@ model Publication {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   blocks       Json[]
-  dependencies Json
+  dependencies Json?
   published_at DateTime?
 
   created_at DateTime @default(now())

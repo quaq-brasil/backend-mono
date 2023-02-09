@@ -35,7 +35,7 @@ GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
 
 # get  template by page url and template url
 
-GET http://localhost:5000/api/v1/templates/minhapagina/meutemplate
+GET http://localhost:5000/api/v1/templates/felp-s-page-693/felp-s-template
 
 ###
 

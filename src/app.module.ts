@@ -10,18 +10,18 @@ import { UserModule } from './app/user/user.module';
 import { WorkspaceModule } from './app/workspace/workspace.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    PublicationModule,
-    TemplateModule,
-    FileModule,
-    UserModule,
-    PageModule,
-    WorkspaceModule,
-    InteractionModule,
-    AuthModule,
-  ],
-  controllers: [],
-  providers: [],
+	imports: [
+		ConfigModule.forRoot(),
+		PublicationModule,
+		TemplateModule,
+		FileModule,
+		UserModule,
+		PageModule,
+		WorkspaceModule,
+		InteractionModule,
+		AuthModule,
+	],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}
