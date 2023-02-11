@@ -24,7 +24,8 @@ Content-Type: application/json
       "id": "3",
       "type": "textentry",
       "data": {
-        "type": "email"
+        "type": "email",
+				"value": "dasdasdadadssa"
       }
     }
   ],
@@ -34,13 +35,13 @@ Content-Type: application/json
       "type": "textentry",
       "data": {
         "type": "email",
-        "value": "adsadasaaa"
+        "value": "deu certo"
       }
     }
   ],
   "events": [],
-  "template_id": "63e00e52bb60a04fa845a3c9",
-  "publication_id": "63e103c957d857994c68c04d",
+  "template_id": "63e7cf8388e2141604e1f88f",
+  "publication_id": "63e7cfd588e2141604e1f890",
   "page_id": "63e00e16bb60a04fa845a3c8",
   "user_id": "63d26f06ea1e68c873e97ab2"
 }

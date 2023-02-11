@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
     "name": "page 1",
-    "url": "minhapagina",
+    "url": "minhapagina2",
     "workspace_id": "63b34032485edc50f1bdfa72",
     "avatar_url": "url/url",
     "background_url": "url/url"

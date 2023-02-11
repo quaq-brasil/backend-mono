@@ -1,6 +1,6 @@
 # get publication
 
-GET  https://bff.quaq.me/api/v1/publications/63e059f8a3264c4698093527
+GET  https://bff.quaq.me/api/v1/publications/63e7cfd588e2141604e1f890
 
 ###
 
@@ -28,7 +28,7 @@ Content-Type: application/json
 			}
 		}],
     "page_id": "63e00e16bb60a04fa845a3c8",
-		"template_id": "63e00e52bb60a04fa845a3c9"
+		"template_id": "63e7cf8388e2141604e1f88f"
 }
 
 ###

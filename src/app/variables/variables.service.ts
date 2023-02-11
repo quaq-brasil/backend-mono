@@ -5,19 +5,37 @@ import { PrismaService } from 'src/prisma.service';
 export class VariablesService {
 	constructor(private prismaService: PrismaService) {}
 
-	async findAllVariablesAvailable(
+	async findPanelVariables(
 		creator_id: string,
 		blocks?: any[],
 		template_id?: string,
+		connectedTemplates?: string[],
 	) {
 		const variables: any = {
-			creator: {},
 			consumer: {},
 			events: {},
 			blocks: {},
 			publications: {},
 		};
 
+		await this.findAllVariablesAvailable(
+			creator_id,
+			variables,
+			blocks,
+			template_id,
+		);
+
+		await this.formatConnectedTemplates(variables, connectedTemplates);
+
+		return variables;
+	}
+
+	async findAllVariablesAvailable(
+		creator_id: string,
+		variables: any,
+		blocks?: any[],
+		template_id?: string,
+	) {
 		if (creator_id) {
 			await this.formatCreator(creator_id, variables);
 		}
@@ -77,135 +95,179 @@ export class VariablesService {
 					title: block.saveAs,
 					content: block.data,
 				},
-				data: this.formatBlockData(block),
-				events: this.formatBlockEvents(block),
+				data: {},
+				events: {},
 			};
+
+			this.formatBlockData(block, newBlocks);
+			this.formatBlockEvents(block, newBlocks);
 
 			variables.blocks[block.saveAs] = newBlocks;
 		});
 	}
 
-	async formatBlockData(block: any) {
+	async formatBlockData(block: any, variables: any) {
 		switch (block.type) {
 			case 'textentry':
-				return {
+				variables.data = {
 					value: 'string',
 				};
+				break;
 			case 'pool':
-				return {
+				variables.data = {
 					selected_options: 'string list',
 					number_of_selections: 'number',
 				};
+				break;
+
 			case 'button':
-				return {
+				variables.data = {
 					clicked: 'boolean',
 				};
+				break;
+
 			case 'review':
-				return {
+				variables.data = {
 					review: 'number',
 				};
+				break;
+
 			case 'webhook':
-				return {
+				variables.data = {
 					header: 'string',
 					body: 'string',
 				};
+				break;
+
 			default:
-				return {};
+				variables.data = {};
+				break;
 		}
 	}
 
-	async formatBlockEvents(block: any) {
+	async formatBlockEvents(block: any, variables: any) {
 		switch (block.type) {
 			case 'text':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 				};
+				break;
 			case 'image':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 				};
+				break;
 			case 'chart':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 				};
+				break;
 			case 'textentry':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastInteractionAt: 'string',
 					firstInteractionAt: 'string',
 				};
+				break;
 			case 'pool':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastInteractionAt: 'string',
 					firstInteractionAt: 'string',
 					maxAchievedAt: 'string',
 					minAchievedAt: 'string',
 				};
+				break;
 			case 'button':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastInteractionAt: 'string',
 					firstInteractionAt: 'string',
 				};
+				break;
 			case 'review':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastInteractionAt: 'string',
 					firstInteractionAt: 'string',
 				};
+				break;
 			case 'automation':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastExecutionAt: 'string',
 					firstExecutionAt: 'string',
 					hasStopBeenReached: 'string',
 				};
+				break;
 			case 'webhook':
-				return {
+				variables.events = {
 					displayedAt: 'string',
 					lastExecutionAt: 'string',
 					firstExecutionAt: 'string',
 					responseReceivedAt: 'string',
 					requestSentAt: 'string',
 				};
+				break;
 			default:
-				return {};
+				variables.events = {};
+				break;
 		}
 	}
 
 	async formatPublications(template_id: string, variables: any) {
-		const template = await this.prismaService.template.findUnique({
-			where: {
-				id: template_id,
-			},
-			include: {
-				Publications: true,
-				Interactions: true,
-			},
-		});
-
-		const publications = {};
-
-		template.Publications.forEach((publication) => {
-			const interactions = template.Interactions.filter(
-				(interaction) => interaction.publication_id === publication.id,
-			);
-
-			const newInteractions = interactions.map((interaction) => {
-				return {
-					consumer: {
-						id: interaction.user_id,
-					},
-					events: interaction.events,
-					locations: interaction.locations,
-					data: interaction.data,
-				};
+		try {
+			const template = await this.prismaService.template.findUnique({
+				where: {
+					id: template_id,
+				},
+				include: {
+					Publications: true,
+					Interactions: true,
+				},
 			});
 
-			publications[publication.title] = newInteractions;
-		});
+			const publications = {};
 
-		variables.publications = publications;
+			template.Publications.forEach((publication) => {
+				const interactions = template.Interactions.filter(
+					(interaction) => interaction.publication_id === publication.id,
+				);
+
+				const newInteractions = interactions.map((interaction) => {
+					return {
+						consumer: {
+							id: interaction.user_id,
+						},
+						events: interaction.events,
+						locations: interaction.locations,
+						data: interaction.data,
+					};
+				});
+
+				publications[publication.title] = newInteractions;
+			});
+
+			variables.publications = publications;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async formatConnectedTemplates(variables: any, connectedTemplates: string[]) {
+		if (connectedTemplates && connectedTemplates.length > 0) {
+			await Promise.all(
+				connectedTemplates.map(async (id) => {
+					variables[id] = {};
+
+					await this.findAllVariablesAvailable(
+						undefined,
+						variables[id],
+						undefined,
+						id,
+					);
+				}),
+			);
+		}
 	}
 }
