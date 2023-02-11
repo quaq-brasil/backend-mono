@@ -7,6 +7,7 @@ import { PageModule } from './app/page/page.module';
 import { PublicationModule } from './app/publication/publication.module';
 import { TemplateModule } from './app/template/template.module';
 import { UserModule } from './app/user/user.module';
+import { VariablesModule } from './app/variables/variables.module';
 import { WorkspaceModule } from './app/workspace/workspace.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { WorkspaceModule } from './app/workspace/workspace.module';
 		WorkspaceModule,
 		InteractionModule,
 		AuthModule,
+		VariablesModule,
 	],
 	controllers: [],
 	providers: [],
