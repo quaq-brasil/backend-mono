@@ -56,6 +56,9 @@ export class WorkspaceService {
 			where: {
 				user_id,
 			},
+			include: {
+				Page: true,
+			},
 		});
 	}
 
