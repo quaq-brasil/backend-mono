@@ -77,6 +77,7 @@ export class VariablesService {
 			name: 'string',
 			email: 'string',
 			profile_picture: 'string',
+			registration_status: 'string',
 		};
 	}
 
