@@ -12,7 +12,11 @@ export class S3FileUploadService {
 		private readonly configService: ConfigService,
 	) {}
 
-	async uploadFile(dataBuffer: Buffer, fileName: string): Promise<FileEntity> {
+	async uploadFile(
+		dataBuffer: Buffer,
+		fileName: string,
+		contentType: string,
+	): Promise<FileEntity> {
 		const s3 = new S3();
 		const uploadResult = await s3
 			.upload({
@@ -20,6 +24,7 @@ export class S3FileUploadService {
 				Body: dataBuffer,
 				Key: `${randomUUID()}-${fileName}`,
 				ACL: 'public-read',
+				ContentType: contentType,
 			})
 			.promise();
 
