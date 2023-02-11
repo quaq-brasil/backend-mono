@@ -259,7 +259,7 @@ export class VariablesService {
 		if (connectedTemplates && connectedTemplates.length > 0) {
 			await Promise.all(
 				connectedTemplates.map(async (id) => {
-					variables[id] = {};
+					variables.connected_templates[id] = {};
 
 					await this.findAllVariablesAvailable(
 						undefined,
