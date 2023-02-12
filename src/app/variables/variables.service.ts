@@ -257,18 +257,23 @@ export class VariablesService {
 
 	async formatConnectedTemplates(variables: any, connectedTemplates: string[]) {
 		if (connectedTemplates && connectedTemplates.length > 0) {
-			await Promise.all(
-				connectedTemplates.map(async (id) => {
-					variables.connected_templates[id] = {};
+			try {
+				await Promise.all(
+					connectedTemplates.map(async (id) => {
+						variables.connected_templates = {};
+						variables.connected_templates[id] = {};
 
-					await this.findAllVariablesAvailable(
-						undefined,
-						variables[id],
-						undefined,
-						id,
-					);
-				}),
-			);
+						await this.findAllVariablesAvailable(
+							undefined,
+							variables.connected_templates[id],
+							undefined,
+							id,
+						);
+					}),
+				);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	}
 }

@@ -1,5 +1,5 @@
 
-POST https://bff.quaq.me/api/v1/variables
+POST http://localhost:5000/api/v1/variables
 Content-Type: application/json
 
 {
