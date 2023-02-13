@@ -1,5 +1,5 @@
 
-POST http://localhost:5000/api/v1/variables
+POST http://bff.quaq.me/api/v1/variables
 Content-Type: application/json
 
 {
@@ -15,5 +15,5 @@ Content-Type: application/json
 			}
 		],
 		"template_id": "63e7cf8388e2141604e1f88f",
-		"connected_templates": ["63e7cf8388e2141604e1f88f", "63ae050ffbbce66bbc152486"]
+		"connected_templates": ["63ea3727a434dfdd4ef4da70"]
 }

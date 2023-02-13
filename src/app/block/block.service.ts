@@ -80,8 +80,6 @@ export class BlockService {
 
 		const body = JSON.parse(block.data.body);
 
-		console.log('body', body);
-
 		try {
 			switch (block.data.type) {
 				case 'GET':
@@ -155,23 +153,41 @@ export class BlockService {
 		return result;
 	}
 
-	replaceVariablesWithValues(blocks, variablesValues) {
-		if (typeof blocks === 'object') {
-			return Object.keys(blocks).reduce((obj, key) => {
-				obj[key] = this.replaceVariablesWithValues(
-					blocks[key],
-					variablesValues,
-				);
-				return obj;
-			}, {});
-		} else if (
-			typeof blocks === 'string' &&
-			blocks.startsWith('{{') &&
-			blocks.endsWith('}}')
-		) {
-			const variable = blocks.substring(2, blocks.length - 2);
-			return variablesValues[variable.replace(/\./g, '__')] || undefined;
+	compileVariables(obj, vars) {
+		const result = JSON.parse(JSON.stringify(obj));
+
+		function replaceVar(str) {
+			let res = str;
+			const varRegex = /\{\{([^{}]+)\}\}/g;
+			let match;
+			while ((match = varRegex.exec(str)) !== null) {
+				const [varString, varPath] = match;
+				const pathParts = varPath.split('.');
+				let value = vars;
+				for (const part of pathParts) {
+					value = value[part];
+					if (value === undefined) {
+						break;
+					}
+				}
+				if (value !== undefined) {
+					res = res.replace(varString, value);
+				}
+			}
+			return res;
 		}
-		return blocks;
+
+		function traverse(o) {
+			for (const key in o) {
+				if (typeof o[key] === 'object') {
+					traverse(o[key]);
+				} else if (typeof o[key] === 'string') {
+					o[key] = replaceVar(o[key]);
+				}
+			}
+		}
+
+		traverse(result);
+		return result;
 	}
 }

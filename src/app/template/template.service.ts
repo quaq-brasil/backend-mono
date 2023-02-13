@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { BlockService } from '../block/block.service';
+import { VariablesService } from '../variables/variables.service';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -23,6 +24,7 @@ export class TemplateService {
 	constructor(
 		private prismaService: PrismaService,
 		private blockService: BlockService,
+		private variablesService: VariablesService,
 	) {}
 
 	getInstance() {
@@ -30,6 +32,7 @@ export class TemplateService {
 			this.instance = new TemplateService(
 				this.prismaService,
 				this.blockService,
+				this.variablesService,
 			);
 		}
 		return this.instance;
@@ -72,7 +75,11 @@ export class TemplateService {
 		});
 	}
 
-	async findOneByPageAndTemplateUrl(url: string, page_url: string) {
+	async findOneByPageAndTemplateUrl(
+		url: string,
+		page_url: string,
+		consumer_id?: string,
+	) {
 		const templates = await this.prismaService.template.findMany({
 			where: {
 				url,
@@ -98,11 +105,22 @@ export class TemplateService {
 				publication,
 			};
 
-			formattedTemplate.publication.blocks =
-				this.blockService.replaceVariablesWithValues(
-					formattedTemplate.publication.blocks,
-					this.blockService.variablesValues,
-				);
+			const variables = await this.variablesService.findPanelVariables(
+				undefined,
+				formattedTemplate.publication.blocks,
+				formattedTemplate.id,
+				formattedTemplate.publication?.dependencies?.connected_templates || [],
+				consumer_id,
+			);
+
+			console.log('variables', variables);
+
+			formattedTemplate.publication.blocks = this.blockService.compileVariables(
+				formattedTemplate.publication.blocks,
+				variables,
+			);
+
+			// console.log(formattedTemplate.publication.blocks);
 
 			return formattedTemplate;
 		}

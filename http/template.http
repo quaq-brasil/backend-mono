@@ -23,7 +23,7 @@ Content-Type: application/json
 
 # get template by url
 
-GET https://bff.quaq.com.br/template/url/url
+GET https://bff.quaq.me/templates/url/testess
 
 ###
 
@@ -35,7 +35,7 @@ GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
 
 # get  template by page url and template url
 
-GET http://localhost:5000/api/v1/templates/minhapagina/better-name
+GET https://bff.quaq.me/api/v1/templates/quaq-6f8/testess
 
 ###
 
