@@ -1,56 +1,80 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { BlockService } from '../block/block.service';
 import { CreateInteractionDto } from './dto/create-interaction.dto';
 import { UpdateInteractionDto } from './dto/update-interaction.dto';
 
 @Injectable()
 export class InteractionService {
-  constructor(private prismaService: PrismaService) {}
+	constructor(
+		private prismaService: PrismaService,
+		private blockService: BlockService,
+	) {}
 
-  create(createInteractionDto: CreateInteractionDto) {
-    return this.prismaService.interaction.create({
-      data: createInteractionDto,
-    });
-  }
+	async create(createInteractionDto: CreateInteractionDto) {
+		const data = await this.blockService.webhookBlockExecution(
+			createInteractionDto.blocks,
+			createInteractionDto.data,
+		);
 
-  findOne(id: string) {
-    return this.prismaService.interaction.findUnique({
-      where: {
-        id: id,
-      },
-    });
-  }
+		if (data) {
+			createInteractionDto.data = data;
+		}
 
-  findAllByUserId(user_id: string) {
-    return this.prismaService.interaction.findMany({
-      where: {
-        user_id: user_id,
-      },
-    });
-  }
+		return this.prismaService.interaction.create({
+			data: createInteractionDto,
+		});
+	}
 
-  findAllByPageId(page_id: string) {
-    return this.prismaService.interaction.findMany({
-      where: {
-        page_id: page_id,
-      },
-    });
-  }
+	findOne(id: string) {
+		return this.prismaService.interaction.findUnique({
+			where: {
+				id: id,
+			},
+		});
+	}
 
-  findAllByPublicationId(publication_id: string) {
-    return this.prismaService.interaction.findMany({
-      where: {
-        publication_id: publication_id,
-      },
-    });
-  }
+	findAllByUserId(user_id: string) {
+		return this.prismaService.interaction.findMany({
+			where: {
+				user_id: user_id,
+			},
+		});
+	}
 
-  update(id: string, updateInteractionDto: UpdateInteractionDto) {
-    return this.prismaService.interaction.update({
-      where: {
-        id: id,
-      },
-      data: updateInteractionDto,
-    });
-  }
+	findAllByPageId(page_id: string) {
+		return this.prismaService.interaction.findMany({
+			where: {
+				page_id: page_id,
+			},
+		});
+	}
+
+	findAllByPublicationId(publication_id: string) {
+		return this.prismaService.interaction.findMany({
+			where: {
+				publication_id: publication_id,
+			},
+		});
+	}
+
+	async update(id: string, updateInteractionDto: UpdateInteractionDto) {
+		const data = await this.blockService.webhookBlockExecution(
+			updateInteractionDto.blocks,
+			updateInteractionDto.data,
+		);
+
+		console.log('data', data);
+
+		if (data) {
+			updateInteractionDto.data = data;
+		}
+
+		return await this.prismaService.interaction.update({
+			where: {
+				id: id,
+			},
+			data: updateInteractionDto,
+		});
+	}
 }

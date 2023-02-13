@@ -93,7 +93,7 @@ export class VariablesService {
 				config: {
 					id: block.id,
 					type: block.type,
-					title: block.saveAs,
+					title: block.save_as,
 					content: block.data,
 				},
 				data: {},
@@ -103,7 +103,7 @@ export class VariablesService {
 			this.formatBlockData(block, newBlocks);
 			this.formatBlockEvents(block, newBlocks);
 
-			variables.blocks[block.saveAs] = newBlocks;
+			variables.blocks[block.save_as] = newBlocks;
 		});
 	}
 

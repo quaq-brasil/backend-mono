@@ -5,7 +5,7 @@ import {
 	NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { PublicationService } from '../publication/publication.service';
+import { BlockService } from '../block/block.service';
 import { CreateTemplateRequest } from './dto/create-template-request';
 import { UpdateTemplateRequest } from './dto/update-template-request';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -22,14 +22,14 @@ export class TemplateService {
 
 	constructor(
 		private prismaService: PrismaService,
-		private publicationService: PublicationService,
+		private blockService: BlockService,
 	) {}
 
 	getInstance() {
 		if (!this.instance) {
 			this.instance = new TemplateService(
 				this.prismaService,
-				this.publicationService,
+				this.blockService,
 			);
 		}
 		return this.instance;
@@ -99,9 +99,9 @@ export class TemplateService {
 			};
 
 			formattedTemplate.publication.blocks =
-				this.publicationService.replaceVariablesWithValues(
+				this.blockService.replaceVariablesWithValues(
 					formattedTemplate.publication.blocks,
-					this.publicationService.variablesValues,
+					this.blockService.variablesValues,
 				);
 
 			return formattedTemplate;
