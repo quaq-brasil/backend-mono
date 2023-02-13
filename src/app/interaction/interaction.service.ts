@@ -59,15 +59,25 @@ export class InteractionService {
 	}
 
 	async update(id: string, updateInteractionDto: UpdateInteractionDto) {
-		const data = await this.blockService.webhookBlockExecution(
-			updateInteractionDto.blocks,
-			updateInteractionDto.data,
-		);
+		let executeWebhook = false;
 
-		console.log('data', data);
+		updateInteractionDto.data.forEach((dataBlock) => {
+			if (dataBlock.config === 'button') {
+				if (dataBlock.output.data.clicked) {
+					executeWebhook = true;
+				}
+			}
+		});
 
-		if (data) {
-			updateInteractionDto.data = data;
+		if (executeWebhook) {
+			const data = await this.blockService.webhookBlockExecution(
+				updateInteractionDto.blocks,
+				updateInteractionDto.data,
+			);
+
+			if (data) {
+				updateInteractionDto.data = data;
+			}
 		}
 
 		return await this.prismaService.interaction.update({

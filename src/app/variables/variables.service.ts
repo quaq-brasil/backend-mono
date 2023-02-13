@@ -11,6 +11,7 @@ export class VariablesService {
 		template_id?: string,
 		connectedTemplates?: string[],
 		consumer_id?: string,
+		data?: any[],
 	) {
 		const variables: any = {
 			consumer: {},
@@ -25,6 +26,7 @@ export class VariablesService {
 			blocks,
 			template_id,
 			consumer_id,
+			data,
 		);
 
 		await this.formatConnectedTemplates(variables, connectedTemplates);
@@ -38,16 +40,17 @@ export class VariablesService {
 		blocks?: any[],
 		template_id?: string,
 		consumer_id?: string,
+		data?: any[],
 	) {
 		if (creator_id) {
 			await this.formatCreator(creator_id, variables);
 		}
 
-		this.formatConsumer(variables);
+		this.formatConsumer(variables, consumer_id);
 		this.formatEvents(variables);
 
 		if (blocks && blocks.length > 0) {
-			await this.formaBlocks(blocks, variables);
+			await this.formaBlocks(blocks, variables, data);
 		}
 
 		if (template_id) {
@@ -108,10 +111,12 @@ export class VariablesService {
 		variables.events = {};
 	}
 
-	async formaBlocks(blocks: any[], variables: any) {
+	async formaBlocks(blocks: any[], variables: any, data?: any[]) {
 		variables.blocks = {};
 
 		blocks.forEach((block) => {
+			const currentData = data.filter((cData) => cData.id === block.id);
+
 			const newBlocks = {
 				config: {
 					id: block.id,
@@ -123,8 +128,13 @@ export class VariablesService {
 				events: {},
 			};
 
-			this.formatBlockData(block, newBlocks);
-			this.formatBlockEvents(block, newBlocks);
+			if (!currentData || currentData?.length < 1) {
+				this.formatBlockData(block, newBlocks);
+				this.formatBlockEvents(block, newBlocks);
+			} else {
+				newBlocks.data = currentData[0]?.output?.data;
+				newBlocks.events = currentData[0]?.output?.events;
+			}
 
 			variables.blocks[block.save_as] = newBlocks;
 		});
