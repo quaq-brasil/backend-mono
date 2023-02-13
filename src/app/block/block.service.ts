@@ -30,14 +30,18 @@ export class BlockService {
 
 	async webhookBlockExecution(blocks: WebhookBlock[], data: any[]) {
 		if (blocks) {
-			await Promise.all(
-				blocks.map(async (block) => {
-					if (block.type === 'webhook') {
-						const newData = await this.webhookBlock(block, data);
-						data.push(newData);
-					}
-				}),
-			);
+			try {
+				await Promise.all(
+					blocks.map(async (block) => {
+						if (block.type === 'webhook') {
+							const newData = await this.webhookBlock(block, data);
+							data.push(newData);
+						}
+					}),
+				);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 
 		return data;

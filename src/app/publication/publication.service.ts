@@ -14,11 +14,11 @@ export class PublicationService {
 	) {}
 
 	async createOne(request: CreatePublicationRequest) {
-		if (request.blocks) {
-			const variables =
-				this.blockService.extractVariables(request.blocks) || {};
-			request.dependencies = { ...request.dependencies, variables: variables };
-		}
+		// if (request.blocks) {
+		// 	const variables =
+		// 		this.blockService.extractVariables(request.blocks) || {};
+		// 	request.dependencies = { ...request.dependencies, variables: variables };
+		// }
 
 		return await this.prismaService.publication.create({
 			data: request,

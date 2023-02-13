@@ -51,12 +51,50 @@ export class TemplateService {
 		});
 	}
 
-	async findOne(id: string) {
-		return this.prismaService.template.findUnique({
+	async findOne(id: string, consumer_id?: string, data?: any[]) {
+		return await this.prismaService.template.findUnique({
 			where: {
 				id,
 			},
+			include: {
+				Publications: true,
+				Page: true,
+			},
 		});
+
+		// if (template) {
+		// 	const publication =
+		// 		template.Publications[template?.Publications?.length - 1] ||
+		// 		({} as any);
+
+		// 	const formattedTemplate = {
+		// 		...template,
+		// 		publication,
+		// 	};
+
+		// 	console.log(
+		// 		'formattedTemplate.publication.blocks',
+		// 		formattedTemplate.publication.blocks,
+		// 	);
+
+		// 	const variables = await this.variablesService.findPanelVariables(
+		// 		undefined,
+		// 		formattedTemplate.publication.blocks,
+		// 		formattedTemplate.id,
+		// 		formattedTemplate.publication?.dependencies?.connected_templates || [],
+		// 		consumer_id,
+		// 		data,
+		// 	);
+
+		// 	formattedTemplate.publication.blocks = this.blockService.compileVariables(
+		// 		formattedTemplate.publication.blocks,
+		// 		variables,
+		// 	);
+
+		// 	return formattedTemplate;
+		// }
+
+		// throw new NotFoundException({ message: 'template not found' });
 	}
 
 	async findOneByUrl(url: string) {
@@ -113,14 +151,10 @@ export class TemplateService {
 				consumer_id,
 			);
 
-			console.log('variables', variables);
-
 			formattedTemplate.publication.blocks = this.blockService.compileVariables(
 				formattedTemplate.publication.blocks,
 				variables,
 			);
-
-			// console.log(formattedTemplate.publication.blocks);
 
 			return formattedTemplate;
 		}

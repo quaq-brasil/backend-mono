@@ -1,6 +1,6 @@
 # get publication
 
-GET  https://bff.quaq.me/api/v1/publications/63e7cfd588e2141604e1f890
+GET  http://localhost:5000/api/v1/publications/63ea71c5f629b5caf0489ecf
 
 ###
 

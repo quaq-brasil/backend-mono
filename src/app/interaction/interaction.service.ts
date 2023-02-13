@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { BlockService } from '../block/block.service';
+import { TemplateService } from '../template/template.service';
 import { CreateInteractionDto } from './dto/create-interaction.dto';
 import { UpdateInteractionDto } from './dto/update-interaction.dto';
 
@@ -9,6 +10,7 @@ export class InteractionService {
 	constructor(
 		private prismaService: PrismaService,
 		private blockService: BlockService,
+		private templateService: TemplateService,
 	) {}
 
 	async create(createInteractionDto: CreateInteractionDto) {
@@ -21,9 +23,20 @@ export class InteractionService {
 			createInteractionDto.data = data;
 		}
 
-		return this.prismaService.interaction.create({
+		const interaction = await this.prismaService.interaction.create({
 			data: createInteractionDto,
 		});
+
+		const template = await this.templateService.findOne(
+			createInteractionDto.template_id,
+			createInteractionDto.user_id,
+			createInteractionDto.data,
+		);
+
+		return {
+			...template,
+			interaction_id: interaction.id,
+		};
 	}
 
 	findOne(id: string) {
@@ -61,13 +74,15 @@ export class InteractionService {
 	async update(id: string, updateInteractionDto: UpdateInteractionDto) {
 		let executeWebhook = false;
 
-		updateInteractionDto.data.forEach((dataBlock) => {
-			if (dataBlock.config === 'button') {
-				if (dataBlock.output.data.clicked) {
-					executeWebhook = true;
+		if (updateInteractionDto?.data) {
+			updateInteractionDto.data.forEach((dataBlock) => {
+				if (dataBlock.config === 'button') {
+					if (dataBlock.output.data.clicked) {
+						executeWebhook = true;
+					}
 				}
-			}
-		});
+			});
+		}
 
 		if (executeWebhook) {
 			const data = await this.blockService.webhookBlockExecution(
@@ -80,11 +95,19 @@ export class InteractionService {
 			}
 		}
 
-		return await this.prismaService.interaction.update({
+		await this.prismaService.interaction.update({
 			where: {
 				id: id,
 			},
 			data: updateInteractionDto,
 		});
+
+		console.log('data', updateInteractionDto.data);
+
+		return await this.templateService.findOne(
+			updateInteractionDto.template_id,
+			updateInteractionDto.user_id,
+			updateInteractionDto.data,
+		);
 	}
 }

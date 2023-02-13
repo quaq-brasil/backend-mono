@@ -1,6 +1,6 @@
 # get template
 
-GET https://bff.quaq.com.br/template/63ae050ffbbce66bbc152486
+GET http://localhost:5000/api/v1/templates/63ea8b8f6135e742cf10734b
 
 ###
 
@@ -35,7 +35,7 @@ GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
 
 # get  template by page url and template url
 
-GET https://bff.quaq.me/api/v1/templates/quaq-6f8/testess
+GET http://localhost:5000/api/v1/templates/paginateste/dads
 
 ###
 

@@ -43,19 +43,6 @@ export class TemplateController {
 		return this.templateService.findOneByPageAndTemplateUrl(url, page_url);
 	}
 
-	@Get(':page_url/:url/:consumer_id')
-	findOneByPageAndTemplateUrlWithConsumerId(
-		@Param('page_url') page_url: string,
-		@Param('url') url: string,
-		@Param('consumer_id') consumer_id: string,
-	) {
-		return this.templateService.findOneByPageAndTemplateUrl(
-			url,
-			page_url,
-			consumer_id,
-		);
-	}
-
 	@Put(':id')
 	update(
 		@Param('id') id: string,

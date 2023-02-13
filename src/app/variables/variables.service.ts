@@ -114,8 +114,12 @@ export class VariablesService {
 	async formaBlocks(blocks: any[], variables: any, data?: any[]) {
 		variables.blocks = {};
 
+		console.log('blocks', blocks);
+
 		blocks.forEach((block) => {
-			const currentData = data.filter((cData) => cData.id === block.id);
+			const currentData = data
+				? data.filter((cData) => cData.id === block.id)
+				: undefined;
 
 			const newBlocks = {
 				config: {

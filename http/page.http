@@ -28,7 +28,7 @@ GET https://bff.quaq.com.br/page
 
 # find one by url
 
-GET http://localhost:5000/api/v1/pages/url/minhapagina
+GET http://localhost:5000/api/v1/pages/url/paginateste
 
 ###
 
