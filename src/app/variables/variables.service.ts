@@ -10,6 +10,7 @@ export class VariablesService {
 		blocks?: any[],
 		template_id?: string,
 		connectedTemplates?: string[],
+		consumer_id?: string,
 	) {
 		const variables: any = {
 			consumer: {},
@@ -23,6 +24,7 @@ export class VariablesService {
 			variables,
 			blocks,
 			template_id,
+			consumer_id,
 		);
 
 		await this.formatConnectedTemplates(variables, connectedTemplates);
@@ -35,6 +37,7 @@ export class VariablesService {
 		variables: any,
 		blocks?: any[],
 		template_id?: string,
+		consumer_id?: string,
 	) {
 		if (creator_id) {
 			await this.formatCreator(creator_id, variables);
@@ -71,7 +74,27 @@ export class VariablesService {
 		}
 	}
 
-	async formatConsumer(variables: any) {
+	async formatConsumer(variables: any, consumer_id?: string) {
+		if (consumer_id) {
+			try {
+				const consumer = await this.prismaService.user.findUnique({
+					where: {
+						id: consumer_id,
+					},
+				});
+
+				variables.consumer = {
+					id: consumer.id || 'string',
+					name: consumer.name || 'string',
+					email: consumer.email || 'string',
+					profile_picture: consumer.avatar_url || 'string',
+					registration_status: consumer.type || 'string',
+				};
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
 		variables.consumer = {
 			id: 'string',
 			name: 'string',
