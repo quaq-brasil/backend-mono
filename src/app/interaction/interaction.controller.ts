@@ -32,6 +32,11 @@ export class InteractionController {
 		return this.interactionService.findAllByPublicationId(publication_id);
 	}
 
+	@Get('template/:template_id')
+	findAllByTemplateId(@Param('template_id') template_id: string) {
+		return this.interactionService.findAllByPublicationId(template_id);
+	}
+
 	@Put(':id')
 	update(
 		@Param('id') id: string,

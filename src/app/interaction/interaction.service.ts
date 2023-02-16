@@ -71,6 +71,14 @@ export class InteractionService {
 		});
 	}
 
+	findAllByTemplateId(template_id: string) {
+		return this.prismaService.interaction.findMany({
+			where: {
+				template_id: template_id,
+			},
+		});
+	}
+
 	async update(id: string, updateInteractionDto: UpdateInteractionDto) {
 		let executeWebhook = false;
 

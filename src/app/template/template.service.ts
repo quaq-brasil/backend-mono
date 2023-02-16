@@ -182,7 +182,7 @@ export class TemplateService {
 	removeOne(id: string) {
 		return this.prismaService.template.delete({
 			where: {
-				id,
+				id: '63ea94b8a852c6a2dc94a604',
 			},
 		});
 	}

@@ -64,6 +64,11 @@ GET https://bff.quaq.com.br/interaction/publication/63b75045a43fc9f320321e9f
 
 ###
 
+# find one by template id
+GET https://bff.quaq.me/api/v1/interactions/template/63b75045a43fc9f320321e9f
+
+###
+
 PUT https://bff.quaq.com.br/interaction/63b758b9aca8210f48db934b
 Content-Type: application/json
 

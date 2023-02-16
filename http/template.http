@@ -1,6 +1,6 @@
 # get template
 
-GET http://localhost:5000/api/v1/templates/63ea8b8f6135e742cf10734b
+GET http://localhost:5000/api/v1/templates/63ee9aa429576d089a4a2c95
 
 ###
 
@@ -35,11 +35,10 @@ GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
 
 # get  template by page url and template url
 
-GET http://localhost:5000/api/v1/templates/paginateste/dads
-
+GET http://bff.quaq.me/api/v1/templates/demopositivo/template-test
 ###
 
-PUT https://bff.quaq.com.br/api/v1/templates/63e00e52bb60a04fa845a3c9
+PUT http://localhost:5000/api/v1/templates/63e00e52bb60a04fa845a3c9
 Content-Type: application/json
 
 {
@@ -50,7 +49,7 @@ Content-Type: application/json
 
 # delete one template
 
-DELETE https://bff.quaq.me/api/v1/templates/63e14a4dcf10c7e6a53b2a10
+DELETE http://localhost:5000/api/v1/templates/63ea94b8a852c6a2dc94a604
 
 
 ###
