@@ -68,6 +68,18 @@ export class InteractionService {
 			where: {
 				publication_id: publication_id,
 			},
+			include: {
+				User: {
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						avatar_url: true,
+						email_verified: true,
+						type: true,
+					},
+				},
+			},
 		});
 	}
 

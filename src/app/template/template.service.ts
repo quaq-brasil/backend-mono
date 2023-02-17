@@ -52,7 +52,7 @@ export class TemplateService {
 	}
 
 	async findOne(id: string, consumer_id?: string, data?: any[]) {
-		return await this.prismaService.template.findUnique({
+		const template = await this.prismaService.template.findUnique({
 			where: {
 				id,
 			},
@@ -62,39 +62,34 @@ export class TemplateService {
 			},
 		});
 
-		// if (template) {
-		// 	const publication =
-		// 		template.Publications[template?.Publications?.length - 1] ||
-		// 		({} as any);
+		if (template) {
+			const publication =
+				template.Publications[template?.Publications?.length - 1] ||
+				({} as any);
 
-		// 	const formattedTemplate = {
-		// 		...template,
-		// 		publication,
-		// 	};
+			const formattedTemplate = {
+				...template,
+				publication,
+			};
 
-		// 	console.log(
-		// 		'formattedTemplate.publication.blocks',
-		// 		formattedTemplate.publication.blocks,
-		// 	);
+			const variables = await this.variablesService.findPanelVariables(
+				undefined,
+				formattedTemplate.publication.blocks,
+				formattedTemplate.id,
+				formattedTemplate.publication?.dependencies?.connected_templates || [],
+				consumer_id,
+				data,
+			);
 
-		// 	const variables = await this.variablesService.findPanelVariables(
-		// 		undefined,
-		// 		formattedTemplate.publication.blocks,
-		// 		formattedTemplate.id,
-		// 		formattedTemplate.publication?.dependencies?.connected_templates || [],
-		// 		consumer_id,
-		// 		data,
-		// 	);
+			formattedTemplate.publication.blocks = this.blockService.compileVariables(
+				formattedTemplate.publication.blocks,
+				variables,
+			);
 
-		// 	formattedTemplate.publication.blocks = this.blockService.compileVariables(
-		// 		formattedTemplate.publication.blocks,
-		// 		variables,
-		// 	);
+			return formattedTemplate;
+		}
 
-		// 	return formattedTemplate;
-		// }
-
-		// throw new NotFoundException({ message: 'template not found' });
+		throw new NotFoundException({ message: 'template not found' });
 	}
 
 	async findOneByUrl(url: string) {

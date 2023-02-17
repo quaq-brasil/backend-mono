@@ -60,7 +60,7 @@ GET https://bff.quaq.com.br/interaction/page/63b75045a43fc9f320321e9f
 ###
 
 # find one by publication id
-GET https://bff.quaq.com.br/interaction/publication/63b75045a43fc9f320321e9f
+GET http://localhost:5000/api/v1/interactions/publication/63e7cfd588e2141604e1f890
 
 ###
 
@@ -69,7 +69,7 @@ GET https://bff.quaq.me/api/v1/interactions/template/63b75045a43fc9f320321e9f
 
 ###
 
-PUT https://bff.quaq.com.br/interaction/63b758b9aca8210f48db934b
+PUT http://localhost:5000/api/vi/interactions/63ee9aa429576d089a4a2c95
 Content-Type: application/json
 
 {
