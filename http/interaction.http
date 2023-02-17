@@ -40,9 +40,9 @@ Content-Type: application/json
     }
   ],
   "events": [],
-  "template_id": "63e7cf8388e2141604e1f88f",
-  "publication_id": "63e7cfd588e2141604e1f890",
-  "page_id": "63e00e16bb60a04fa845a3c8",
+  "template_id": "63eebb65f5c834d3a9154bc0",
+  "publication_id": "63efbfa074410fc6df8e0d89",
+  "page_id": "63df08bef243bdc4870d6b09",
   "user_id": "63d26f06ea1e68c873e97ab2"
 }
 
@@ -60,7 +60,7 @@ GET https://bff.quaq.com.br/interaction/page/63b75045a43fc9f320321e9f
 ###
 
 # find one by publication id
-GET http://localhost:5000/api/v1/interactions/publication/63e7cfd588e2141604e1f890
+GET http://localhost:5000/api/v1/interactions/publication/63efbfa074410fc6df8e0d89
 
 ###
 

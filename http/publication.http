@@ -1,6 +1,6 @@
 # get publication
 
-GET  http://localhost:5000/api/v1/publications/63ea71c5f629b5caf0489ecf
+GET  http://localhost:5000/api/v1/publications/63eebb65f5c834d3a9154bbf
 
 ###
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 # get many publication by template id
 
-GET https://bff.quaq.com.br/publication/template/1
+GET http://localhost:5000/api/v1/publications/template/63eebb65f5c834d3a9154bc0
 
 ###
 

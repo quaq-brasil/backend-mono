@@ -29,6 +29,7 @@ export class InteractionService {
 
 		const template = await this.templateService.findOne(
 			createInteractionDto.template_id,
+			undefined,
 			createInteractionDto.user_id,
 			createInteractionDto.data,
 		);
@@ -126,6 +127,7 @@ export class InteractionService {
 
 		return await this.templateService.findOne(
 			updateInteractionDto.template_id,
+			undefined,
 			updateInteractionDto.user_id,
 			updateInteractionDto.data,
 		);

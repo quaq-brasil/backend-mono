@@ -51,15 +51,44 @@ export class TemplateService {
 		});
 	}
 
-	async findOne(id: string, consumer_id?: string, data?: any[]) {
-		const template = await this.prismaService.template.findUnique({
+	async findOne(id: string, headers: any, consumer_id?: string, data?: any[]) {
+		const include: any = {
+			Publications: true,
+			Page: true,
+		};
+
+		if (headers.request === 'logs') {
+			include.Publications = {
+				orderBy: {
+					updated_at: 'desc',
+				},
+				include: {
+					Interaction: {
+						orderBy: {
+							updated_at: 'desc',
+						},
+						select: {
+							id: true,
+							updated_at: true,
+							User: {
+								select: {
+									avatar_url: true,
+									name: true,
+								},
+							},
+						},
+					},
+				},
+			};
+		}
+
+		console.log('include', include.Publications);
+
+		const template: any = await this.prismaService.template.findUnique({
 			where: {
 				id,
 			},
-			include: {
-				Publications: true,
-				Page: true,
-			},
+			include: include,
 		});
 
 		if (template) {

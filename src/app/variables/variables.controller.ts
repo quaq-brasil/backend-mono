@@ -13,6 +13,8 @@ export class VariablesController {
 			blocks?: any[];
 			template_id?: string;
 			connected_templates?: string[];
+			consumer_id?: string;
+			data?: any[];
 		},
 	) {
 		return this.variablesService.findPanelVariables(
@@ -20,6 +22,8 @@ export class VariablesController {
 			data.blocks,
 			data.template_id,
 			data.connected_templates,
+			data.consumer_id,
+			data.data,
 		);
 	}
 }

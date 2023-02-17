@@ -1,12 +1,12 @@
 # find one
 
-GET http://localhost:5000/api/v1/users/63d7195b8efd06bc4047296b
+GET http://localhost:5000/api/v1/users/63d26f06ea1e68c873e97ab2
 
 ###
 
 # create one
 
-POST http://localhost:3000/api/v1/users/
+POST http://localhost:5000/api/v1/users
 Content-Type: application/json
 
 {

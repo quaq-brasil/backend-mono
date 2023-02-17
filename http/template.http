@@ -1,6 +1,7 @@
 # get template
 
-GET http://localhost:5000/api/v1/templates/63ee9aa429576d089a4a2c95
+GET http://localhost:5000/api/v1/templates/63efc46ba52e71db610d72bb
+request: logs
 
 ###
 
@@ -29,7 +30,7 @@ GET https://bff.quaq.me/templates/url/testess
 
 # get many template by page id
 
-GET http://localhost:5000/api/v1/templates/page/63e00e16bb60a04fa845a3c8
+GET http://localhost:5000/api/v1/templates/page/63eebb65f5c834d3a9154bc0
 
 ###
 

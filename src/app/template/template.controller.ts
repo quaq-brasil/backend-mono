@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	Headers,
 	Param,
 	Post,
 	Put,
@@ -21,8 +22,8 @@ export class TemplateController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.templateService.findOne(id);
+	findOne(@Param('id') id: string, @Headers() headers: any) {
+		return this.templateService.findOne(id, headers);
 	}
 
 	@Get('url/:url')
