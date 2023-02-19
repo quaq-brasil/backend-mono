@@ -45,6 +45,37 @@ export class InteractionService {
 			where: {
 				id: id,
 			},
+			include: {
+				Publication: {
+					select: {
+						dependencies: true,
+					},
+				},
+				Template: {
+					select: {
+						id: true,
+						name: true,
+						url: true,
+						shortcut_image: true,
+					},
+				},
+				User: {
+					select: {
+						id: true,
+						avatar_url: true,
+						name: true,
+					},
+				},
+				Page: {
+					select: {
+						id: true,
+						url: true,
+						name: true,
+						avatar_url: true,
+						background_url: true,
+					},
+				},
+			},
 		});
 	}
 
