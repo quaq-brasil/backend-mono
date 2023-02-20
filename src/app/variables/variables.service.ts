@@ -73,7 +73,7 @@ export class VariablesService {
 				profile_picture: creator.avatar_url || 'string',
 			};
 		} catch (error) {
-			console.log(error);
+			console.warn(error);
 		}
 	}
 
@@ -94,7 +94,7 @@ export class VariablesService {
 					registration_status: consumer.type || 'string',
 				};
 			} catch (error) {
-				console.log(error);
+				console.warn(error);
 			}
 		}
 
@@ -113,8 +113,6 @@ export class VariablesService {
 
 	async formaBlocks(blocks: any[], variables: any, data?: any[]) {
 		variables.blocks = {};
-
-		console.log('blocks', blocks);
 
 		blocks.forEach((block) => {
 			const currentData = data
@@ -288,7 +286,7 @@ export class VariablesService {
 
 			variables.publications = publications;
 		} catch (error) {
-			console.log(error);
+			console.warn(error);
 		}
 	}
 
@@ -309,7 +307,7 @@ export class VariablesService {
 					}),
 				);
 			} catch (error) {
-				console.log(error);
+				console.warn(error);
 			}
 		}
 	}

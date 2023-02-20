@@ -40,7 +40,7 @@ export class BlockService {
 					}),
 				);
 			} catch (error) {
-				console.log(error);
+				console.warn(error);
 			}
 		}
 
@@ -111,7 +111,7 @@ export class BlockService {
 					return webhookData;
 			}
 		} catch (error) {
-			console.log(error);
+			console.warn(error);
 		}
 	}
 

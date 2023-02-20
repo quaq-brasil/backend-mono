@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { BlockService } from '../block/block.service';
 import { TemplateService } from '../template/template.service';
@@ -27,17 +27,21 @@ export class InteractionService {
 			data: createInteractionDto,
 		});
 
-		const template = await this.templateService.findOne(
-			createInteractionDto.template_id,
-			undefined,
-			createInteractionDto.user_id,
-			createInteractionDto.data,
-		);
+		try {
+			const template = await this.templateService.findOne(
+				createInteractionDto.template_id,
+				undefined,
+				createInteractionDto.user_id,
+				createInteractionDto.data,
+			);
 
-		return {
-			...template,
-			interaction_id: interaction.id,
-		};
+			return {
+				...template,
+				interaction_id: interaction.id,
+			};
+		} catch (err) {
+			throw new BadRequestException('template does not exists', err);
+		}
 	}
 
 	findOne(id: string) {
@@ -153,8 +157,6 @@ export class InteractionService {
 			},
 			data: updateInteractionDto,
 		});
-
-		console.log('data', updateInteractionDto.data);
 
 		return await this.templateService.findOne(
 			updateInteractionDto.template_id,

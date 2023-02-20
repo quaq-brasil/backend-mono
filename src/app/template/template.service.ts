@@ -57,7 +57,7 @@ export class TemplateService {
 			Page: true,
 		};
 
-		if (headers.request === 'logs') {
+		if (headers && headers.request === 'logs') {
 			include.Publications = {
 				orderBy: {
 					updated_at: 'desc',
@@ -81,8 +81,6 @@ export class TemplateService {
 				},
 			};
 		}
-
-		console.log('include', include.Publications);
 
 		const template: any = await this.prismaService.template.findUnique({
 			where: {
