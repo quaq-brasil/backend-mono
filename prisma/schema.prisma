@@ -12,7 +12,7 @@ model UserToken {
   token         String   @unique
   refresh_token String?
   expires_at    DateTime
-  user_id       String   @db.ObjectId
+  user_id       String
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -48,10 +48,10 @@ model Interaction {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  template_id    String @db.ObjectId
-  publication_id String @db.ObjectId
-  page_id        String @db.ObjectId
-  user_id        String @db.ObjectId
+  template_id    String
+  publication_id String
+  page_id        String
+  user_id        String
 
   Publication Publication @relation(fields: [publication_id], references: [id])
   Page        Page        @relation(fields: [page_id], references: [id])
@@ -75,7 +75,7 @@ model Page {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  workspace_id String @db.ObjectId
+  workspace_id String
 
   templates   Template[]
   Publication Publication[]
@@ -95,8 +95,8 @@ model Publication {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  template_id String? @db.ObjectId
-  page_id     String  @db.ObjectId
+  template_id String?
+  page_id     String
 
   Interaction Interaction[]
   Template    Template?     @relation(fields: [template_id], references: [id])
@@ -106,21 +106,22 @@ model Publication {
 }
 
 model Template {
-  id                         String @id @default(auto()) @map("_id") @db.ObjectId
+  id                         String   @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
   url                        String
   shortcut_image             String
-  shortcut_size              String @default("small")
+  shortcut_size              String   @default("small")
   trackers                   Json?
-  number_of_new_interactions Int    @default(0)
+  number_of_new_interactions Int      @default(0)
+  deleted                    Boolean?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  page_id                String  @db.ObjectId
-  current_publication_id String? @db.ObjectId
+  page_id                String
+  current_publication_id String?
 
-  Page         Page          @relation(fields: [page_id], references: [id])
+  Page         Page?         @relation(fields: [page_id], references: [id])
   Publications Publication[]
   Interactions Interaction[]
 
@@ -159,7 +160,7 @@ model Workspace {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user_id String? @db.ObjectId
+  user_id String?
 
   User User?  @relation(fields: [user_id], references: [id])
   Page Page[]

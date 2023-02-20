@@ -1,9 +1,12 @@
 import {
 	BadRequestException,
 	Injectable,
+	InternalServerErrorException,
 	Logger,
 	NotFoundException,
 } from '@nestjs/common';
+import { createHash, randomUUID } from 'crypto';
+
 import { PrismaService } from 'src/prisma.service';
 import { BlockService } from '../block/block.service';
 import { VariablesService } from '../variables/variables.service';
@@ -201,12 +204,67 @@ export class TemplateService {
 		});
 	}
 
-	removeOne(id: string) {
-		return this.prismaService.template.delete({
-			where: {
-				id: '63ea94b8a852c6a2dc94a604',
-			},
-		});
+	async removeOne(id: string) {
+		let template;
+		try {
+			template = await this.prismaService.template.findUniqueOrThrow({
+				where: {
+					id,
+				},
+			});
+		} catch (err) {
+			throw new NotFoundException({ message: 'template not found' });
+		}
+
+		if (template && !template.deleted) {
+			try {
+				const hashName = createHash('sha256')
+					.update(template.name)
+					.digest('hex');
+				const hashUrl = randomUUID();
+				const hashShortcutImage = createHash('sha256')
+					.update(template.shortcut_image)
+					.digest('hex');
+				const hashShortcutSize = createHash('sha256')
+					.update(template.shortcut_size)
+					.digest('hex');
+				const hashTrackers = createHash('sha256')
+					.update(JSON.stringify(template.trackers))
+					.digest('hex');
+				const hashNumberOfNewInteractions =
+					(template.number_of_new_interactions + 2) * 164;
+				const hashPageId = createHash('sha256')
+					.update(JSON.stringify(template.page_id))
+					.digest('hex');
+				const hashCurrentPublicationId = createHash('sha256')
+					.update(template.current_publication_id)
+					.digest('hex');
+
+				await this.prismaService.template.update({
+					where: {
+						id,
+					},
+					data: {
+						name: hashName,
+						url: hashUrl,
+						shortcut_image: hashShortcutImage,
+						shortcut_size: hashShortcutSize,
+						trackers: { hash: hashTrackers },
+						number_of_new_interactions: hashNumberOfNewInteractions,
+						page_id: hashPageId,
+						current_publication_id: hashCurrentPublicationId,
+						deleted: true,
+					},
+				});
+				return { message: 'deleted template' };
+			} catch (err) {
+				throw new InternalServerErrorException({
+					message: `error deleting template, ${err}`,
+				});
+			}
+		}
+
+		throw new NotFoundException({ message: 'template not found' });
 	}
 
 	async generateUniqueSlugByTemplateTitle(

@@ -50,7 +50,7 @@ Content-Type: application/json
 
 # delete one template
 
-DELETE http://localhost:5000/api/v1/templates/63ea94b8a852c6a2dc94a604
+DELETE http://localhost:5000/api/v1/templates/63f3c6d5d8bd9436af2cbdec
 
 
 ###
