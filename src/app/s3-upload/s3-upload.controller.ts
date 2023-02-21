@@ -8,7 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileEntity } from '@prisma/client';
 import { S3FileUploadService } from './s3-upload.service';
 
-@Controller('/ap1/v1/fileUpload')
+@Controller('/api/v1/fileUpload')
 export class S3FileUploadController {
 	constructor(private fileUploadService: S3FileUploadService) {}
 
