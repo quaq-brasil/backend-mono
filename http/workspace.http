@@ -71,7 +71,7 @@ GET https://bff.quaq.me/api/v1/workspaces/page/slug/quaq
 
 # generate unique slug workspace
 
-POST http://localhost:5000/api/v1/workspaces/generate_unique_url
+POST http://localhost:5000/api/v1/workspaces/generate_unique_slug
 Content-Type: application/json
 
 {

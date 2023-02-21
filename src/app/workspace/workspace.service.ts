@@ -65,7 +65,7 @@ export class WorkspaceService {
 	async findOneByPageSlug(page_slug: string) {
 		const page = await this.prismaService.page.findUnique({
 			where: {
-				url: page_slug,
+				slug: page_slug,
 			},
 			include: {
 				Workspace: true,
@@ -147,6 +147,3 @@ export class WorkspaceService {
 		}
 	}
 }
-
-// rota gerar url unica
-// pegar workspace slug da pagina

@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
     "name": "name",
-    "url": "url",
+    "slug": "slug",
     "shortcut_image": "shortcutImage",
     "shortcut_size": "shortcutSize",
     "current_publication_id": "1",
@@ -20,9 +20,9 @@ Content-Type: application/json
 
 ###
 
-# get template by url
+# get template by slug
 
-GET http://localhost:3000/template/url/url
+GET http://localhost:3000/template/slug/slug
 
 ###
 
@@ -37,7 +37,7 @@ Content-Type: application/json
 
 {
     "title": "title",
-    "url": "url",
+    "slug": "slug",
     "shortcutImage": "shortcutImage",
     "shortcutSize": "shortcutSize",
     "numberOfNewInteractions": 1,

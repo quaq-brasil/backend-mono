@@ -1,27 +1,31 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateTemplateRequest {
-  @IsString()
-  name: string;
+	@IsString()
+	title: string;
 
-  @IsString()
-  url: string;
+	@IsString()
+	slug: string;
 
-  @IsString()
-  shortcut_image: string;
+	@IsString()
+	shortcut_image: string;
 
-  @IsString()
-  @IsOptional()
-  shortcut_size: string;
+	@IsString()
+	@IsOptional()
+	shortcut_size: string;
 
-  @IsString()
-  @IsOptional()
-  current_publication_id: string;
+	@IsString()
+	@IsOptional()
+	current_publication_id: string;
 
-  @IsObject()
-  @IsOptional()
-  trackers: any;
+	@IsObject()
+	@IsOptional()
+	trackers: any;
 
-  @IsString()
-  page_id: string;
+	@IsObject()
+	@IsOptional()
+	access_config: any;
+
+	@IsString()
+	page_id: string;
 }

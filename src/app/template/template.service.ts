@@ -42,9 +42,9 @@ export class TemplateService {
 	}
 
 	async createOne(request: CreateTemplateRequest) {
-		if (request.url && request.page_id) {
-			request.url = await this.generateUniqueSlugByTemplateTitle(
-				request.url,
+		if (request.slug && request.page_id) {
+			request.slug = await this.generateUniqueSlugByTemplateTitle(
+				request.slug,
 				request.page_id,
 			);
 		}
@@ -122,10 +122,10 @@ export class TemplateService {
 		throw new NotFoundException({ message: 'template not found' });
 	}
 
-	async findOneByUrl(url: string) {
+	async findOneBySlug(slug: string) {
 		return this.prismaService.template.findFirst({
 			where: {
-				url,
+				slug,
 			},
 		});
 	}
@@ -138,14 +138,14 @@ export class TemplateService {
 		});
 	}
 
-	async findOneByPageAndTemplateUrl(
-		url: string,
-		page_url: string,
+	async findOneByPageAndTemplateSlug(
+		slug: string,
+		page_slug: string,
 		consumer_id?: string,
 	) {
 		const templates = await this.prismaService.template.findMany({
 			where: {
-				url,
+				slug,
 			},
 			include: {
 				Page: true,
@@ -155,7 +155,7 @@ export class TemplateService {
 
 		if (templates && templates.length > 0) {
 			const uniqueTemplate = templates.filter(
-				(template) => template.Page.url === page_url,
+				(template) => template.Page.slug === page_slug,
 			);
 
 			const publication =
@@ -188,9 +188,9 @@ export class TemplateService {
 	}
 
 	async updateOne(id: string, request: UpdateTemplateRequest) {
-		if (request.url && request.page_id) {
-			request.url = await this.generateUniqueSlugByTemplateTitle(
-				request.url,
+		if (request.slug && request.page_id) {
+			request.slug = await this.generateUniqueSlugByTemplateTitle(
+				request.slug,
 				request.page_id,
 				id,
 			);
@@ -221,7 +221,7 @@ export class TemplateService {
 				const hashName = createHash('sha256')
 					.update(template.name)
 					.digest('hex');
-				const hashUrl = randomUUID();
+				const hashSlug = randomUUID();
 				const hashShortcutImage = createHash('sha256')
 					.update(template.shortcut_image)
 					.digest('hex');
@@ -245,8 +245,8 @@ export class TemplateService {
 						id,
 					},
 					data: {
-						name: hashName,
-						url: hashUrl,
+						title: hashName,
+						slug: hashSlug,
 						shortcut_image: hashShortcutImage,
 						shortcut_size: hashShortcutSize,
 						trackers: { hash: hashTrackers },
@@ -278,10 +278,10 @@ export class TemplateService {
 
 		let attempts = 0;
 
-		while (await this.isURLTaken(uniqSlug, page_id, id)) {
+		while (await this.isSlugTaken(uniqSlug, page_id, id)) {
 			attempts++;
 			if (attempts >= this.MAX_ATTEMPTS) {
-				throw new BadRequestException('Could not generate unique URL');
+				throw new BadRequestException('Could not generate unique Slug');
 			}
 
 			const randomSlug: string = uniqueSlug();
@@ -291,8 +291,8 @@ export class TemplateService {
 		return uniqSlug;
 	}
 
-	async isURLTaken(url: string, page_id: string, id?: string) {
-		if (this.RESERVED_TEMPLATE_SLUGS.includes(url)) {
+	async isSlugTaken(slug: string, page_id: string, id?: string) {
+		if (this.RESERVED_TEMPLATE_SLUGS.includes(slug)) {
 			return true;
 		}
 
@@ -307,14 +307,14 @@ export class TemplateService {
 				}
 
 				templates.forEach((template) => {
-					if (template.url === url && template.id !== id) {
+					if (template.slug === slug && template.id !== id) {
 						return true;
 					}
 				});
 
 				return false;
 			} catch (error) {
-				this.logger.error(`Error checking if URL is taken: ${error.message}`);
+				this.logger.error(`Error checking if Slug is taken: ${error.message}`);
 				throw new BadRequestException({ message: error.message });
 			}
 		}
@@ -325,14 +325,14 @@ export class TemplateService {
 			});
 
 			templates.forEach((template) => {
-				if (template.url === url) {
+				if (template.slug === slug) {
 					return true;
 				}
 			});
 
 			return false;
 		} catch (error) {
-			this.logger.error(`Error checking if URL is taken: ${error.message}`);
+			this.logger.error(`Error checking if Slug is taken: ${error.message}`);
 			throw new BadRequestException({ message: error.message });
 		}
 	}

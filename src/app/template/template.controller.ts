@@ -26,9 +26,9 @@ export class TemplateController {
 		return this.templateService.findOne(id, headers);
 	}
 
-	@Get('url/:url')
-	findOneByUrl(@Param('url') url: string) {
-		return this.templateService.findOneByUrl(url);
+	@Get('slug/:slug')
+	findOneBySlug(@Param('slug') slug: string) {
+		return this.templateService.findOneBySlug(slug);
 	}
 
 	@Get('page/:page_id')
@@ -36,12 +36,12 @@ export class TemplateController {
 		return this.templateService.findManyByPageId(page_id);
 	}
 
-	@Get(':page_url/:url')
-	findOneByPageAndTemplateUrl(
-		@Param('page_url') page_url: string,
-		@Param('url') url: string,
+	@Get(':page_slug/:slug')
+	findOneByPageAndTemplateSlug(
+		@Param('page_slug') page_slug: string,
+		@Param('slug') slug: string,
 	) {
-		return this.templateService.findOneByPageAndTemplateUrl(url, page_url);
+		return this.templateService.findOneByPageAndTemplateSlug(slug, page_slug);
 	}
 
 	@Put(':id')
@@ -57,8 +57,8 @@ export class TemplateController {
 		return this.templateService.removeOne(id);
 	}
 
-	@Post('generate_unique_url')
-	generateUniqueUrlByPageName(
+	@Post('generate_unique_slug')
+	generateUniqueSlugByPageName(
 		@Body() data: { title: string; page_id: string; id?: string },
 	) {
 		return this.templateService.generateUniqueSlugByTemplateTitle(

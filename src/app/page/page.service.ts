@@ -25,9 +25,9 @@ export class PageService {
 	}
 
 	async create(createPageDto: CreatePageDto) {
-		if (createPageDto.url) {
-			createPageDto.url = await this.generateUniqueSlugByPageName(
-				createPageDto.url,
+		if (createPageDto.slug) {
+			createPageDto.slug = await this.generateUniqueSlugByPageName(
+				createPageDto.slug,
 			);
 		}
 
@@ -65,18 +65,18 @@ export class PageService {
 		}
 	}
 
-	async findOneByUrl(url: string) {
+	async findOneBySlug(slug: string) {
 		try {
 			return await this.prismaService.page.findUnique({
 				where: {
-					url,
+					slug,
 				},
 				include: {
 					templates: true,
 				},
 			});
 		} catch (error) {
-			this.logger.error(`Error finding page by url: ${error.message}`);
+			this.logger.error(`Error finding page by slug: ${error.message}`);
 			throw new BadRequestException({ message: error.message });
 		}
 	}
@@ -97,9 +97,9 @@ export class PageService {
 	}
 
 	async update(id: string, updatePageDto: UpdatePageDto) {
-		if (updatePageDto.url) {
-			updatePageDto.url = await this.generateUniqueSlugByPageName(
-				updatePageDto.url,
+		if (updatePageDto.slug) {
+			updatePageDto.slug = await this.generateUniqueSlugByPageName(
+				updatePageDto.slug,
 			);
 		}
 
@@ -136,10 +136,10 @@ export class PageService {
 
 		let attempts = 0;
 
-		while (await this.isURLTaken(uniqSlug, id)) {
+		while (await this.isSlugTaken(uniqSlug, id)) {
 			attempts++;
 			if (attempts >= this.MAX_ATTEMPTS) {
-				throw new BadRequestException('Could not generate unique URL');
+				throw new BadRequestException('Could not generate unique Slug');
 			}
 
 			const randomSlug: string = uniqueSlug();
@@ -149,15 +149,15 @@ export class PageService {
 		return uniqSlug;
 	}
 
-	async isURLTaken(url: string, id?: string) {
-		if (this.RESERVED_PAGE_SLUGS.includes(url)) {
+	async isSlugTaken(slug: string, id?: string) {
+		if (this.RESERVED_PAGE_SLUGS.includes(slug)) {
 			return true;
 		}
 
 		if (id) {
 			try {
 				const page = await this.prismaService.page.findUnique({
-					where: { url },
+					where: { slug },
 				});
 
 				if (!page) {
@@ -166,17 +166,17 @@ export class PageService {
 
 				return page.id !== id;
 			} catch (error) {
-				this.logger.error(`Error checking if URL is taken: ${error.message}`);
+				this.logger.error(`Error checking if Slug is taken: ${error.message}`);
 				throw new BadRequestException({ message: error.message });
 			}
 		}
 
 		try {
 			return (
-				(await this.prismaService.page.findMany({ where: { url } })).length > 0
+				(await this.prismaService.page.findMany({ where: { slug } })).length > 0
 			);
 		} catch (error) {
-			this.logger.error(`Error checking if URL is taken: ${error.message}`);
+			this.logger.error(`Error checking if Slug is taken: ${error.message}`);
 			throw new BadRequestException({ message: error.message });
 		}
 	}

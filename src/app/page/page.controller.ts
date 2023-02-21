@@ -30,9 +30,9 @@ export class PageController {
 		return await this.pageService.findOne(id);
 	}
 
-	@Get('url/:url')
-	findOneByUrl(@Param('url') url: string) {
-		return this.pageService.findOneByUrl(url);
+	@Get('slug/:slug')
+	findOneBySlug(@Param('slug') slug: string) {
+		return this.pageService.findOneBySlug(slug);
 	}
 
 	@Get('workspace/:workspace_id')
@@ -50,8 +50,8 @@ export class PageController {
 		return this.pageService.delete(id);
 	}
 
-	@Post('generate_unique_url')
-	generateUniqueUrlByPageName(@Body() data: { name: string; id?: string }) {
+	@Post('generate_unique_slug')
+	generateUniqueSlugByPageName(@Body() data: { name: string; id?: string }) {
 		return this.pageService.generateUniqueSlugByPageName(data.name, data.id);
 	}
 }

@@ -58,8 +58,8 @@ export class InteractionService {
 				Template: {
 					select: {
 						id: true,
-						name: true,
-						url: true,
+						title: true,
+						slug: true,
 						shortcut_image: true,
 					},
 				},
@@ -73,8 +73,8 @@ export class InteractionService {
 				Page: {
 					select: {
 						id: true,
-						url: true,
-						name: true,
+						slug: true,
+						title: true,
 						avatar_url: true,
 						background_url: true,
 					},

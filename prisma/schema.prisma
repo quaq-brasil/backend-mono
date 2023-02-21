@@ -17,7 +17,7 @@ model UserToken {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("user_tokens2")
+  @@map("user_tokens")
 }
 
 model File {
@@ -31,19 +31,16 @@ model File {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  @@map("files2")
 }
 
 model Interaction {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  blocks        Json[]
-  data          Json[]
-  events        Json[]
-  metadata      Json?
-  last_block_id String?
-  depth         Int     @default(0)
-  locations     Json[]  @default([])
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  blocks    Json[]
+  data      Json[]
+  events    Json[]
+  metadata  Json?
+  depth     Int    @default(0)
+  locations Json[] @default([])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -58,19 +55,19 @@ model Interaction {
   Template    Template    @relation(fields: [template_id], references: [id])
   User        User        @relation(fields: [user_id], references: [id])
 
-  @@map("interactions2")
+  @@map("interactions")
 }
 
 model Page {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
-  name             String
-  description      String?
-  url              String  @unique
-  avatar_url       String?
-  background_url   String?
-  is_stripe_active Boolean @default(false)
-  stripe_id        String?
-  trackers         Json?
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  slug           String  @unique
+  avatar_url     String?
+  background_url String?
+  services       Json[]  @default([])
+  trackers       Json?
+  access_config  Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -82,7 +79,7 @@ model Page {
   Interaction Interaction[]
   Workspace   Workspace?    @relation(fields: [workspace_id], references: [id])
 
-  @@map("pages2")
+  @@map("pages")
 }
 
 model Publication {
@@ -102,18 +99,19 @@ model Publication {
   Template    Template?     @relation(fields: [template_id], references: [id])
   Page        Page?         @relation(fields: [page_id], references: [id])
 
-  @@map("publications2")
+  @@map("publications")
 }
 
 model Template {
   id                         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name                       String
-  url                        String
+  title                      String
+  slug                       String
   shortcut_image             String
   shortcut_size              String   @default("small")
   trackers                   Json?
   number_of_new_interactions Int      @default(0)
   deleted                    Boolean?
+  access_config              Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -125,7 +123,7 @@ model Template {
   Publications Publication[]
   Interactions Interaction[]
 
-  @@map("templates2")
+  @@map("templates")
 }
 
 model User {
@@ -137,7 +135,7 @@ model User {
   password_reset_token_attempts Int       @default(0)
   name                          String?
   avatar_url                    String?
-  stripe_customer_id            String?
+  services                      Json[]    @default([])
   confirmation_token            String?
   last_login                    DateTime?
 
@@ -147,13 +145,13 @@ model User {
   Workspace   Workspace[]
   Interaction Interaction[]
 
-  @@map("users2")
+  @@map("users")
 }
 
 model Workspace {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  slug       String?  @unique
+  title      String
+  slug       String   @unique
   avatar_url String?
   services   Json[]   @default([])
   members    Json?
@@ -165,7 +163,7 @@ model Workspace {
   User User?  @relation(fields: [user_id], references: [id])
   Page Page[]
 
-  @@map("workspaces2")
+  @@map("workspaces")
 }
 
 model FileEntity {
@@ -175,4 +173,6 @@ model FileEntity {
   key       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("files")
 }

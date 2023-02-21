@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
   "name": "name",
-  "url": "meutemplate2",
+  "slug": "meutemplate2",
   "shortcut_image": "shortcutImage",
   "shortcut_size": "shortcutSize",
   "current_publication_id": "63e7cf7388e2141604e1f88e",
@@ -22,9 +22,9 @@ Content-Type: application/json
 
 ###
 
-# get template by url
+# get template by slug
 
-GET https://bff.quaq.me/templates/url/testess
+GET https://bff.quaq.me/templates/slug/testess
 
 ###
 
@@ -34,7 +34,7 @@ GET http://localhost:5000/api/v1/templates/page/63eebb65f5c834d3a9154bc0
 
 ###
 
-# get  template by page url and template url
+# get  template by page slug and template slug
 
 GET http://bff.quaq.me/api/v1/templates/demopositivo/template-test
 ###
@@ -56,7 +56,7 @@ DELETE http://localhost:5000/api/v1/templates/63f3c6d5d8bd9436af2cbdec
 ###
 
 
-POST https://bff.quaq.me/api/v1/templates/generate_unique_url
+POST https://bff.quaq.me/api/v1/templates/generate_unique_slug
 Content-Type: application/json
 
 
