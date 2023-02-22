@@ -14,10 +14,10 @@ import { WorkspaceModule } from './app/workspace/workspace.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
-		PublicationModule,
 		TemplateModule,
-		FileModule,
+		PublicationModule,
 		UserModule,
+		FileModule,
 		PageModule,
 		WorkspaceModule,
 		InteractionModule,
