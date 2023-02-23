@@ -139,7 +139,7 @@ export class BlockService {
 					extract(value[key]);
 				}
 			} else if (typeof value === 'string') {
-				const match = value.match(/{{(.*?)}}/g);
+				const match = value.match(/{{[^{}]*+}}/g);
 				if (match) {
 					match.forEach((variable) => {
 						let varName = variable.replace(/[{.}]/g, '__');
