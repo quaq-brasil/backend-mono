@@ -1,5 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { VariablesService } from './variables.service';
+import { Body, Controller, Post } from '@nestjs/common'
+import { VariablesService } from './variables.service'
 
 @Controller('api/v1/variables')
 export class VariablesController {
@@ -9,12 +9,12 @@ export class VariablesController {
 	create(
 		@Body()
 		data: {
-			creator_id: string;
-			blocks?: any[];
-			template_id?: string;
-			connected_templates?: string[];
-			consumer_id?: string;
-			data?: any[];
+			creator_id: string
+			blocks?: any[]
+			template_id?: string
+			connected_templates?: string[]
+			consumer_id?: string
+			data?: any[]
 		},
 	) {
 		return this.variablesService.findPanelVariables(
@@ -24,6 +24,6 @@ export class VariablesController {
 			data.connected_templates,
 			data.consumer_id,
 			data.data,
-		);
+		)
 	}
 }

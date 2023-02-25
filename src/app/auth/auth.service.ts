@@ -1,35 +1,48 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
-import { compareSync } from 'bcrypt';
-import { UserService } from '../user/user.service';
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import * as bcrypt from 'bcrypt'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
-  ) {}
+	constructor(
+		private prismaService: PrismaService,
+		private jwtService: JwtService,
+	) {}
 
-  async login(user) {
-    const payload = { sub: user.id, email: user.email };
+	async login(email: string, password: string) {
+		const user = await this.validateCredentials(email, password)
 
-    return {
-      token: this.jwtService.sign(payload),
-    };
-  }
+		const payload = {
+			sub: user.id,
+			email: user.email,
+			name: user.name,
+			avatar_url: user.avatar_url,
+		}
 
-  async validateUser(email: string, password: string) {
-    let user: User;
-    try {
-      user = await this.userService.findOneByEmail(email);
-    } catch (error) {
-      return null;
-    }
+		return this.jwtService.sign(payload)
+	}
 
-    const isPasswordValid = compareSync(password, user.password);
-    if (!isPasswordValid) return null;
+	async validateCredentials(email: string, password: string) {
+		try {
+			const user = await this.prismaService.user.findUniqueOrThrow({
+				where: {
+					email,
+				},
+			})
 
-    return user;
-  }
+			if (bcrypt.compareSync(password, user?.password)) {
+				delete user.password
+				return user
+			}
+
+			throw new BadRequestException({
+				message: 'email or password are incorrect!',
+			})
+		} catch (err) {
+			throw new BadRequestException({
+				message: 'email or password are incorrect!',
+			})
+		}
+	}
 }

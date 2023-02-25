@@ -1,9 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class VariablesService {
-	constructor(private prismaService: PrismaService) {}
+	constructor(private readonly prismaService: PrismaService) {}
+
+	EVENT_PROPERTIES = {
+		text: {
+			displayedAt: 'string',
+		},
+		image: {
+			displayedAt: 'string',
+		},
+		chart: {
+			displayedAt: 'string',
+		},
+		textentry: {
+			displayedAt: 'string',
+			lastInteractionAt: 'string',
+			firstInteractionAt: 'string',
+		},
+		pool: {
+			displayedAt: 'string',
+			lastInteractionAt: 'string',
+			firstInteractionAt: 'string',
+			maxAchievedAt: 'string',
+			minAchievedAt: 'string',
+		},
+		button: {
+			displayedAt: 'string',
+			lastInteractionAt: 'string',
+			firstInteractionAt: 'string',
+		},
+		review: {
+			displayedAt: 'string',
+			lastInteractionAt: 'string',
+			firstInteractionAt: 'string',
+		},
+		automation: {
+			displayedAt: 'string',
+			lastExecutionAt: 'string',
+			firstExecutionAt: 'string',
+			hasStopBeenReached: 'string',
+		},
+		webhook: {
+			displayedAt: 'string',
+			lastExecutionAt: 'string',
+			firstExecutionAt: 'string',
+			responseReceivedAt: 'string',
+			requestSentAt: 'string',
+		},
+	}
 
 	async findPanelVariables(
 		creator_id: string,
@@ -11,14 +58,14 @@ export class VariablesService {
 		template_id?: string,
 		connectedTemplates?: string[],
 		consumer_id?: string,
-		data?: any[],
+		data?: any[]
 	) {
 		const variables: any = {
 			consumer: {},
 			events: {},
 			blocks: {},
 			publications: {},
-		};
+		}
 
 		await this.findAllVariablesAvailable(
 			creator_id,
@@ -26,12 +73,12 @@ export class VariablesService {
 			blocks,
 			template_id,
 			consumer_id,
-			data,
-		);
+			data
+		)
 
-		await this.formatConnectedTemplates(variables, connectedTemplates);
+		await this.formatConnectedTemplates(variables, connectedTemplates)
 
-		return variables;
+		return variables
 	}
 
 	async findAllVariablesAvailable(
@@ -40,21 +87,21 @@ export class VariablesService {
 		blocks?: any[],
 		template_id?: string,
 		consumer_id?: string,
-		data?: any[],
+		data?: any[]
 	) {
 		if (creator_id) {
-			await this.formatCreator(creator_id, variables);
+			await this.formatCreator(creator_id, variables)
 		}
 
-		this.formatConsumer(variables, consumer_id);
-		this.formatEvents(variables);
+		this.formatConsumer(variables, consumer_id)
+		this.formatEvents(variables)
 
 		if (blocks && blocks.length > 0) {
-			await this.formaBlocks(blocks, variables, data);
+			await this.formaBlocks(blocks, variables, data)
 		}
 
 		if (template_id) {
-			await this.formatPublications(template_id, variables);
+			await this.formatPublications(template_id, variables)
 		}
 	}
 
@@ -64,16 +111,16 @@ export class VariablesService {
 				where: {
 					id: creator_id,
 				},
-			});
+			})
 
 			variables.creator = {
 				id: creator.id || 'string',
 				name: creator.name || 'string',
 				email: creator.email || 'string',
 				profile_picture: creator.avatar_url || 'string',
-			};
+			}
 		} catch (error) {
-			console.warn(error);
+			console.warn(error)
 		}
 	}
 
@@ -84,7 +131,7 @@ export class VariablesService {
 					where: {
 						id: consumer_id,
 					},
-				});
+				})
 
 				variables.consumer = {
 					id: consumer.id || 'string',
@@ -92,9 +139,9 @@ export class VariablesService {
 					email: consumer.email || 'string',
 					profile_picture: consumer.avatar_url || 'string',
 					registration_status: consumer.type || 'string',
-				};
+				}
 			} catch (error) {
-				console.warn(error);
+				console.warn(error)
 			}
 		}
 
@@ -104,20 +151,20 @@ export class VariablesService {
 			email: 'string',
 			profile_picture: 'string',
 			registration_status: 'string',
-		};
+		}
 	}
 
 	async formatEvents(variables: any) {
-		variables.events = {};
+		variables.events = {}
 	}
 
 	async formaBlocks(blocks: any[], variables: any, data?: any[]) {
-		variables.blocks = {};
+		variables.blocks = {}
 
 		blocks.forEach((block) => {
 			const currentData = data
 				? data.filter((cData) => cData.id === block.id)
-				: undefined;
+				: undefined
 
 			const newBlocks = {
 				config: {
@@ -128,18 +175,18 @@ export class VariablesService {
 				},
 				data: {},
 				events: {},
-			};
-
-			if (!currentData || currentData?.length < 1) {
-				this.formatBlockData(block, newBlocks);
-				this.formatBlockEvents(block, newBlocks);
-			} else {
-				newBlocks.data = currentData[0]?.output?.data;
-				newBlocks.events = currentData[0]?.output?.events;
 			}
 
-			variables.blocks[block.save_as] = newBlocks;
-		});
+			if (!currentData || currentData?.length < 1) {
+				this.formatBlockData(block, newBlocks)
+				this.formatBlockEvents(block, newBlocks)
+			} else {
+				newBlocks.data = currentData[0]?.output?.data
+				newBlocks.events = currentData[0]?.output?.events
+			}
+
+			variables.blocks[block.save_as] = newBlocks
+		})
 	}
 
 	async formatBlockData(block: any, variables: any) {
@@ -147,108 +194,43 @@ export class VariablesService {
 			case 'textentry':
 				variables.data = {
 					value: 'string',
-				};
-				break;
+				}
+				break
 			case 'pool':
 				variables.data = {
 					selected_options: 'string list',
 					number_of_selections: 'number',
-				};
-				break;
+				}
+				break
 
 			case 'button':
 				variables.data = {
 					clicked: 'boolean',
-				};
-				break;
+				}
+				break
 
 			case 'review':
 				variables.data = {
 					review: 'number',
-				};
-				break;
+				}
+				break
 
 			case 'webhook':
 				variables.data = {
 					header: 'string',
 					body: 'string',
-				};
-				break;
+				}
+				break
 
 			default:
-				variables.data = {};
-				break;
+				variables.data = {}
+				break
 		}
 	}
 
-	async formatBlockEvents(block: any, variables: any) {
-		switch (block.type) {
-			case 'text':
-				variables.events = {
-					displayedAt: 'string',
-				};
-				break;
-			case 'image':
-				variables.events = {
-					displayedAt: 'string',
-				};
-				break;
-			case 'chart':
-				variables.events = {
-					displayedAt: 'string',
-				};
-				break;
-			case 'textentry':
-				variables.events = {
-					displayedAt: 'string',
-					lastInteractionAt: 'string',
-					firstInteractionAt: 'string',
-				};
-				break;
-			case 'pool':
-				variables.events = {
-					displayedAt: 'string',
-					lastInteractionAt: 'string',
-					firstInteractionAt: 'string',
-					maxAchievedAt: 'string',
-					minAchievedAt: 'string',
-				};
-				break;
-			case 'button':
-				variables.events = {
-					displayedAt: 'string',
-					lastInteractionAt: 'string',
-					firstInteractionAt: 'string',
-				};
-				break;
-			case 'review':
-				variables.events = {
-					displayedAt: 'string',
-					lastInteractionAt: 'string',
-					firstInteractionAt: 'string',
-				};
-				break;
-			case 'automation':
-				variables.events = {
-					displayedAt: 'string',
-					lastExecutionAt: 'string',
-					firstExecutionAt: 'string',
-					hasStopBeenReached: 'string',
-				};
-				break;
-			case 'webhook':
-				variables.events = {
-					displayedAt: 'string',
-					lastExecutionAt: 'string',
-					firstExecutionAt: 'string',
-					responseReceivedAt: 'string',
-					requestSentAt: 'string',
-				};
-				break;
-			default:
-				variables.events = {};
-				break;
-		}
+	async formatBlockEvents(block: any, blockData: any) {
+		const eventType = this.EVENT_PROPERTIES[block.type] || {}
+		blockData.events = { ...eventType }
 	}
 
 	async formatPublications(template_id: string, variables: any) {
@@ -261,14 +243,14 @@ export class VariablesService {
 					Publications: true,
 					Interactions: true,
 				},
-			});
+			})
 
-			const publications = {};
+			const publications = {}
 
 			template.Publications.forEach((publication) => {
 				const interactions = template.Interactions.filter(
-					(interaction) => interaction.publication_id === publication.id,
-				);
+					(interaction) => interaction.publication_id === publication.id
+				)
 
 				const newInteractions = interactions.map((interaction) => {
 					return {
@@ -278,15 +260,15 @@ export class VariablesService {
 						events: interaction.events,
 						locations: interaction.locations,
 						data: interaction.data,
-					};
-				});
+					}
+				})
 
-				publications[publication.title] = newInteractions;
-			});
+				publications[publication.title] = newInteractions
+			})
 
-			variables.publications = publications;
+			variables.publications = publications
 		} catch (error) {
-			console.warn(error);
+			console.warn(error)
 		}
 	}
 
@@ -295,19 +277,19 @@ export class VariablesService {
 			try {
 				await Promise.all(
 					connectedTemplates.map(async (id) => {
-						variables.connected_templates = {};
-						variables.connected_templates[id] = {};
+						variables.connected_templates = {}
+						variables.connected_templates[id] = {}
 
 						await this.findAllVariablesAvailable(
 							undefined,
 							variables.connected_templates[id],
 							undefined,
-							id,
-						);
-					}),
-				);
+							id
+						)
+					})
+				)
 			} catch (error) {
-				console.warn(error);
+				console.warn(error)
 			}
 		}
 	}

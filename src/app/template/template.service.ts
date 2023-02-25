@@ -3,31 +3,31 @@ import {
 	Injectable,
 	InternalServerErrorException,
 	Logger,
-	NotFoundException,
-} from '@nestjs/common';
-import { createHash, randomUUID } from 'crypto';
+	NotFoundException
+} from '@nestjs/common'
+import { createHash, randomUUID } from 'crypto'
 
-import { PrismaService } from 'src/prisma.service';
-import { BlockService } from '../block/block.service';
-import { VariablesService } from '../variables/variables.service';
-import { CreateTemplateRequest } from './dto/create-template-request';
-import { UpdateTemplateRequest } from './dto/update-template-request';
+import { PrismaService } from 'src/prisma.service'
+import { BlockService } from '../block/block.service'
+import { VariablesService } from '../variables/variables.service'
+import { CreateTemplateRequest } from './dto/create-template-request'
+import { UpdateTemplateRequest } from './dto/update-template-request'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const getSlug = require('speakingurl');
+const getSlug = require('speakingurl')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const uniqueSlug = require('unique-slug');
+const uniqueSlug = require('unique-slug')
 
 @Injectable()
 export class TemplateService {
-	private readonly logger = new Logger(TemplateService.name);
-	private readonly MAX_ATTEMPTS = 10;
-	private readonly RESERVED_TEMPLATE_SLUGS = [];
-	private instance: TemplateService;
+	private readonly logger = new Logger(TemplateService.name)
+	private readonly MAX_ATTEMPTS = 10
+	private readonly RESERVED_TEMPLATE_SLUGS = []
+	private instance: TemplateService
 
 	constructor(
 		private prismaService: PrismaService,
 		private blockService: BlockService,
-		private variablesService: VariablesService,
+		private variablesService: VariablesService
 	) {}
 
 	getInstance() {
@@ -35,30 +35,30 @@ export class TemplateService {
 			this.instance = new TemplateService(
 				this.prismaService,
 				this.blockService,
-				this.variablesService,
-			);
+				this.variablesService
+			)
 		}
-		return this.instance;
+		return this.instance
 	}
 
 	async createOne(request: CreateTemplateRequest) {
 		if (request.slug && request.page_id) {
 			request.slug = await this.generateUniqueSlugByTemplateTitle(
 				request.slug,
-				request.page_id,
-			);
+				request.page_id
+			)
 		}
 
 		return this.prismaService.template.create({
 			data: { ...request },
-		});
+		})
 	}
 
 	async findOne(id: string, headers: any, consumer_id?: string, data?: any[]) {
 		const include: any = {
 			Publications: true,
 			Page: true,
-		};
+		}
 
 		if (headers && headers.request === 'logs') {
 			include.Publications = {
@@ -82,7 +82,7 @@ export class TemplateService {
 						},
 					},
 				},
-			};
+			}
 		}
 
 		const template: any = await this.prismaService.template.findUnique({
@@ -90,17 +90,16 @@ export class TemplateService {
 				id,
 			},
 			include: include,
-		});
+		})
 
 		if (template) {
 			const publication =
-				template.Publications[template?.Publications?.length - 1] ||
-				({} as any);
+				template.Publications[template?.Publications?.length - 1] || ({} as any)
 
 			const formattedTemplate = {
 				...template,
 				publication,
-			};
+			}
 
 			const variables = await this.variablesService.findPanelVariables(
 				undefined,
@@ -108,18 +107,18 @@ export class TemplateService {
 				formattedTemplate.id,
 				formattedTemplate.publication?.dependencies?.connected_templates || [],
 				consumer_id,
-				data,
-			);
+				data
+			)
 
 			formattedTemplate.publication.blocks = this.blockService.compileVariables(
 				formattedTemplate.publication.blocks,
-				variables,
-			);
+				variables
+			)
 
-			return formattedTemplate;
+			return formattedTemplate
 		}
 
-		throw new NotFoundException({ message: 'template not found' });
+		throw new NotFoundException({ message: 'template not found' })
 	}
 
 	async findOneBySlug(slug: string) {
@@ -127,7 +126,7 @@ export class TemplateService {
 			where: {
 				slug,
 			},
-		});
+		})
 	}
 
 	async findManyByPageId(page_id: string) {
@@ -135,13 +134,13 @@ export class TemplateService {
 			where: {
 				page_id,
 			},
-		});
+		})
 	}
 
 	async findOneByPageAndTemplateSlug(
 		slug: string,
 		page_slug: string,
-		consumer_id?: string,
+		consumer_id?: string
 	) {
 		const templates = await this.prismaService.template.findMany({
 			where: {
@@ -151,40 +150,40 @@ export class TemplateService {
 				Page: true,
 				Publications: true,
 			},
-		});
+		})
 
 		if (templates && templates.length > 0) {
 			const uniqueTemplate = templates.filter(
-				(template) => template.Page.slug === page_slug,
-			);
+				(template) => template.Page.slug === page_slug
+			)
 
 			const publication =
 				uniqueTemplate[0].Publications[
 					uniqueTemplate[0]?.Publications?.length - 1
-				] || ({} as any);
+				] || ({} as any)
 
 			const formattedTemplate = {
 				...uniqueTemplate[0],
 				publication,
-			};
+			}
 
 			const variables = await this.variablesService.findPanelVariables(
 				undefined,
 				formattedTemplate.publication.blocks,
 				formattedTemplate.id,
 				formattedTemplate.publication?.dependencies?.connected_templates || [],
-				consumer_id,
-			);
+				consumer_id
+			)
 
 			formattedTemplate.publication.blocks = this.blockService.compileVariables(
 				formattedTemplate.publication.blocks,
-				variables,
-			);
+				variables
+			)
 
-			return formattedTemplate;
+			return formattedTemplate
 		}
 
-		throw new NotFoundException({ message: 'template not found' });
+		throw new NotFoundException({ message: 'template not found' })
 	}
 
 	async updateOne(id: string, request: UpdateTemplateRequest) {
@@ -192,8 +191,8 @@ export class TemplateService {
 			request.slug = await this.generateUniqueSlugByTemplateTitle(
 				request.slug,
 				request.page_id,
-				id,
-			);
+				id
+			)
 		}
 
 		return this.prismaService.template.update({
@@ -201,44 +200,44 @@ export class TemplateService {
 				id,
 			},
 			data: request,
-		});
+		})
 	}
 
 	async removeOne(id: string) {
-		let template;
+		let template
 		try {
 			template = await this.prismaService.template.findUniqueOrThrow({
 				where: {
 					id,
 				},
-			});
+			})
 		} catch (err) {
-			throw new NotFoundException({ message: 'template not found' });
+			throw new NotFoundException({ message: 'template not found' })
 		}
 
 		if (template && !template.deleted) {
 			try {
 				const hashName = createHash('sha256')
 					.update(template.name)
-					.digest('hex');
-				const hashSlug = randomUUID();
+					.digest('hex')
+				const hashSlug = randomUUID()
 				const hashShortcutImage = createHash('sha256')
 					.update(template.shortcut_image)
-					.digest('hex');
+					.digest('hex')
 				const hashShortcutSize = createHash('sha256')
 					.update(template.shortcut_size)
-					.digest('hex');
+					.digest('hex')
 				const hashTrackers = createHash('sha256')
 					.update(JSON.stringify(template.trackers))
-					.digest('hex');
+					.digest('hex')
 				const hashNumberOfNewInteractions =
-					(template.number_of_new_interactions + 2) * 164;
+					(template.number_of_new_interactions + 2) * 164
 				const hashPageId = createHash('sha256')
 					.update(JSON.stringify(template.page_id))
-					.digest('hex');
+					.digest('hex')
 				const hashCurrentPublicationId = createHash('sha256')
 					.update(template.current_publication_id)
-					.digest('hex');
+					.digest('hex')
 
 				await this.prismaService.template.update({
 					where: {
@@ -255,85 +254,85 @@ export class TemplateService {
 						current_publication_id: hashCurrentPublicationId,
 						deleted: true,
 					},
-				});
-				return { message: 'deleted template' };
+				})
+				return { message: 'deleted template' }
 			} catch (err) {
 				throw new InternalServerErrorException({
 					message: `error deleting template, ${err}`,
-				});
+				})
 			}
 		}
 
-		throw new NotFoundException({ message: 'template not found' });
+		throw new NotFoundException({ message: 'template not found' })
 	}
 
 	async generateUniqueSlugByTemplateTitle(
 		title: string,
 		page_id: string,
-		id?: string,
+		id?: string
 	) {
-		const slug = getSlug(title);
+		const slug = getSlug(title)
 
-		let uniqSlug = slug;
+		let uniqSlug = slug
 
-		let attempts = 0;
+		let attempts = 0
 
 		while (await this.isSlugTaken(uniqSlug, page_id, id)) {
-			attempts++;
+			attempts++
 			if (attempts >= this.MAX_ATTEMPTS) {
-				throw new BadRequestException('Could not generate unique Slug');
+				throw new BadRequestException('Could not generate unique Slug')
 			}
 
-			const randomSlug: string = uniqueSlug();
-			uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`;
+			const randomSlug: string = uniqueSlug()
+			uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`
 		}
 
-		return uniqSlug;
+		return uniqSlug
 	}
 
 	async isSlugTaken(slug: string, page_id: string, id?: string) {
 		if (this.RESERVED_TEMPLATE_SLUGS.includes(slug)) {
-			return true;
+			return true
 		}
 
 		if (id) {
 			try {
 				const templates = await this.prismaService.template.findMany({
 					where: { page_id },
-				});
+				})
 
 				if (!templates) {
-					return false;
+					return false
 				}
 
 				templates.forEach((template) => {
 					if (template.slug === slug && template.id !== id) {
-						return true;
+						return true
 					}
-				});
+				})
 
-				return false;
+				return false
 			} catch (error) {
-				this.logger.error(`Error checking if Slug is taken: ${error.message}`);
-				throw new BadRequestException({ message: error.message });
+				this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+				throw new BadRequestException({ message: error.message })
 			}
 		}
 
 		try {
 			const templates = await this.prismaService.template.findMany({
 				where: { page_id },
-			});
+			})
 
 			templates.forEach((template) => {
 				if (template.slug === slug) {
-					return true;
+					return true
 				}
-			});
+			})
 
-			return false;
+			return false
 		} catch (error) {
-			this.logger.error(`Error checking if Slug is taken: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 }

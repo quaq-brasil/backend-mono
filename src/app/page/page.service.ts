@@ -1,52 +1,52 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { CreatePageDto } from './dto/create-page.dto';
-import { UpdatePageDto } from './dto/update-page.dto';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
+import { CreatePageDto } from './dto/create-page.dto'
+import { UpdatePageDto } from './dto/update-page.dto'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const getSlug = require('speakingurl');
+const getSlug = require('speakingurl')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const uniqueSlug = require('unique-slug');
+const uniqueSlug = require('unique-slug')
 
 @Injectable()
 export class PageService {
-	private readonly logger = new Logger(PageService.name);
-	private readonly MAX_ATTEMPTS = 10;
-	private instance: PageService;
-	private readonly RESERVED_PAGE_SLUGS = ['me', 'workspace', 'adm', 'terms'];
+	private readonly logger = new Logger(PageService.name)
+	private readonly MAX_ATTEMPTS = 10
+	private instance: PageService
+	private readonly RESERVED_PAGE_SLUGS = ['me', 'workspace', 'adm', 'terms']
 
 	constructor(private prismaService: PrismaService) {}
 
 	getInstance() {
 		if (!this.instance) {
-			this.instance = new PageService(this.prismaService);
+			this.instance = new PageService(this.prismaService)
 		}
 
-		return this.instance;
+		return this.instance
 	}
 
 	async create(createPageDto: CreatePageDto) {
 		if (createPageDto.slug) {
 			createPageDto.slug = await this.generateUniqueSlugByPageName(
 				createPageDto.slug,
-			);
+			)
 		}
 
 		try {
 			return await this.prismaService.page.create({
 				data: createPageDto,
-			});
+			})
 		} catch (error) {
-			this.logger.error(`Error creating page: ${error.message}`);
-			throw error;
+			this.logger.error(`Error creating page: ${error.message}`)
+			throw error
 		}
 	}
 
 	async findAll() {
 		try {
-			return await this.prismaService.page.findMany();
+			return await this.prismaService.page.findMany()
 		} catch (error) {
-			this.logger.error(`Error finding all pages: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error finding all pages: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
@@ -56,12 +56,12 @@ export class PageService {
 				where: {
 					id,
 				},
-			});
+			})
 
-			return found;
+			return found
 		} catch (error) {
-			this.logger.error(`Error finding page by id: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error finding page by id: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
@@ -74,10 +74,10 @@ export class PageService {
 				include: {
 					templates: true,
 				},
-			});
+			})
 		} catch (error) {
-			this.logger.error(`Error finding page by slug: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error finding page by slug: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
@@ -87,12 +87,10 @@ export class PageService {
 				where: {
 					workspace_id,
 				},
-			});
+			})
 		} catch (error) {
-			this.logger.error(
-				`Error finding pages by workspace id: ${error.message}`,
-			);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error finding pages by workspace id: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
@@ -100,7 +98,7 @@ export class PageService {
 		if (updatePageDto.slug) {
 			updatePageDto.slug = await this.generateUniqueSlugByPageName(
 				updatePageDto.slug,
-			);
+			)
 		}
 
 		try {
@@ -109,10 +107,10 @@ export class PageService {
 					id,
 				},
 				data: updatePageDto,
-			});
+			})
 		} catch (error) {
-			this.logger.error(`Error updating page: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error updating page: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
@@ -122,62 +120,62 @@ export class PageService {
 				where: {
 					id,
 				},
-			});
+			})
 		} catch (error) {
-			this.logger.error(`Error deleting page: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error deleting page: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 
 	async generateUniqueSlugByPageName(name: string, id?: string) {
-		const slug = getSlug(name);
+		const slug = getSlug(name)
 
-		let uniqSlug = slug;
+		let uniqSlug = slug
 
-		let attempts = 0;
+		let attempts = 0
 
 		while (await this.isSlugTaken(uniqSlug, id)) {
-			attempts++;
+			attempts++
 			if (attempts >= this.MAX_ATTEMPTS) {
-				throw new BadRequestException('Could not generate unique Slug');
+				throw new BadRequestException('Could not generate unique Slug')
 			}
 
-			const randomSlug: string = uniqueSlug();
-			uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`;
+			const randomSlug: string = uniqueSlug()
+			uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`
 		}
 
-		return uniqSlug;
+		return uniqSlug
 	}
 
 	async isSlugTaken(slug: string, id?: string) {
 		if (this.RESERVED_PAGE_SLUGS.includes(slug)) {
-			return true;
+			return true
 		}
 
 		if (id) {
 			try {
 				const page = await this.prismaService.page.findUnique({
 					where: { slug },
-				});
+				})
 
 				if (!page) {
-					return false;
+					return false
 				}
 
-				return page.id !== id;
+				return page.id !== id
 			} catch (error) {
-				this.logger.error(`Error checking if Slug is taken: ${error.message}`);
-				throw new BadRequestException({ message: error.message });
+				this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+				throw new BadRequestException({ message: error.message })
 			}
 		}
 
 		try {
 			return (
 				(await this.prismaService.page.findMany({ where: { slug } })).length > 0
-			);
+			)
 		} catch (error) {
-			this.logger.error(`Error checking if Slug is taken: ${error.message}`);
-			throw new BadRequestException({ message: error.message });
+			this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+			throw new BadRequestException({ message: error.message })
 		}
 	}
 }

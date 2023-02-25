@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { BlockService } from '../block/block.service';
-import { VariablesService } from '../variables/variables.service';
-import { CreatePublicationRequest } from './dto/create-publication-request';
-import { UpdatePublicationRequest } from './dto/update-publication-request';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
+import { BlockService } from '../block/block.service'
+import { VariablesService } from '../variables/variables.service'
+import { CreatePublicationRequest } from './dto/create-publication-request'
+import { UpdatePublicationRequest } from './dto/update-publication-request'
 
 @Injectable()
 export class PublicationService {
@@ -14,15 +14,14 @@ export class PublicationService {
 	) {}
 
 	async createOne(request: CreatePublicationRequest) {
-		// if (request.blocks) {
-		// 	const variables =
-		// 		this.blockService.extractVariables(request.blocks) || {};
-		// 	request.dependencies = { ...request.dependencies, variables: variables };
-		// }
+		if (request.blocks) {
+			const variables = this.blockService.extractVariables(request.blocks) || {}
+			request.dependencies = { ...request.dependencies, variables: variables }
+		}
 
 		return await this.prismaService.publication.create({
 			data: request,
-		});
+		})
 	}
 
 	async findOne(id: string) {
@@ -30,7 +29,7 @@ export class PublicationService {
 			where: {
 				id,
 			},
-		});
+		})
 
 		const variables = this.variablesService.findPanelVariables(
 			undefined,
@@ -39,15 +38,14 @@ export class PublicationService {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			publication?.dependencies?.connected_templates || [],
-			undefined,
-		);
+		)
 
 		publication.blocks = this.blockService.compileVariables(
 			publication.blocks,
 			variables,
-		);
+		)
 
-		return publication;
+		return publication
 	}
 
 	async findManyByTemplateId(template_id: string) {
@@ -55,7 +53,7 @@ export class PublicationService {
 			where: {
 				template_id,
 			},
-		});
+		})
 	}
 
 	async findManyByPageId(page_id: string) {
@@ -63,14 +61,13 @@ export class PublicationService {
 			where: {
 				page_id,
 			},
-		});
+		})
 	}
 
 	async updateOne(id: string, request: UpdatePublicationRequest) {
 		if (request.blocks) {
-			const variables =
-				this.blockService.extractVariables(request.blocks) || {};
-			request.dependencies = { ...request.dependencies, variables: variables };
+			const variables = this.blockService.extractVariables(request.blocks) || {}
+			request.dependencies = { ...request.dependencies, variables: variables }
 		}
 
 		return await this.prismaService.publication.update({
@@ -78,6 +75,6 @@ export class PublicationService {
 				id,
 			},
 			data: request,
-		});
+		})
 	}
 }

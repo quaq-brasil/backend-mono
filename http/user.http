@@ -18,7 +18,7 @@ Content-Type: application/json
 
 # update one
 
-PUT http://localhost:3000/api/v1/users/63d7195b8efd06bc4047296b
+PUT http://localhost:5000/api/v1/users/63f94c30421732b782145805
 Content-Type: application/json
 
 {

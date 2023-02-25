@@ -154,7 +154,7 @@ model Workspace {
   slug       String   @unique
   avatar_url String?
   services   Json[]   @default([])
-  members    Json?
+  members    Json[]   @default([])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
