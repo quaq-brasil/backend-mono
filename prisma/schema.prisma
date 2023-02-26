@@ -65,7 +65,7 @@ model Page {
   slug           String  @unique
   avatar_url     String?
   background_url String?
-  services       Json[]  @default([])
+  services       Json?
   trackers       Json?
   access_config  Json?
 

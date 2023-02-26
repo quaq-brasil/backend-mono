@@ -1,28 +1,28 @@
-import { IsObject, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator'
 
 export class CreatePageDto {
 	@IsString()
-	title: string;
+	title: string
 
 	@IsString()
 	@IsOptional()
-	description: string;
+	description: string
 
 	@IsString()
-	slug: string;
-
-	@IsString()
-	@IsOptional()
-	avatar_url: string;
+	slug: string
 
 	@IsString()
 	@IsOptional()
-	background_url: string;
+	avatar_url: string
+
+	@IsString()
+	@IsOptional()
+	background_url: string
 
 	@IsObject()
 	@IsOptional()
-	services: any[];
+	services: any[]
 
 	@IsString()
-	workspace_id: string;
+	workspace_id: string
 }
