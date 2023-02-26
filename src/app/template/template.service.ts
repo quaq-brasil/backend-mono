@@ -5,6 +5,7 @@ import {
 	Logger,
 	NotFoundException
 } from '@nestjs/common'
+import { Template } from '@prisma/client'
 import { createHash, randomUUID } from 'crypto'
 
 import { PrismaService } from 'src/prisma.service'
@@ -27,7 +28,7 @@ export class TemplateService {
 	constructor(
 		private prismaService: PrismaService,
 		private blockService: BlockService,
-		private variablesService: VariablesService
+		private variablesService: VariablesService,
 	) {}
 
 	getInstance() {
@@ -35,7 +36,7 @@ export class TemplateService {
 			this.instance = new TemplateService(
 				this.prismaService,
 				this.blockService,
-				this.variablesService
+				this.variablesService,
 			)
 		}
 		return this.instance
@@ -45,7 +46,7 @@ export class TemplateService {
 		if (request.slug && request.page_id) {
 			request.slug = await this.generateUniqueSlugByTemplateTitle(
 				request.slug,
-				request.page_id
+				request.page_id,
 			)
 		}
 
@@ -107,12 +108,12 @@ export class TemplateService {
 				formattedTemplate.id,
 				formattedTemplate.publication?.dependencies?.connected_templates || [],
 				consumer_id,
-				data
+				data,
 			)
 
 			formattedTemplate.publication.blocks = this.blockService.compileVariables(
 				formattedTemplate.publication.blocks,
-				variables
+				variables,
 			)
 
 			return formattedTemplate
@@ -140,7 +141,7 @@ export class TemplateService {
 	async findOneByPageAndTemplateSlug(
 		slug: string,
 		page_slug: string,
-		consumer_id?: string
+		consumer_id?: string,
 	) {
 		const templates = await this.prismaService.template.findMany({
 			where: {
@@ -154,7 +155,7 @@ export class TemplateService {
 
 		if (templates && templates.length > 0) {
 			const uniqueTemplate = templates.filter(
-				(template) => template.Page.slug === page_slug
+				(template) => template.Page.slug === page_slug,
 			)
 
 			const publication =
@@ -172,12 +173,12 @@ export class TemplateService {
 				formattedTemplate.publication.blocks,
 				formattedTemplate.id,
 				formattedTemplate.publication?.dependencies?.connected_templates || [],
-				consumer_id
+				consumer_id,
 			)
 
 			formattedTemplate.publication.blocks = this.blockService.compileVariables(
 				formattedTemplate.publication.blocks,
-				variables
+				variables,
 			)
 
 			return formattedTemplate
@@ -191,7 +192,7 @@ export class TemplateService {
 			request.slug = await this.generateUniqueSlugByTemplateTitle(
 				request.slug,
 				request.page_id,
-				id
+				id,
 			)
 		}
 
@@ -204,7 +205,7 @@ export class TemplateService {
 	}
 
 	async removeOne(id: string) {
-		let template
+		let template: Template
 		try {
 			template = await this.prismaService.template.findUniqueOrThrow({
 				where: {
@@ -217,8 +218,8 @@ export class TemplateService {
 
 		if (template && !template.deleted) {
 			try {
-				const hashName = createHash('sha256')
-					.update(template.name)
+				const hashTitle = createHash('sha256')
+					.update(template.title)
 					.digest('hex')
 				const hashSlug = randomUUID()
 				const hashShortcutImage = createHash('sha256')
@@ -244,7 +245,7 @@ export class TemplateService {
 						id,
 					},
 					data: {
-						title: hashName,
+						title: hashTitle,
 						slug: hashSlug,
 						shortcut_image: hashShortcutImage,
 						shortcut_size: hashShortcutSize,
@@ -269,7 +270,7 @@ export class TemplateService {
 	async generateUniqueSlugByTemplateTitle(
 		title: string,
 		page_id: string,
-		id?: string
+		id?: string,
 	) {
 		const slug = getSlug(title)
 
