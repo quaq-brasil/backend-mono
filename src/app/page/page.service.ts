@@ -98,6 +98,7 @@ export class PageService {
 		if (updatePageDto.slug) {
 			updatePageDto.slug = await this.generateUniqueSlugByPageName(
 				updatePageDto.slug,
+				id,
 			)
 		}
 
