@@ -10,7 +10,7 @@ POST  http://bff.quaq.me/api/v1/workspaces
 Content-Type: application/json
 
 {
-  "name": "My Workspace",
+  "title": "My Workspace",
   "avatar_url": "http://example.com/avatar.png",
 	"slug": "tesdddasastae",
   "services": [
@@ -76,4 +76,27 @@ Content-Type: application/json
 
 {
     "name": "adm1"
+}
+
+
+###
+
+# add member
+
+POST http://localhost:5000/api/v1/workspaces/members/add/63fe83024453454eabf9faec
+Content-Type: application/json
+
+{
+    "email": "icarlosrigoni@gmail.com"
+}
+
+###
+
+# remove member
+
+POST http://localhost:5000/api/v1/workspaces/members/remove/63fe83024453454eabf9faec
+Content-Type: application/json
+
+{
+    "user_id": "63f94c30421732b782145805"
 }
