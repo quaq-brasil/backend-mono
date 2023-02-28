@@ -57,7 +57,7 @@ GET http://localhost:5000/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
 
 # get workspace by slug
 
-GET https://bff.quaq.me/api/v1/workspaces/slug/tesdddasastae
+GET https://bff.quaq.me/api/v1/workspaces/slug/quaq
 
 
 ###
