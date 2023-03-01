@@ -142,8 +142,8 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  Workspace   Workspace[]
   Interaction Interaction[]
+  workspaces  WorkspaceToUser[]
 
   @@map("users")
 }
@@ -154,14 +154,11 @@ model Workspace {
   slug       String   @unique
   avatar_url String?
   services   Json[]   @default([])
-  members    Json[]   @default([])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user_id String?
-
-  User User?  @relation(fields: [user_id], references: [id])
-  Page Page[]
+  Page    Page[]
+  members WorkspaceToUser[]
 
   @@map("workspaces")
 }
@@ -175,4 +172,12 @@ model FileEntity {
   updatedAt DateTime @updatedAt
 
   @@map("files")
+}
+
+model WorkspaceToUser {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  user         User      @relation(fields: [user_id], references: [id])
+  user_id      String    @db.ObjectId
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id String    @db.ObjectId
 }

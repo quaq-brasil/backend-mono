@@ -52,12 +52,16 @@ export class WorkspaceService {
 	}
 
 	async findAllByUserId(user_id: string) {
-		return await this.prismaService.workspace.findMany({
+		return await this.prismaService.workspaceToUser.findMany({
 			where: {
 				user_id,
 			},
 			include: {
-				Page: true,
+				workspace: {
+					include: {
+						Page: true,
+					},
+				},
 			},
 		})
 	}
@@ -113,26 +117,26 @@ export class WorkspaceService {
 			where: {
 				id,
 			},
+			include: {
+				members: true,
+			},
 		})
 
 		if (!workspace) {
 			throw new BadRequestException({ message: 'workspace not found' })
 		}
 
+		const newMembersIds = [...workspace.members, { user_id: user.id }]
+
 		return await this.prismaService.workspace.update({
 			where: {
 				id,
 			},
+
 			data: {
-				members: [
-					...workspace.members,
-					{
-						id: user.id,
-						email: user.email,
-						avatar_url: user.avatar_url,
-						name: user.name,
-					},
-				],
+				members: {
+					connect: newMembersIds.map((member) => ({ id: member.user_id })),
+				},
 			},
 		})
 	}
@@ -153,25 +157,37 @@ export class WorkspaceService {
 			where: {
 				id,
 			},
+			include: {
+				members: true,
+			},
 		})
 
 		if (!workspace) {
 			throw new BadRequestException({ message: 'workspace not found' })
 		}
 
-		const newMembers = workspace.members.filter(
-			(member: any) => member?.id !== user_id,
-		)
+		let newMembers = []
 
-		console.log('newMembers', newMembers)
+		workspace.members.forEach((member: any) => {
+			if (member?.id !== user_id) {
+				newMembers = [...newMembers, member.id]
+			}
+		})
+
+		const newMembersIds = workspace.members.filter(
+			(member) => member.user_id !== user_id,
+		)
 
 		return await this.prismaService.workspace.update({
 			where: {
 				id,
 			},
 			data: {
-				members: newMembers,
+				members: {
+					connect: newMembersIds.map((member) => ({ id: member.user_id })),
+				},
 			},
+			include: {},
 		})
 	}
 
