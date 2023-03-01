@@ -60,6 +60,18 @@ export class WorkspaceService {
 				workspace: {
 					include: {
 						Page: true,
+						members: {
+							include: {
+								user: {
+									select: {
+										id: true,
+										name: true,
+										email: true,
+										avatar_url: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -138,6 +150,20 @@ export class WorkspaceService {
 					connect: newMembersIds.map((member) => ({ id: member.user_id })),
 				},
 			},
+			include: {
+				members: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+								avatar_url: true,
+							},
+						},
+					},
+				},
+			},
 		})
 	}
 
@@ -187,7 +213,20 @@ export class WorkspaceService {
 					connect: newMembersIds.map((member) => ({ id: member.user_id })),
 				},
 			},
-			include: {},
+			include: {
+				members: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+								avatar_url: true,
+							},
+						},
+					},
+				},
+			},
 		})
 	}
 
