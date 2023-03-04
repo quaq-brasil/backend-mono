@@ -1,20 +1,23 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator'
 
 export class CreateWorkspaceDto {
 	@IsString()
-	title: string;
+	user_id: string
 
 	@IsString()
-	slug: string;
+	title: string
+
+	@IsString()
+	slug: string
 
 	@IsOptional()
 	@IsString()
-	avatar_url: string;
+	avatar_url: string
 
 	@IsOptional()
 	@IsArray()
-	services: any[];
+	services: any[]
 
 	@IsOptional()
-	members: any;
+	members: any
 }

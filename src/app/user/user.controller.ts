@@ -9,7 +9,7 @@ import {
 	Post,
 	Put,
 	Req,
-	UseGuards
+	UseGuards,
 } from '@nestjs/common'
 import { JwtGuard } from '../auth/jwt.guard'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -27,8 +27,6 @@ export class UserController {
 	@UseGuards(JwtGuard)
 	@Get()
 	async findOne(@Req() req) {
-		console.log(req.user)
-
 		return await this.userService.findOne(req.user.sub)
 	}
 

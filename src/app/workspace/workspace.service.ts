@@ -23,22 +23,44 @@ export class WorkspaceService {
 		return this.instance
 	}
 
-	async create(createWorkspaceDto: CreateWorkspaceDto) {
+	async create(createWorkspaceDto: CreateWorkspaceDto, user_id: string) {
 		if (createWorkspaceDto.slug) {
 			createWorkspaceDto.slug = await this.generateUniqueSlugByWorkspaceName(
 				createWorkspaceDto.slug,
 			)
 		}
 
-		return await this.prismaService.workspace.create({
+		delete createWorkspaceDto.user_id
+
+		const workspace = await this.prismaService.workspace.create({
 			data: createWorkspaceDto,
 		})
+
+		await this.prismaService.workspaceToUser.create({
+			data: { workspace_id: workspace.id, user_id: user_id },
+		})
+
+		return workspace
 	}
 
 	findOne(id: string) {
 		return this.prismaService.workspace.findUnique({
 			where: {
 				id,
+			},
+			include: {
+				members: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+								avatar_url: true,
+							},
+						},
+					},
+				},
 			},
 		})
 	}
@@ -48,11 +70,25 @@ export class WorkspaceService {
 			where: {
 				slug,
 			},
+			include: {
+				members: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+								avatar_url: true,
+							},
+						},
+					},
+				},
+			},
 		})
 	}
 
 	async findAllByUserId(user_id: string) {
-		return await this.prismaService.workspaceToUser.findMany({
+		const workspacesToUser = await this.prismaService.workspaceToUser.findMany({
 			where: {
 				user_id,
 			},
@@ -76,6 +112,8 @@ export class WorkspaceService {
 				},
 			},
 		})
+
+		return workspacesToUser.map((workspaceToUser) => workspaceToUser.workspace)
 	}
 
 	async findOneByPageSlug(page_slug: string) {
@@ -84,7 +122,22 @@ export class WorkspaceService {
 				slug: page_slug,
 			},
 			include: {
-				Workspace: true,
+				Workspace: {
+					include: {
+						members: {
+							include: {
+								user: {
+									select: {
+										id: true,
+										name: true,
+										email: true,
+										avatar_url: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		})
 
@@ -138,37 +191,43 @@ export class WorkspaceService {
 			throw new BadRequestException({ message: 'workspace not found' })
 		}
 
-		const newMembersIds = [...workspace.members, { user_id: user.id }]
+		const userIsAlreadyIncluded = workspace.members.filter(
+			(member) => member.id === user.id,
+		)
 
-		return await this.prismaService.workspace.update({
-			where: {
-				id,
-			},
+		if (userIsAlreadyIncluded && userIsAlreadyIncluded.length > 0) {
+			throw new BadRequestException({
+				message: 'user is already included in the workspace',
+			})
+		}
 
-			data: {
-				members: {
-					connect: newMembersIds.map((member) => ({ id: member.user_id })),
-				},
-			},
-			include: {
-				members: {
-					include: {
-						user: {
-							select: {
-								id: true,
-								name: true,
-								email: true,
-								avatar_url: true,
+		const workspaceToUserCreated =
+			await this.prismaService.workspaceToUser.create({
+				data: { user_id: user.id, workspace_id: workspace.id },
+				include: {
+					workspace: {
+						include: {
+							members: {
+								include: {
+									user: {
+										select: {
+											id: true,
+											name: true,
+											email: true,
+											avatar_url: true,
+										},
+									},
+								},
 							},
 						},
 					},
 				},
-			},
-		})
+			})
+
+		return workspaceToUserCreated.workspace
 	}
 
 	async removeWorkspaceMember(id: string, user_id: string) {
-		console.log('user_id', user_id)
 		const user = await this.prismaService.user.findUnique({
 			where: {
 				id: user_id,
@@ -184,36 +243,6 @@ export class WorkspaceService {
 				id,
 			},
 			include: {
-				members: true,
-			},
-		})
-
-		if (!workspace) {
-			throw new BadRequestException({ message: 'workspace not found' })
-		}
-
-		let newMembers = []
-
-		workspace.members.forEach((member: any) => {
-			if (member?.id !== user_id) {
-				newMembers = [...newMembers, member.id]
-			}
-		})
-
-		const newMembersIds = workspace.members.filter(
-			(member) => member.user_id !== user_id,
-		)
-
-		return await this.prismaService.workspace.update({
-			where: {
-				id,
-			},
-			data: {
-				members: {
-					connect: newMembersIds.map((member) => ({ id: member.user_id })),
-				},
-			},
-			include: {
 				members: {
 					include: {
 						user: {
@@ -228,6 +257,45 @@ export class WorkspaceService {
 				},
 			},
 		})
+
+		if (!workspace) {
+			throw new BadRequestException({ message: 'workspace not found' })
+		}
+
+		const relationToDelete = workspace.members.filter(
+			(member) => member.user_id === user_id && member.workspace_id === id,
+		)
+
+		if (!relationToDelete) {
+			throw new BadRequestException({
+				message: 'user is not part of the workspace',
+			})
+		}
+
+		const workspaceToUserDeleted =
+			await this.prismaService.workspaceToUser.delete({
+				where: { id: relationToDelete[0].id },
+				include: {
+					workspace: {
+						include: {
+							members: {
+								include: {
+									user: {
+										select: {
+											id: true,
+											name: true,
+											email: true,
+											avatar_url: true,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			})
+
+		return workspaceToUserDeleted.workspace
 	}
 
 	async generateUniqueSlugByWorkspaceName(name: string, id?: string) {

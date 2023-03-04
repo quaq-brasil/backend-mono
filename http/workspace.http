@@ -1,5 +1,5 @@
 # Variables
-@baseUrl = https://bff.quaq.me
+@baseUrl = http://localhost:5000
 
 # Find one workspace by workspace id
 
@@ -52,7 +52,7 @@ GET {{baseUrl}}/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
 
 # Find one workspace by workspace slug
 
-GET {{baseUrl}}/api/v1/workspaces/slug/quaq-adm
+GET {{baseUrl}}/api/v1/workspaces/slug/test
 
 
 ###
@@ -93,5 +93,5 @@ POST {{baseUrl}}/api/v1/workspaces/members/remove/63ffcb458a60bbf52e188e23
 Content-Type: application/json
 
 {
-    "user_id": "63ffc77f312a8c2cd621ab50"
+    "user_id": "63ffe02892dcb08c520c3a12"
 }
