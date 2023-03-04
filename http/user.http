@@ -1,40 +1,40 @@
-# find one
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET http://localhost:5000/api/v1/users/63d26f06ea1e68c873e97ab2
+# Find one user by auth token
+
+GET {{baseUrl}}/api/v1/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJlbWFpbCI6ImZlbGlwZS50LnYuZEBnbWFpbC5jb20iLCJuYW1lIjoic3RyaW5nIiwiYXZhdGFyX3VybCI6Imh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNDY0ODAyNjg2MTY3LWI5MzlhNjkxMDY1OT9peGxpYj1yYi00LjAuMyZpeGlkPU1ud3hNakEzZkRCOE1IeHdhRzkwYnkxd1lXZGxmSHg4ZkdWdWZEQjhmSHg4JmF1dG89Zm9ybWF0JmZpdD1jcm9wJnc9MTQ1MCZxPTgwIiwiaWF0IjoxNjc3NzA4MjQ1LCJleHAiOjE2Nzc4MjgyNDV9.bfOvqCKHuaH8lzFZ-q_2Nl0LcD_edpw8D6IN0Ek9n5Q
 
 ###
 
-# create one
+# Create one user
 
-POST http://localhost:5000/api/v1/users
+POST {{baseUrl}}/api/v1/users
 Content-Type: application/json
 
-{
-     "email": "icarlosrigoni@gmail.com",
-     "password": "1234578"
-}
+{}
 
 ###
 
-# update one
+# Update one user by user id
 
-PUT http://localhost:5000/api/v1/users/63f94c30421732b782145805
+PUT {{baseUrl}}/api/v1/users/63ffc767312a8c2cd621ab4f
 Content-Type: application/json
 
 {
     "email": "icarlosrigoni@gmail.com",
-    "password": "1234578",
+    "password": "12345678",
     "type": "registered",
     "email_verified": true,
     "password_reset_token_attempts": 5,
     "name": "string",
-    "avatar_url": "string"
-
+    "avatar_url": "https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1450&q=80"
 }
 
 
 ###
 
-# delete one
+# Delete one user by user id
 
-DELETE https://bff.quaq.com.br/user/63b6ed226e2cf11afe9f163c
+DELETE {{baseUrl}}//user/63b6ed226e2cf11afe9f163c

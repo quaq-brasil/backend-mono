@@ -1,12 +1,15 @@
-# find one
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET https://bff.quaq.me/api/v1/files/63d2b1a166402037076c063d
+# Find one file by file id
+
+GET {{baseUrl}}/api/v1/files/63d2b1a166402037076c063d
 
 ###
 
-# create one
+# Create one file
 
-POST https://bff.quaq.me/api/v1/files
+POST {{baseUrl}}/api/v1/files
 Content-Type: application/json
 
 {
@@ -22,15 +25,15 @@ Content-Type: application/json
 
 ###
 
-# find one by url
+# Find one file by file url
 
-GET https://bff.quaq.com.br/file/url/1
+GET {{baseUrl}}/file/url/1
 
 ###
 
-# update one
+# Update one file by file id
 
-PUT https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+PUT {{baseUrl}}/file/63b34032485edc50f1bdfa72
 Content-Type: application/json
 
 {
@@ -46,6 +49,6 @@ Content-Type: application/json
 
 ###
 
-# delete one
+# Delete one file by file id
 
-DELETE https://bff.quaq.com.br/file/63b34032485edc50f1bdfa72
+DELETE {{baseUrl}}/file/63b34032485edc50f1bdfa72

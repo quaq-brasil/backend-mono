@@ -1,13 +1,15 @@
-# get publication
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET  http://localhost:5000/api/v1/publications/63eebb65f5c834d3a9154bbf
+# Find one publication by publication id
+
+GET  {{baseUrl}}/api/v1/publications/63eebb65f5c834d3a9154bbf
 
 ###
 
-# create publication
+# Create publication
 
-
-POST http://localhost:5000/api/v1/publications
+POST {{baseUrl}}/api/v1/publications
 Content-Type: application/json
 
 {
@@ -33,21 +35,21 @@ Content-Type: application/json
 
 ###
 
-# get many publication by template id
+# Find many publications by template id
 
-GET http://localhost:5000/api/v1/publications/template/63eebb65f5c834d3a9154bc0
-
-###
-
-# get many publication by page id
-
-GET https://bff.quaq.com.br/publication/page/1
+GET {{baseUrl}}/api/v1/publications/template/63eebb65f5c834d3a9154bc0
 
 ###
 
-# update publication
+# Find many publications by page id
 
-PUT http://localhost:3000/api/v1/publications/63d5cd37f090a8a5e12a1a5c
+GET {{baseUrl}}/publication/page/1
+
+###
+
+# Update publication by publication id
+
+PUT {{baseUrl}}/api/v1/publications/63d5cd37f090a8a5e12a1a5c
 Content-Type: application/json
 
 {

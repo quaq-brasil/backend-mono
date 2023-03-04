@@ -1,11 +1,14 @@
-# get template
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET http://localhost:5000/api/v1/templates/63efc46ba52e71db610d72bb
+# Find one template by template id
+
+GET {{baseUrl}}/api/v1/templates/63efc46ba52e71db610d72bb
 request: logs
 
 ###
 
-POST http://localhost:5000/api/v1/templates
+POST {{baseUrl}}/api/v1/templates
 Content-Type: application/json
 
 {
@@ -22,24 +25,24 @@ Content-Type: application/json
 
 ###
 
-# get template by slug
+# Find one template by template slug
 
-GET https://bff.quaq.me/templates/slug/testess
-
-###
-
-# get many template by page id
-
-GET http://localhost:5000/api/v1/templates/page/63eebb65f5c834d3a9154bc0
+GET {{baseUrl}}/templates/slug/testess
 
 ###
 
-# get  template by page slug and template slug
+# Find many templates by page id
 
-GET http://bff.quaq.me/api/v1/templates/demopositivo/template-test
+GET {{baseUrl}}/api/v1/templates/page/63eebb65f5c834d3a9154bc0
+
 ###
 
-PUT http://localhost:5000/api/v1/templates/63e00e52bb60a04fa845a3c9
+# Find one page and template by page and template slug
+
+GET http://bff.quaq.me/api/v1/templates/quaq/test
+###
+
+PUT {{baseUrl}}/api/v1/templates/63e00e52bb60a04fa845a3c9
 Content-Type: application/json
 
 {
@@ -48,15 +51,16 @@ Content-Type: application/json
 
 ###
 
-# delete one template
+# Delete one template by template id
 
-DELETE http://localhost:5000/api/v1/templates/63f3c6d5d8bd9436af2cbdec
+DELETE {{baseUrl}}/api/v1/templates/63f3c6d5d8bd9436af2cbdec
 
 
 ###
 
+# Generate template unique slug
 
-POST https://bff.quaq.me/api/v1/templates/generate_unique_slug
+POST {{baseUrl}}/api/v1/templates/generate_unique_slug
 Content-Type: application/json
 
 

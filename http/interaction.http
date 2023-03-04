@@ -1,11 +1,14 @@
-# find one
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET https://bff.quaq.me/api/v1/interactions/63ea847f8d4ff3f2739df2db
+# Find one interaction by interaction id
+
+GET {{baseUrl}}/api/v1/interactions/63ea847f8d4ff3f2739df2db
 
 ###
 
-# create one
-POST https://bff.quaq.me/api/v1/interactions
+# Create one interaction
+POST {{baseUrl}}/api/v1/interactions
 Content-Type: application/json
 
 {
@@ -48,28 +51,29 @@ Content-Type: application/json
 
 ###
 
-# find one by user id
-GET https://bff.quaq.com.br/interaction/user/63b75045a43fc9f320321e9f
+# Find one interaction by user id
+GET {{baseUrl}}/interaction/user/63b75045a43fc9f320321e9f
 
 ###
 
-# find one by page id
-GET https://bff.quaq.com.br/interaction/page/63b75045a43fc9f320321e9f
+# Find one interaction by page id
+GET {{baseUrl}}/interaction/page/63b75045a43fc9f320321e9f
 
 
 ###
 
-# find one by publication id
-GET http://localhost:5000/api/v1/interactions/publication/63efbfa074410fc6df8e0d89
+# Find one interaction by publication id
+GET {{baseUrl}}/api/v1/interactions/publication/63efbfa074410fc6df8e0d89
 
 ###
 
-# find one by template id
-GET https://bff.quaq.me/api/v1/interactions/template/63b75045a43fc9f320321e9f
+# Find one interaction by template id
+GET {{baseUrl}}/api/v1/interactions/template/63b75045a43fc9f320321e9f
 
 ###
 
-PUT http://localhost:5000/api/vi/interactions/63ee9aa429576d089a4a2c95
+# Update one interaction by interaction id
+PUT {{baseUrl}}/api/vi/interactions/63ee9aa429576d089a4a2c95
 Content-Type: application/json
 
 {

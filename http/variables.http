@@ -1,5 +1,8 @@
+# Variables
+@baseUrl = https://bff.quaq.me
 
-POST http://bff.quaq.me/api/v1/variables
+# Create and find variables
+POST {{baseUrl}}/api/v1/variables
 Content-Type: application/json
 
 {

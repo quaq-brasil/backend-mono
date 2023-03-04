@@ -1,77 +1,72 @@
-# find one
+# Variables
+@baseUrl = https://bff.quaq.me
 
-GET https://bff.quaq.me/api/v1/workspaces/63e3def89fb620ad10c31742
+# Find one workspace by workspace id
+
+GET {{baseUrl}}/api/v1/workspaces/63ffcb458a60bbf52e188e23
 
 ###
 
-# create one
+# Create one workspace
 
-POST  http://bff.quaq.me/api/v1/workspaces
+POST  {{baseUrl}}/api/v1/workspaces
 Content-Type: application/json
 
 {
-  "title": "My Workspace",
-  "avatar_url": "http://example.com/avatar.png",
-	"slug": "tesdddasastae",
+  "title": "quaq adm",
+  "avatar_url": "https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1450&q=80",
+	"slug": "quaq-adm",
   "services": [
     {
-      "name": "My Service",
-      "description": "My Service Description"
+      "name": "basic",
+      "description": "basic"
     }
   ]
 }
 
 ###
 
-# update one
+# Update one workspace by workspace id
 
-PUT  https://localhost:5000/workspace/63b7543e7d02f98b8692255d
+PUT  {{baseUrl}}/api/v1/workspaces/63ffcb458a60bbf52e188e23
 Content-Type: application/json
 
 {
-  "name": "My Workspace2",
-  "avatar_url": "http://example.com/avatar2.png",
-	"slug": "teste",
-  "services": [
-    {
-      "name": "My Service2",
-      "description": "My Service Description"
-    }
-  ]
+  "avatar_url": "https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1450&q=80"
 }
 
 ###
 
-# delete one
+# Delete one workspace by workspace id
 
-DELETE https://bff.quaq.com.br/workspace/63b7543e7d02f98b8692255d
-
-###
-
-# get workspace by user id
-
-GET http://localhost:5000/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
-
+DELETE https://bff.quaq.com.br/api/v1/workspace/63b7543e7d02f98b8692255d
 
 ###
 
-# get workspace by slug
+# Find many workspaces by user id
 
-GET https://bff.quaq.me/api/v1/workspaces/slug/quaq
+GET {{baseUrl}}/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
 
 
 ###
 
-# get workspace by page slug
+# Find one workspace by workspace slug
 
-GET https://bff.quaq.me/api/v1/workspaces/page/slug/quaq
+GET {{baseUrl}}/api/v1/workspaces/slug/quaq-adm
 
 
 ###
 
-# generate unique slug workspace
+# Find one workspace by page slug
 
-POST http://localhost:5000/api/v1/workspaces/generate_unique_slug
+GET {{baseUrl}}/api/v1/workspaces/page/slug/quaq
+
+
+###
+
+# Generate unique workspace slug
+
+POST {{baseUrl}}/api/v1/workspaces/generate_unique_slug
 Content-Type: application/json
 
 {
@@ -81,22 +76,22 @@ Content-Type: application/json
 
 ###
 
-# add member
+# Add new member to workspace
 
-POST http://localhost:5000/api/v1/workspaces/members/add/63fe83024453454eabf9faec
+POST {{baseUrl}}/api/v1/workspaces/members/add/63ffcb458a60bbf52e188e23
 Content-Type: application/json
 
 {
-    "email": "icarlosrigoni@gmail.com"
+    "email": "felipe.t.v.d@gmail.com"
 }
 
 ###
 
-# remove member
+# Remove exising member from workspace
 
-POST http://localhost:5000/api/v1/workspaces/members/remove/63fe83024453454eabf9faec
+POST {{baseUrl}}/api/v1/workspaces/members/remove/63ffcb458a60bbf52e188e23
 Content-Type: application/json
 
 {
-    "user_id": "63f94c30421732b782145805"
+    "user_id": "63ffc77f312a8c2cd621ab50"
 }

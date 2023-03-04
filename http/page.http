@@ -1,13 +1,13 @@
 # find one
 
-GET http://localhost:5000/api/v1/pages/63e00e16bb60a04fa845a3c8
+GET https://bff.quaq.me/api/v1/pages/6401193a8952302c1966e4a4
 
 
 ###
 
 # create one
 
-POST http://localhost:5000/api/v1/pages
+POST https://bff.quaq.me/api/v1/pages
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ GET https://bff.quaq.com.br/page
 
 # find one by slug
 
-GET http://localhost:5000/api/v1/pages/slug/paginateste
+GET https://bff.quaq.me/api/v1/pages/slug/paginateste
 
 ###
 
@@ -40,7 +40,7 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PUT http://localhost:5000/api/v1/pages/63e00e16bb60a04fa845a3c8
+PUT https://bff.quaq.me/api/v1/pages/63e00e16bb60a04fa845a3c8
 Content-Type: application/json
 
 {
@@ -63,7 +63,7 @@ DELETE https://bff.quaq.com.br/page/63b75045a43fc9f320321e9f
 
 # generate unique slug
 
-POST http://localhost:5000/api/v1/pages/generate_unique_slug
+POST https://bff.quaq.me/api/v1/pages/generate_unique_slug
 Content-Type: application/json
 
 {
