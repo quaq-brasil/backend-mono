@@ -2,12 +2,15 @@ import {
 	Controller,
 	Post,
 	UploadedFile,
+	UseGuards,
 	UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { FileEntity } from '@prisma/client';
-import { S3FileUploadService } from './s3-upload.service';
+} from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { FileEntity } from '@prisma/client'
+import { JwtGuard } from '../auth/jwt.guard'
+import { S3FileUploadService } from './s3-upload.service'
 
+@UseGuards(JwtGuard)
 @Controller('/api/v1/fileUpload')
 export class S3FileUploadController {
 	constructor(private fileUploadService: S3FileUploadService) {}
@@ -21,7 +24,7 @@ export class S3FileUploadController {
 			file.buffer,
 			file.originalname,
 			file.mimetype,
-		);
-		return uploadedFile;
+		)
+		return uploadedFile
 	}
 }

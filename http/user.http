@@ -1,5 +1,5 @@
 # Variables
-@baseUrl = https://bff.quaq.me
+@baseUrl = http://localhost:5000
 
 # Find one user by auth token
 
@@ -19,11 +19,11 @@ Content-Type: application/json
 
 # Update one user by user id
 
-PUT {{baseUrl}}/api/v1/users/63ffc767312a8c2cd621ab4f
+PUT {{baseUrl}}/api/v1/users/6404f1d0637629ee4a3fb4ee
 Content-Type: application/json
 
 {
-    "email": "icarlosrigoni@gmail.com",
+    "email": "test@test.com",
     "password": "12345678",
     "type": "registered",
     "email_verified": true,

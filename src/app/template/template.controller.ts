@@ -6,12 +6,15 @@ import {
 	Headers,
 	Param,
 	Post,
-	Put
+	Put,
+	UseGuards,
 } from '@nestjs/common'
+import { JwtGuard } from '../auth/jwt.guard'
 import { CreateTemplateRequest } from './dto/create-template-request'
 import { UpdateTemplateRequest } from './dto/update-template-request'
 import { TemplateService } from './template.service'
 
+@UseGuards(JwtGuard)
 @Controller('api/v1/templates')
 export class TemplateController {
 	constructor(private readonly templateService: TemplateService) {}

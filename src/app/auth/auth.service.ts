@@ -18,6 +18,7 @@ export class AuthService {
 			email: user.email,
 			name: user.name,
 			avatar_url: user.avatar_url,
+			workspaces: user.workspaces,
 		}
 
 		return this.jwtService.sign(payload)
@@ -29,11 +30,34 @@ export class AuthService {
 				where: {
 					email,
 				},
+				include: {
+					workspaces: {
+						select: {
+							workspace: {
+								select: {
+									id: true,
+									slug: true,
+									Page: {
+										select: {
+											id: true,
+											slug: true,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			})
+
+			const workspaces = user.workspaces.map((workspace) => workspace.workspace)
 
 			if (bcrypt.compareSync(password, user?.password)) {
 				delete user.password
-				return user
+				return {
+					...user,
+					workspaces: workspaces,
+				}
 			}
 
 			throw new BadRequestException({

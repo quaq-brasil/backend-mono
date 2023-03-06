@@ -1,5 +1,6 @@
 # Variables
 @baseUrl = http://localhost:5000
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDA0ZjFkMDYzNzYyOWVlNGEzZmI0ZWUiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoic3RyaW5nIiwiYXZhdGFyX3VybCI6Imh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNDY0ODAyNjg2MTY3LWI5MzlhNjkxMDY1OT9peGxpYj1yYi00LjAuMyZpeGlkPU1ud3hNakEzZkRCOE1IeHdhRzkwYnkxd1lXZGxmSHg4ZkdWdWZEQjhmSHg4JmF1dG89Zm9ybWF0JmZpdD1jcm9wJnc9MTQ1MCZxPTgwIiwid29ya3NwYWNlcyI6W10sImlhdCI6MTY3ODA0NTY3NSwiZXhwIjoxNjc4MTY1Njc1fQ.N8Nu_TSx58d5C3I_PMaKYJRUSpEkBx5Mop51mqtNLw4
 
 # Find one workspace by workspace id
 
@@ -52,8 +53,8 @@ GET {{baseUrl}}/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
 
 # Find one workspace by workspace slug
 
-GET {{baseUrl}}/api/v1/workspaces/slug/test
-
+GET {{baseUrl}}/api/v1/workspaces/slug/quaq-adm
+Authorization: {{JWTToken}}
 
 ###
 

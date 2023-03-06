@@ -1,12 +1,12 @@
 # Variables
-@baseUrl = https://bff.quaq.me
+@baseUrl = http://localhost:5000/
 
 # Authenticate user
 POST {{baseUrl}}api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "felipe.t.v.d@gmail.com",
+    "email": "test@test.com",
     "password": "12345678"
 }
 

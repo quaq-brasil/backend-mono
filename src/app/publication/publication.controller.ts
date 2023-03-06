@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Put,
+	UseGuards,
+} from '@nestjs/common'
+import { JwtGuard } from '../auth/jwt.guard'
 import { CreatePublicationRequest } from './dto/create-publication-request'
 import { UpdatePublicationRequest } from './dto/update-publication-request'
 import { PublicationService } from './publication.service'
 
+@UseGuards(JwtGuard)
 @Controller('api/v1/publications')
 export class PublicationController {
 	constructor(private readonly publicationService: PublicationService) {}

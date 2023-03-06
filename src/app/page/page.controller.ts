@@ -1,8 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	Put,
+	UseGuards,
+} from '@nestjs/common'
+import { JwtGuard } from '../auth/jwt.guard'
 import { CreatePageDto } from './dto/create-page.dto'
 import { UpdatePageDto } from './dto/update-page.dto'
 import { PageService } from './page.service'
 
+@UseGuards(JwtGuard)
 @Controller('api/v1/pages')
 export class PageController {
 	constructor(private readonly pageService: PageService) {}

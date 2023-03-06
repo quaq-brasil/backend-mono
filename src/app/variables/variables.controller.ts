@@ -1,6 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post, UseGuards } from '@nestjs/common'
+import { JwtGuard } from '../auth/jwt.guard'
 import { VariablesService } from './variables.service'
 
+@UseGuards(JwtGuard)
 @Controller('api/v1/variables')
 export class VariablesController {
 	constructor(private readonly variablesService: VariablesService) {}
