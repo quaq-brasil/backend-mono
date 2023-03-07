@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { AbilityModule } from './app/ability/ability.module'
 import { AuthModule } from './app/auth/auth.module'
 import { FileModule } from './app/file/file.module'
 import { InteractionModule } from './app/interaction/interaction.module'
@@ -26,8 +27,9 @@ import { WorkspaceModule } from './app/workspace/workspace.module'
 		VariablesModule,
 		S3FileUploadModule,
 		PermissionsModule,
+		AbilityModule
 	],
 	controllers: [],
-	providers: [],
+	providers: []
 })
 export class AppModule {}

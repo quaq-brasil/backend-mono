@@ -4,6 +4,6 @@ import { PermissionsService } from './permissions.service'
 
 @Module({
 	controllers: [],
-	providers: [PrismaService, PermissionsService],
+	providers: [PrismaService, PermissionsService]
 })
 export class PermissionsModule {}

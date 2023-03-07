@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
-import { PermissionsService } from './../permissions/permissions.service'
+import { AbilityFactory } from '../ability/ability.factory'
 import { WorkspaceController } from './workspace.controller'
 import { WorkspaceService } from './workspace.service'
 
 @Module({
 	controllers: [WorkspaceController],
-	providers: [WorkspaceService, PrismaService, PermissionsService],
+	providers: [WorkspaceService, PrismaService, AbilityFactory]
 })
 export class WorkspaceModule {}

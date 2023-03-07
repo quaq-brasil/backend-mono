@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { BlockService } from '../block/block.service';
-import { TemplateService } from '../template/template.service';
-import { VariablesService } from '../variables/variables.service';
-import { InteractionController } from './interaction.controller';
-import { InteractionService } from './interaction.service';
+import { Module } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
+import { AbilityFactory } from '../ability/ability.factory'
+import { BlockService } from '../block/block.service'
+import { TemplateService } from '../template/template.service'
+import { VariablesService } from '../variables/variables.service'
+import { InteractionController } from './interaction.controller'
+import { InteractionService } from './interaction.service'
 
 @Module({
 	controllers: [InteractionController],
@@ -14,6 +15,7 @@ import { InteractionService } from './interaction.service';
 		BlockService,
 		TemplateService,
 		VariablesService,
-	],
+		AbilityFactory
+	]
 })
 export class InteractionModule {}

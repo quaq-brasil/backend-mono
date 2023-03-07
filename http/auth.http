@@ -6,7 +6,7 @@ POST {{baseUrl}}api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
+    "email": "felipe.t.v.d@gmail.com",
     "password": "12345678"
 }
 

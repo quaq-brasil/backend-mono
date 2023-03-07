@@ -26,24 +26,24 @@ export class PermissionsService {
 
 	async workspaceValidate(user: IUser, workspace_id: string) {
 		const doesUserHavePermission = user.workspaces.filter(
-			(workspace) => workspace.id === workspace_id,
+			(workspace) => workspace.id === workspace_id
 		)
 
 		if (!doesUserHavePermission || doesUserHavePermission.length < 1) {
 			throw new ForbiddenException({
-				message: 'user permission is insufficient to complete this action',
+				message: 'user permission is insufficient to complete this action'
 			})
 		}
 	}
 
 	async workspaceValidateBySlug(user: IUser, slug: string) {
 		const doesUserHavePermission = user.workspaces.filter(
-			(workspace) => workspace.slug === slug,
+			(workspace) => workspace.slug === slug
 		)
 
 		if (!doesUserHavePermission || doesUserHavePermission.length < 1) {
 			throw new ForbiddenException({
-				message: 'user permission is insufficient to complete this action',
+				message: 'user permission is insufficient to complete this action'
 			})
 		}
 	}
@@ -56,12 +56,12 @@ export class PermissionsService {
 				if (page.slug === slug) {
 					doesUserHavePermission.push(workspace)
 				}
-			}),
+			})
 		)
 
 		if (!doesUserHavePermission || doesUserHavePermission.length < 1) {
 			throw new ForbiddenException({
-				message: 'user permission is insufficient to complete this action',
+				message: 'user permission is insufficient to complete this action'
 			})
 		}
 	}
