@@ -39,7 +39,7 @@ GET {{baseUrl}}/api/v1/templates/page/63eebb65f5c834d3a9154bc0
 
 # Find one page and template by page and template slug
 
-GET http://bff.quaq.me/api/v1/templates/quaq/test
+GET http://localhost:5000/api/v1/templates/quaq/new
 ###
 
 PUT {{baseUrl}}/api/v1/templates/63e00e52bb60a04fa845a3c9

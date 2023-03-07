@@ -39,6 +39,7 @@ export class TemplateController {
 		return this.templateService.findManyByPageId(page_id)
 	}
 
+	@Get(':page_slug/:template_slug')
 	findOneByPageAndTemplateSlug(
 		@Param('page_slug') page_slug: string,
 		@Param('template_slug') template_slug: string

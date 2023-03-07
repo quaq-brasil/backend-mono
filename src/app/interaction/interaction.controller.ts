@@ -28,8 +28,8 @@ export class InteractionController {
 	@UseGuards(JwtGuard, AbilitiesGuard)
 	@CheckAbilities({ action: WorkspaceAction.Manage, subject: 'Interaction' })
 	@Get(':interaction_id')
-	findOne(@Param('id') id: string) {
-		return this.interactionService.findOne(id)
+	findOne(@Param('interaction_id') interaction_id: string) {
+		return this.interactionService.findOne(interaction_id)
 	}
 
 	@UseGuards(JwtGuard)

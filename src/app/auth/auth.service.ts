@@ -15,9 +15,10 @@ export class AuthService {
 
 		const payload = {
 			sub: user.id,
+			type: user.type,
 			email: user.email,
 			name: user.name,
-			avatar_url: user.avatar_url
+			avatar_url: user.avatar_url,
 		}
 
 		return this.jwtService.sign(payload)
@@ -27,8 +28,8 @@ export class AuthService {
 		try {
 			const user = await this.prismaService.user.findUniqueOrThrow({
 				where: {
-					email
-				}
+					email,
+				},
 			})
 
 			if (bcrypt.compareSync(password, user?.password)) {
@@ -37,11 +38,11 @@ export class AuthService {
 			}
 
 			throw new BadRequestException({
-				message: 'email or password are incorrect!'
+				message: 'email or password are incorrect!',
 			})
 		} catch (err) {
 			throw new BadRequestException({
-				message: 'email or password are incorrect!'
+				message: 'email or password are incorrect!',
 			})
 		}
 	}
