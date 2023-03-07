@@ -25,10 +25,8 @@ export class AbilitiesGuard implements CanActivate {
 
 		const ability = await this.calsAbilityFactory.defineAbility({
 			user,
-			...params
+			...params,
 		})
-
-		console.log('ability', ability)
 
 		try {
 			rules.forEach((rule) =>

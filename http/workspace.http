@@ -49,6 +49,7 @@ DELETE https://bff.quaq.com.br/api/v1/workspace/63b7543e7d02f98b8692255d
 # Find many workspaces by user id
 
 GET {{baseUrl}}/api/v1/workspaces/user/63d26f06ea1e68c873e97ab2
+Authorization: {{JWTToken}}
 
 
 ###
