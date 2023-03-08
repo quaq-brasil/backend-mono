@@ -68,6 +68,7 @@ model Page {
   services       Json?
   trackers       Json?
   access_config  Json?
+  visibility     String? @default("public")
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -108,6 +109,7 @@ model Template {
   slug                       String
   shortcut_image             String
   shortcut_size              String   @default("small")
+  visibility                 String?  @default("public")
   trackers                   Json?
   number_of_new_interactions Int      @default(0)
   deleted                    Boolean?

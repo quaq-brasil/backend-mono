@@ -28,4 +28,8 @@ export class CreateTemplateRequest {
 
 	@IsString()
 	page_id: string
+
+	@IsString()
+	@IsOptional()
+	visibility: string
 }

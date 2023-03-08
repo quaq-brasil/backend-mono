@@ -25,7 +25,7 @@ export class AbilitiesGuard implements CanActivate {
 
 		const ability = await this.calsAbilityFactory.defineAbility({
 			user,
-			...params,
+			...params
 		})
 
 		try {

@@ -1,6 +1,11 @@
+# Variables
+@baseUrl = http://localhost:5000
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiZmVsaXBlLnQudi5kQGdtYWlsLmNvbSIsIm5hbWUiOiJGZWxpcGUiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9xdWFxLWZpbGVzLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2U0OGNhNDUzLWJkMzMtNGYxNS1iMWRjLTMxMzFjZjA4YjZmZi1Qcm9maWxlLmpwZyIsImlhdCI6MTY3ODMwMjcyMCwiZXhwIjoxNjc4NDIyNzIwfQ.Nvha13VCKxKt2p9JKHlkQkJ-pCLzdvsiza7R_3zln_M
+
 # find one
 
-GET https://bff.quaq.me/api/v1/pages/6401193a8952302c1966e4a4
+GET http://localhost:5000/api/v1/pages/6401193a8952302c1966e4a4
+# Authorization: {{JWTToken}}
 
 
 ###
@@ -8,6 +13,7 @@ GET https://bff.quaq.me/api/v1/pages/6401193a8952302c1966e4a4
 # create one
 
 POST https://bff.quaq.me/api/v1/pages
+
 Content-Type: application/json
 
 {
@@ -23,6 +29,7 @@ Content-Type: application/json
 # find all
 
 GET https://bff.quaq.com.br/page
+Authorization: {{JWTToken}}
 
 ###
 
@@ -40,15 +47,12 @@ GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
 
 # update one
 
-PUT https://bff.quaq.me/api/v1/pages/63e00e16bb60a04fa845a3c8
+PUT http://localhost:5000/api/v1/pages/6401193a8952302c1966e4a4
+Authorization: {{JWTToken}}
 Content-Type: application/json
 
 {
-    "name": "quaq",
-    "slug": "minhapagina",
-    "avatar_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-    "background_url": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-    "is_stripe_active": false
+    "visibility": "public"
 }
 
 ###

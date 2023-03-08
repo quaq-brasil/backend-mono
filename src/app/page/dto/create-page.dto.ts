@@ -25,4 +25,8 @@ export class CreatePageDto {
 
 	@IsString()
 	workspace_id: string
+
+	@IsString()
+	@IsOptional()
+	visibility: string
 }

@@ -4,7 +4,7 @@
 
 # Find one workspace by workspace id
 
-GET {{baseUrl}}/api/v1/workspaces/6406573f26028a771bff0dce
+GET {{baseUrl}}/api/v1/workspaces/6401193a8952302c1966e4a4
 Authorization: {{JWTToken}}
 
 ###

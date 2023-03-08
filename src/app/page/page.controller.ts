@@ -6,8 +6,10 @@ import {
 	Param,
 	Post,
 	Put,
+	Req,
 	UseGuards
 } from '@nestjs/common'
+
 import { CheckAbilities } from '../ability/abilities.decorator'
 import { WorkspaceAction } from '../ability/ability.enums'
 import { JwtGuard } from '../auth/jwt.guard'
@@ -33,13 +35,17 @@ export class PageController {
 	}
 
 	@Get(':page_id')
-	async findOne(@Param('page_id') page_id: string) {
-		return await this.pageService.findOne(page_id)
+	async findOne(@Req() req, @Param('page_id') page_id: string) {
+		const token = req?.headers?.authorization
+
+		return await this.pageService.findOne(page_id, token)
 	}
 
 	@Get('slug/:page_slug')
-	findOneBySlug(@Param('page_slug') page_slug: string) {
-		return this.pageService.findOneBySlug(page_slug)
+	findOneBySlug(@Req() req, @Param('page_slug') page_slug: string) {
+		const token = req?.headers?.authorization
+
+		return this.pageService.findOneBySlug(page_slug, token)
 	}
 
 	@UseGuards(JwtGuard, AbilitiesGuard)
@@ -54,6 +60,7 @@ export class PageController {
 	@Put(':page_id')
 	update(
 		@Param('page_id') page_id: string,
+
 		@Body() updatePageDto: UpdatePageDto
 	) {
 		return this.pageService.update(page_id, updatePageDto)

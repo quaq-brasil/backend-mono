@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	InternalServerErrorException,
 	Logger,
@@ -51,25 +52,31 @@ export class TemplateService {
 		}
 
 		return this.prismaService.template.create({
-			data: { ...request },
+			data: { ...request }
 		})
 	}
 
-	async findOne(id: string, headers: any, consumer_id?: string, data?: any[]) {
+	async findOne(
+		id: string,
+		headers: any,
+		consumer_id?: string,
+		data?: any[],
+		token?: string
+	) {
 		const include: any = {
 			Publications: true,
-			Page: true,
+			Page: true
 		}
 
 		if (headers && headers.request === 'logs') {
 			include.Publications = {
 				orderBy: {
-					updated_at: 'desc',
+					updated_at: 'desc'
 				},
 				include: {
 					Interaction: {
 						orderBy: {
-							updated_at: 'desc',
+							updated_at: 'desc'
 						},
 						select: {
 							id: true,
@@ -77,21 +84,25 @@ export class TemplateService {
 							User: {
 								select: {
 									avatar_url: true,
-									name: true,
-								},
-							},
-						},
-					},
-				},
+									name: true
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
 		const template: any = await this.prismaService.template.findUnique({
 			where: {
-				id,
+				id
 			},
-			include: include,
+			include: include
 		})
+
+		if (template.visibility === 'workspace') {
+			await this.handleVisibilityAccess(template.id, token)
+		}
 
 		if (template) {
 			const publication =
@@ -99,7 +110,7 @@ export class TemplateService {
 
 			const formattedTemplate = {
 				...template,
-				publication,
+				publication
 			}
 
 			const variables = await this.variablesService.findPanelVariables(
@@ -122,50 +133,44 @@ export class TemplateService {
 		throw new NotFoundException({ message: 'template not found' })
 	}
 
-	async findOneBySlug(slug: string) {
-		return this.prismaService.template.findFirst({
-			where: {
-				slug,
-			},
-		})
-	}
-
 	async findManyByPageId(page_id: string) {
 		return await this.prismaService.template.findMany({
 			where: {
-				page_id,
-			},
+				page_id
+			}
 		})
 	}
 
 	async findOneByPageAndTemplateSlug(
 		slug: string,
 		page_slug: string,
-		consumer_id?: string
+		consumer_id?: string,
+		token?: string
 	) {
-		const templates = await this.prismaService.template.findMany({
+		const template = await this.prismaService.template.findFirst({
 			where: {
 				slug,
+				Page: {
+					slug: page_slug
+				}
 			},
 			include: {
 				Page: true,
-				Publications: true,
-			},
+				Publications: true
+			}
 		})
 
-		if (templates && templates.length > 0) {
-			const uniqueTemplate = templates.filter(
-				(template) => template.Page.slug === page_slug
-			)
+		if (template.visibility === 'workspace') {
+			await this.handleVisibilityAccess(template.id, token)
+		}
 
+		if (template) {
 			const publication =
-				uniqueTemplate[0].Publications[
-					uniqueTemplate[0]?.Publications?.length - 1
-				] || ({} as any)
+				template.Publications[template?.Publications?.length - 1] || ({} as any)
 
 			const formattedTemplate = {
-				...uniqueTemplate[0],
-				publication,
+				...template,
+				publication
 			}
 
 			const variables = await this.variablesService.findPanelVariables(
@@ -198,9 +203,9 @@ export class TemplateService {
 
 		return this.prismaService.template.update({
 			where: {
-				id,
+				id
 			},
-			data: request,
+			data: request
 		})
 	}
 
@@ -209,8 +214,8 @@ export class TemplateService {
 		try {
 			template = await this.prismaService.template.findUniqueOrThrow({
 				where: {
-					id,
-				},
+					id
+				}
 			})
 		} catch (err) {
 			throw new NotFoundException({ message: 'template not found' })
@@ -242,7 +247,7 @@ export class TemplateService {
 
 				await this.prismaService.template.update({
 					where: {
-						id,
+						id
 					},
 					data: {
 						title: hashTitle,
@@ -253,13 +258,13 @@ export class TemplateService {
 						number_of_new_interactions: hashNumberOfNewInteractions,
 						page_id: hashPageId,
 						current_publication_id: hashCurrentPublicationId,
-						deleted: true,
-					},
+						deleted: true
+					}
 				})
 				return { message: 'deleted template' }
 			} catch (err) {
 				throw new InternalServerErrorException({
-					message: `error deleting template, ${err}`,
+					message: `error deleting template, ${err}`
 				})
 			}
 		}
@@ -299,7 +304,7 @@ export class TemplateService {
 		if (id) {
 			try {
 				const templates = await this.prismaService.template.findMany({
-					where: { page_id },
+					where: { page_id }
 				})
 
 				if (!templates) {
@@ -321,7 +326,7 @@ export class TemplateService {
 
 		try {
 			const templates = await this.prismaService.template.findMany({
-				where: { page_id },
+				where: { page_id }
 			})
 
 			templates.forEach((template) => {
@@ -334,6 +339,48 @@ export class TemplateService {
 		} catch (error) {
 			this.logger.error(`Error checking if Slug is taken: ${error.message}`)
 			throw new BadRequestException({ message: error.message })
+		}
+	}
+
+	async handleVisibilityAccess(id: string, token: string) {
+		if (!token) {
+			throw new ForbiddenException('permission insufficiently')
+		}
+		const user = JSON.parse(
+			Buffer.from(token.split('.')[1], 'base64').toString('utf8')
+		)
+
+		const template = await this.prismaService.template.findUnique({
+			where: {
+				id
+			},
+			select: {
+				Page: {
+					select: {
+						Workspace: {
+							select: {
+								members: {
+									select: {
+										user: {
+											select: {
+												id: true
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		})
+
+		const memberFound = template.Page.Workspace.members.filter(
+			(member) => member.user.id === user.sub
+		)
+
+		if (!memberFound || memberFound.length < 1) {
+			throw new ForbiddenException('permission insufficiently')
 		}
 	}
 }

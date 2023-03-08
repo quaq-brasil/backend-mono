@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	Logger
+} from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
 import { CreatePageDto } from './dto/create-page.dto'
 import { UpdatePageDto } from './dto/update-page.dto'
@@ -33,7 +38,7 @@ export class PageService {
 
 		try {
 			return await this.prismaService.page.create({
-				data: createPageDto,
+				data: createPageDto
 			})
 		} catch (error) {
 			this.logger.error(`Error creating page: ${error.message}`)
@@ -50,13 +55,17 @@ export class PageService {
 		}
 	}
 
-	async findOne(id: string) {
+	async findOne(id: string, token?: string) {
 		try {
 			const found = await this.prismaService.page.findUnique({
 				where: {
-					id,
-				},
+					id
+				}
 			})
+
+			if (found.visibility === 'workspace') {
+				await this.handleVisibilityAccess(id, token)
+			}
 
 			return found
 		} catch (error) {
@@ -65,16 +74,20 @@ export class PageService {
 		}
 	}
 
-	async findOneBySlug(slug: string) {
+	async findOneBySlug(slug: string, token?: string) {
 		try {
-			return await this.prismaService.page.findUnique({
+			const page = await this.prismaService.page.findUnique({
 				where: {
-					slug,
+					slug
 				},
 				include: {
-					templates: true,
-				},
+					templates: true
+				}
 			})
+
+			if (page.visibility === 'workspace') {
+				await this.handleVisibilityAccess(page.id, token)
+			}
 		} catch (error) {
 			this.logger.error(`Error finding page by slug: ${error.message}`)
 			throw new BadRequestException({ message: error.message })
@@ -85,8 +98,8 @@ export class PageService {
 		try {
 			return await this.prismaService.page.findMany({
 				where: {
-					workspace_id,
-				},
+					workspace_id
+				}
 			})
 		} catch (error) {
 			this.logger.error(`Error finding pages by workspace id: ${error.message}`)
@@ -105,9 +118,9 @@ export class PageService {
 		try {
 			return await this.prismaService.page.update({
 				where: {
-					id,
+					id
 				},
-				data: updatePageDto,
+				data: updatePageDto
 			})
 		} catch (error) {
 			this.logger.error(`Error updating page: ${error.message}`)
@@ -119,8 +132,8 @@ export class PageService {
 		try {
 			return await this.prismaService.page.delete({
 				where: {
-					id,
-				},
+					id
+				}
 			})
 		} catch (error) {
 			this.logger.error(`Error deleting page: ${error.message}`)
@@ -156,7 +169,7 @@ export class PageService {
 		if (id) {
 			try {
 				const page = await this.prismaService.page.findUnique({
-					where: { slug },
+					where: { slug }
 				})
 
 				if (!page) {
@@ -177,6 +190,44 @@ export class PageService {
 		} catch (error) {
 			this.logger.error(`Error checking if Slug is taken: ${error.message}`)
 			throw new BadRequestException({ message: error.message })
+		}
+	}
+
+	async handleVisibilityAccess(id: string, token: string) {
+		if (!token) {
+			throw new ForbiddenException('permission insufficiently')
+		}
+		const user = JSON.parse(
+			Buffer.from(token.split('.')[1], 'base64').toString('utf8')
+		)
+
+		const page = await this.prismaService.page.findUnique({
+			where: {
+				id
+			},
+			select: {
+				Workspace: {
+					select: {
+						members: {
+							select: {
+								user: {
+									select: {
+										id: true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		})
+
+		const memberFound = page.Workspace.members.filter(
+			(member) => member.user.id === user.sub
+		)
+
+		if (!memberFound || memberFound.length < 1) {
+			throw new ForbiddenException('permission insufficiently')
 		}
 	}
 }

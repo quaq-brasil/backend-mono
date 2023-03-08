@@ -7,6 +7,7 @@ import {
 	Param,
 	Post,
 	Put,
+	Req,
 	UseGuards
 } from '@nestjs/common'
 import { CheckAbilities } from '../ability/abilities.decorator'
@@ -28,8 +29,20 @@ export class TemplateController {
 	}
 
 	@Get(':template_id')
-	findOne(@Param('template_id') template_id: string, @Headers() headers: any) {
-		return this.templateService.findOne(template_id, headers)
+	findOne(
+		@Req() req,
+		@Param('template_id') template_id: string,
+		@Headers() headers: any
+	) {
+		const token = req?.headers?.authorization
+
+		return this.templateService.findOne(
+			template_id,
+			headers,
+			undefined,
+			undefined,
+			token
+		)
 	}
 
 	@UseGuards(JwtGuard, AbilitiesGuard)
@@ -41,12 +54,17 @@ export class TemplateController {
 
 	@Get(':page_slug/:template_slug')
 	findOneByPageAndTemplateSlug(
+		@Req() req,
 		@Param('page_slug') page_slug: string,
 		@Param('template_slug') template_slug: string
 	) {
+		const token = req?.headers?.authorization
+
 		return this.templateService.findOneByPageAndTemplateSlug(
 			template_slug,
-			page_slug
+			page_slug,
+			undefined,
+			token
 		)
 	}
 
