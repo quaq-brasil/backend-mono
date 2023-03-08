@@ -27,7 +27,7 @@ export class PageService {
 	async create(createPageDto: CreatePageDto) {
 		if (createPageDto.slug) {
 			createPageDto.slug = await this.generateUniqueSlugByPageName(
-				createPageDto.slug,
+				createPageDto.slug
 			)
 		}
 
@@ -98,7 +98,7 @@ export class PageService {
 		if (updatePageDto.slug) {
 			updatePageDto.slug = await this.generateUniqueSlugByPageName(
 				updatePageDto.slug,
-				id,
+				id
 			)
 		}
 

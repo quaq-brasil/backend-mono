@@ -10,7 +10,7 @@ export class PublicationService {
 	constructor(
 		private prismaService: PrismaService,
 		private blockService: BlockService,
-		private variablesService: VariablesService,
+		private variablesService: VariablesService
 	) {}
 
 	async createOne(request: CreatePublicationRequest) {
@@ -37,12 +37,12 @@ export class PublicationService {
 			publication.template_id,
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			publication?.dependencies?.connected_templates || [],
+			publication?.dependencies?.connected_templates || []
 		)
 
 		publication.blocks = this.blockService.compileVariables(
 			publication.blocks,
-			variables,
+			variables
 		)
 
 		return publication

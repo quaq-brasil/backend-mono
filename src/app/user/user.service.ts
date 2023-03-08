@@ -25,7 +25,7 @@ export class UserService {
 
 	async create() {
 		const user = await this.prismaService.user.create({
-			data: {}
+			data: {},
 		})
 
 		delete user.password
@@ -35,11 +35,15 @@ export class UserService {
 
 	async findOne(id: string) {
 		try {
-			return await this.prismaService.user.findUniqueOrThrow({
+			const user = await this.prismaService.user.findUniqueOrThrow({
 				where: {
-					id
-				}
+					id,
+				},
 			})
+
+			delete user.password
+
+			return user
 		} catch (error) {
 			throw new NotFoundException(error.message)
 		}
@@ -47,11 +51,15 @@ export class UserService {
 
 	async findOneByEmail(email: string) {
 		try {
-			return await this.prismaService.user.findUniqueOrThrow({
+			const user = await this.prismaService.user.findUniqueOrThrow({
 				where: {
-					email
-				}
+					email,
+				},
 			})
+
+			delete user.password
+
+			return user
 		} catch (error) {
 			throw new NotFoundException(error.message)
 		}
@@ -73,12 +81,12 @@ export class UserService {
 		try {
 			const user = await this.prismaService.user.update({
 				where: {
-					id
+					id,
 				},
 				data: {
 					...updateUserDto,
-					password: hashPassword || undefined
-				}
+					password: hashPassword || undefined,
+				},
 			})
 
 			delete user.password
@@ -92,8 +100,8 @@ export class UserService {
 	async remove(id: string) {
 		await this.prismaService.user.delete({
 			where: {
-				id
-			}
+				id,
+			},
 		})
 	}
 
@@ -101,7 +109,7 @@ export class UserService {
 		if (id) {
 			try {
 				const user = await this.prismaService.user.findUnique({
-					where: { email }
+					where: { email },
 				})
 
 				if (!user) {

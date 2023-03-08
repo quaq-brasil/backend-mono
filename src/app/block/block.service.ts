@@ -37,7 +37,7 @@ export class BlockService {
 							const newData = await this.webhookBlock(block, data)
 							data.push(newData)
 						}
-					}),
+					})
 				)
 			} catch (error) {
 				console.warn(error)

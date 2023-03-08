@@ -5,7 +5,6 @@ import { AuthModule } from './app/auth/auth.module'
 import { FileModule } from './app/file/file.module'
 import { InteractionModule } from './app/interaction/interaction.module'
 import { PageModule } from './app/page/page.module'
-import { PermissionsModule } from './app/permissions/permissions.module'
 import { PublicationModule } from './app/publication/publication.module'
 import { S3FileUploadModule } from './app/s3-upload/s3-upload.module'
 import { TemplateModule } from './app/template/template.module'
@@ -26,10 +25,9 @@ import { WorkspaceModule } from './app/workspace/workspace.module'
 		AuthModule,
 		VariablesModule,
 		S3FileUploadModule,
-		PermissionsModule,
-		AbilityModule
+		AbilityModule,
 	],
 	controllers: [],
-	providers: []
+	providers: [],
 })
 export class AppModule {}

@@ -9,13 +9,13 @@ import { PrismaService } from 'src/prisma.service'
 export class S3FileUploadService {
 	constructor(
 		private prismaService: PrismaService,
-		private readonly configService: ConfigService,
+		private readonly configService: ConfigService
 	) {}
 
 	async uploadFile(
 		dataBuffer: Buffer,
 		fileName: string,
-		contentType: string,
+		contentType: string
 	): Promise<FileEntity> {
 		const s3 = new S3()
 		const uploadResult = await s3
