@@ -63,7 +63,7 @@ export class PageService {
 				}
 			})
 
-			if (found.visibility === 'workspace') {
+			if (found?.visibility === 'workspace') {
 				await this.handleVisibilityAccess(id, token)
 			}
 
@@ -85,7 +85,7 @@ export class PageService {
 				}
 			})
 
-			if (page.visibility === 'workspace') {
+			if (page?.visibility === 'workspace') {
 				await this.handleVisibilityAccess(page.id, token)
 			}
 

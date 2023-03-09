@@ -100,7 +100,7 @@ export class TemplateService {
 			include: include
 		})
 
-		if (template.visibility === 'workspace') {
+		if (template?.visibility === 'workspace') {
 			await this.handleVisibilityAccess(template.id, token)
 		}
 
@@ -147,12 +147,9 @@ export class TemplateService {
 		consumer_id?: string,
 		token?: string
 	) {
-		const template = await this.prismaService.template.findFirst({
+		const templates = await this.prismaService.template.findMany({
 			where: {
-				slug,
-				Page: {
-					slug: page_slug
-				}
+				slug
 			},
 			include: {
 				Page: true,
@@ -160,11 +157,19 @@ export class TemplateService {
 			}
 		})
 
-		if (template.visibility === 'workspace') {
-			await this.handleVisibilityAccess(template.id, token)
-		}
+		let template = undefined
+
+		const newTemplates = templates.filter(
+			(template) => template.Page.slug === page_slug
+		)
+
+		template = newTemplates[0]
 
 		if (template) {
+			if (template?.visibility === 'workspace') {
+				await this.handleVisibilityAccess(template.id, token)
+			}
+
 			const publication =
 				template.Publications[template?.Publications?.length - 1] || ({} as any)
 
