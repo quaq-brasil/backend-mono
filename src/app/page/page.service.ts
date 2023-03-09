@@ -88,6 +88,8 @@ export class PageService {
 			if (page.visibility === 'workspace') {
 				await this.handleVisibilityAccess(page.id, token)
 			}
+
+			return page
 		} catch (error) {
 			this.logger.error(`Error finding page by slug: ${error.message}`)
 			throw new BadRequestException({ message: error.message })

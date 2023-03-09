@@ -25,9 +25,9 @@ import { WorkspaceModule } from './app/workspace/workspace.module'
 		AuthModule,
 		VariablesModule,
 		S3FileUploadModule,
-		AbilityModule,
+		AbilityModule
 	],
 	controllers: [],
-	providers: [],
+	providers: []
 })
 export class AppModule {}
