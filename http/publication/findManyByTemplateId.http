@@ -1,0 +1,3 @@
+@baseUrl = https://bff.quaq.me
+# Find many publications by template id
+GET {{baseUrl}}/api/v1/publications/template/63eebb65f5c834d3a9154bc0

@@ -1,0 +1,15 @@
+# Variables
+@baseUrl = https://bff.quaq.me
+
+# Update one interaction by interaction id
+PUT {{baseUrl}}/api/vi/interactions/63ee9aa429576d089a4a2c95
+Content-Type: application/json
+
+{
+    "blocks": [
+        {
+            "type": "text2",
+            "text": "Hello world2"
+        }
+    ]
+}

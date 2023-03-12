@@ -1,0 +1,15 @@
+@baseUrl = https://bff.quaq.me
+# Update publication by publication id
+PUT {{baseUrl}}/api/v1/publications/63d5cd37f090a8a5e12a1a5c
+Content-Type: application/json
+
+{
+    "title": "title1",
+    "blocks": {
+        "1": {
+            "id": "1",
+            "type": "type",
+            "content": "content"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@baseUrl = https://bff.quaq.me
+# Create publication
+POST {{baseUrl}}/api/v1/publications
+Content-Type: application/json
+
+{
+    "title": "title2",
+    "blocks": [{
+			"id": "1",
+			"type": "text",
+			"data": "{{input__placeholder}}"
+		}, {
+			"id": "2",
+			"type": "text",
+			"data": "<h1>{{input__placeholder}}ok</h1>"
+		}, {
+			"id": "3",
+			"type": "textentry",
+			"data": {
+				"type": "email"
+			}
+		}],
+    "page_id": "63e00e16bb60a04fa845a3c8",
+		"template_id": "63e7cf8388e2141604e1f88f"
+}

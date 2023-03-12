@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:5000
+# Update one user by user id
+
+PUT {{baseUrl}}/api/v1/users/6404f1d0637629ee4a3fb4ee
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "12345678",
+    "type": "registered",
+    "email_verified": true,
+    "password_reset_token_attempts": 5,
+    "name": "string",
+    "avatar_url": "https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1450&q=80"
+}

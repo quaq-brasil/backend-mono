@@ -1,0 +1,3 @@
+@baseUrl = https://bff.quaq.me
+# Find many publications by page id
+GET {{baseUrl}}/publication/page/1

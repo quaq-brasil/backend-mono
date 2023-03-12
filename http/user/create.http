@@ -1,0 +1,6 @@
+@baseUrl = http://localhost:5000
+# Create one user
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{}

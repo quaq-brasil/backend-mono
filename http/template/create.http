@@ -1,0 +1,13 @@
+@baseUrl = https://bff.quaq.me
+POST {{baseUrl}}/api/v1/templates
+Content-Type: application/json
+
+{
+  "name": "name",
+  "slug": "meutemplate2",
+  "shortcut_image": "shortcutImage",
+  "shortcut_size": "shortcutSize",
+  "current_publication_id": "63e7cf7388e2141604e1f88e",
+  "number_of_new_interactions": 1,
+  "page_id": "63e00e16bb60a04fa845a3c8"
+}

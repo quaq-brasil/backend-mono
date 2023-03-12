@@ -1,0 +1,5 @@
+@baseUrl = https://bff.quaq.me
+
+# Find one interaction by interaction id
+
+GET {{baseUrl}}/api/v1/interactions/63ea847f8d4ff3f2739df2db

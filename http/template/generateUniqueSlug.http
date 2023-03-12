@@ -1,0 +1,11 @@
+@baseUrl = https://bff.quaq.me
+# Generate template unique slug
+POST {{baseUrl}}/api/v1/templates/generate_unique_slug
+Content-Type: application/json
+
+
+{
+  "title": "name",
+  "page_id": "63e00e16bb60a04fa845a3c8"
+
+}

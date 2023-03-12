@@ -1,0 +1,4 @@
+@baseUrl = https://bff.quaq.me
+
+# Find one publication by publication id
+GET  {{baseUrl}}/api/v1/publications/63eebb65f5c834d3a9154bbf

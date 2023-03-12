@@ -1,0 +1,4 @@
+@baseUrl = http://localhost:5000
+# Find one user by auth token
+
+GET {{baseUrl}}/api/v1/users

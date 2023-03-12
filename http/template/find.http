@@ -1,0 +1,4 @@
+@baseUrl = https://bff.quaq.me
+# Find one template by template id
+GET {{baseUrl}}/api/v1/templates/63efc46ba52e71db610d72bb
+request: logs

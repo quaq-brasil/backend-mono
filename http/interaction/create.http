@@ -1,11 +1,4 @@
-# Variables
 @baseUrl = https://bff.quaq.me
-
-# Find one interaction by interaction id
-
-GET {{baseUrl}}/api/v1/interactions/63ea847f8d4ff3f2739df2db
-
-###
 
 # Create one interaction
 POST {{baseUrl}}/api/v1/interactions
@@ -47,40 +40,4 @@ Content-Type: application/json
   "publication_id": "63efbfa074410fc6df8e0d89",
   "page_id": "63df08bef243bdc4870d6b09",
   "user_id": "63d26f06ea1e68c873e97ab2"
-}
-
-###
-
-# Find one interaction by user id
-GET {{baseUrl}}/interaction/user/63b75045a43fc9f320321e9f
-
-###
-
-# Find one interaction by page id
-GET {{baseUrl}}/interaction/page/63b75045a43fc9f320321e9f
-
-
-###
-
-# Find one interaction by publication id
-GET {{baseUrl}}/api/v1/interactions/publication/63efbfa074410fc6df8e0d89
-
-###
-
-# Find one interaction by template id
-GET {{baseUrl}}/api/v1/interactions/template/63b75045a43fc9f320321e9f
-
-###
-
-# Update one interaction by interaction id
-PUT {{baseUrl}}/api/vi/interactions/63ee9aa429576d089a4a2c95
-Content-Type: application/json
-
-{
-    "blocks": [
-        {
-            "type": "text2",
-            "text": "Hello world2"
-        }
-    ]
 }

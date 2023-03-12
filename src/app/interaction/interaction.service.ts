@@ -24,7 +24,7 @@ export class InteractionService {
 		}
 
 		const interaction = await this.prismaService.interaction.create({
-			data: createInteractionDto,
+			data: createInteractionDto
 		})
 
 		try {
@@ -37,7 +37,7 @@ export class InteractionService {
 
 			return {
 				...template,
-				interaction_id: interaction.id,
+				interaction_id: interaction.id
 			}
 		} catch (err) {
 			throw new BadRequestException('template does not exists', err)
@@ -47,28 +47,28 @@ export class InteractionService {
 	findOne(id: string) {
 		return this.prismaService.interaction.findUnique({
 			where: {
-				id: id,
+				id: id
 			},
 			include: {
 				Publication: {
 					select: {
-						dependencies: true,
-					},
+						dependencies: true
+					}
 				},
 				Template: {
 					select: {
 						id: true,
 						title: true,
 						slug: true,
-						shortcut_image: true,
-					},
+						shortcut_image: true
+					}
 				},
 				User: {
 					select: {
 						id: true,
 						avatar_url: true,
-						name: true,
-					},
+						name: true
+					}
 				},
 				Page: {
 					select: {
@@ -76,33 +76,33 @@ export class InteractionService {
 						slug: true,
 						title: true,
 						avatar_url: true,
-						background_url: true,
-					},
-				},
-			},
+						background_url: true
+					}
+				}
+			}
 		})
 	}
 
 	findAllByUserId(user_id: string) {
 		return this.prismaService.interaction.findMany({
 			where: {
-				user_id: user_id,
-			},
+				user_id: user_id
+			}
 		})
 	}
 
 	findAllByPageId(page_id: string) {
 		return this.prismaService.interaction.findMany({
 			where: {
-				page_id: page_id,
-			},
+				page_id: page_id
+			}
 		})
 	}
 
 	findAllByPublicationId(publication_id: string) {
 		return this.prismaService.interaction.findMany({
 			where: {
-				publication_id: publication_id,
+				publication_id: publication_id
 			},
 			include: {
 				User: {
@@ -112,18 +112,18 @@ export class InteractionService {
 						email: true,
 						avatar_url: true,
 						email_verified: true,
-						type: true,
-					},
-				},
-			},
+						type: true
+					}
+				}
+			}
 		})
 	}
 
 	findAllByTemplateId(template_id: string) {
 		return this.prismaService.interaction.findMany({
 			where: {
-				template_id: template_id,
-			},
+				template_id: template_id
+			}
 		})
 	}
 
@@ -153,9 +153,9 @@ export class InteractionService {
 
 		await this.prismaService.interaction.update({
 			where: {
-				id: id,
+				id: id
 			},
-			data: updateInteractionDto,
+			data: updateInteractionDto
 		})
 
 		return await this.templateService.findOne(

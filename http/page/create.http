@@ -1,0 +1,17 @@
+@baseUrl = http://localhost:5000
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc2NzMxMmE4YzJjZDYyMWFiNGYiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiaWNhcmxvc3JpZ29uaUBnbWFpbC5jb20iLCJuYW1lIjoic3RyaW5nIiwiYXZhdGFyX3VybCI6Imh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNDY0ODAyNjg2MTY3LWI5MzlhNjkxMDY1OT9peGxpYj1yYi00LjAuMyZpeGlkPU1ud3hNakEzZkRCOE1IeHdhRzkwYnkxd1lXZGxmSHg4ZkdWdWZEQjhmSHg4JmF1dG89Zm9ybWF0JmZpdD1jcm9wJnc9MTQ1MCZxPTgwIiwiaWF0IjoxNjc4NDYzNTY1LCJleHAiOjE2Nzg1ODM1NjV9.l-gCaPbfeEsz2FOU-IzWEx5EmsMJHUHRFwYtoeKzwbs
+
+
+# create one
+
+POST https://bff.quaq.me/api/v1/pages
+
+Content-Type: application/json
+
+{
+    "name": "page 1",
+    "slug": "minhapagina2",
+    "workspace_id": "63b34032485edc50f1bdfa72",
+    "avatar_url": "url/url",
+    "background_url": "url/url"
+}
