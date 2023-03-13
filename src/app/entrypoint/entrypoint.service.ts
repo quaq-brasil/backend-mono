@@ -91,6 +91,8 @@ export class EntrypointService {
         template_id:
           entrypoint.EntrypointToPublication[0].publication.template_id,
         events: [],
+        external: true,
+        date_of_consensus: interaction.date_of_consensus,
         user_id: interaction.user_id || "",
         data: interaction.data,
       },

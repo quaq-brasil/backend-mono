@@ -34,13 +34,15 @@ model File {
 }
 
 model Interaction {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  blocks    Json[]
-  data      Json[]
-  events    Json[]
-  metadata  Json?
-  depth     Int    @default(0)
-  locations Json[] @default([])
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  blocks            Json[]
+  data              Json[]
+  events            Json[]
+  metadata          Json?
+  depth             Int       @default(0)
+  locations         Json[]    @default([])
+  external          Boolean?  @default(false)
+  date_of_consensus DateTime?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
