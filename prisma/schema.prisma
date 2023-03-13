@@ -96,9 +96,10 @@ model Publication {
   template_id String?
   page_id     String
 
-  Interaction Interaction[]
-  Template    Template?     @relation(fields: [template_id], references: [id])
-  Page        Page?         @relation(fields: [page_id], references: [id])
+  Interaction             Interaction[]
+  Template                Template?                 @relation(fields: [template_id], references: [id])
+  Page                    Page?                     @relation(fields: [page_id], references: [id])
+  EntrypointToPublication EntrypointToPublication[]
 
   @@map("publications")
 }
@@ -174,6 +175,26 @@ model FileEntity {
   updatedAt DateTime @updatedAt
 
   @@map("files")
+}
+
+model Entrypoint {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  description             String?
+  secret                  String
+  slug                    String                    @unique
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  EntrypointToPublication EntrypointToPublication[]
+
+  @@map("entrypoint")
+}
+
+model EntrypointToPublication {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  entrypoint     Entrypoint  @relation(fields: [entrypoint_id], references: [id])
+  entrypoint_id  String      @db.ObjectId
+  publication    Publication @relation(fields: [publication_id], references: [id])
+  publication_id String      @db.ObjectId
 }
 
 model WorkspaceToUser {

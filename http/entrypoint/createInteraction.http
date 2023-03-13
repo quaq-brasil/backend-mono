@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:5000/api/v1
+
+# Authenticate user
+POST {{baseUrl}}/entrypoint/interaction/123456789
+Content-Type: application/json
+
+{
+    "secret": "123456789",
+    "user_id": "63ffc767312a8c2cd621ab4f",
+    "data": []
+}
