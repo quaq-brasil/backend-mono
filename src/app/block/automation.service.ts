@@ -1,116 +1,108 @@
 import { Injectable } from "@nestjs/common"
 import * as lodash from "lodash"
 
+enum ComparisonType {
+  Equals = "equals",
+  NotEquals = "notEquals",
+  Contains = "contains",
+  NotContains = "notContains",
+  GreaterThan = "greaterThan",
+  LessThan = "lessThan",
+  StartsWith = "startsWith",
+  EndsWith = "endsWith",
+  LengthEquals = "lengthEquals",
+  LengthGreaterThan = "lengthGreaterThan",
+  LengthLessThan = "lengthLessThan",
+  MatchesRegex = "matchesRegex",
+  IsArray = "isArray",
+  IsObject = "isObject",
+  IsTruthy = "isTruthy",
+  IsFalsy = "isFalsy",
+  IsNumber = "isNumber",
+  IsBoolean = "isBoolean",
+  IsUndefined = "isUndefined",
+  IsNull = "isNull",
+  IsNullOrUndefined = "isNullOrUndefined",
+  IsDate = "isDate",
+  IsSymbol = "isSymbol",
+  IsRegExp = "isRegExp",
+  IsString = "isString",
+}
+
 interface IComparison {
   type: ComparisonType
   value: any
   comparativeValue?: any
 }
 
-type ComparisonType =
-  | "equals"
-  | "notEquals"
-  | "contains"
-  | "notContains"
-  | "greaterThan"
-  | "lessThan"
-  | "startsWith"
-  | "endsWith"
-  | "lengthEquals"
-  | "lengthGreaterThan"
-  | "lengthLessThan"
-  | "matchesRegex"
-  | "isArray"
-  | "isObject"
-  | "isTruthy"
-  | "isFalsy"
-  | "isNumber"
-  | "isBoolean"
-  | "isUndefined"
-  | "isNull"
-  | "isNullOrUndefined"
-  | "isDate"
-  | "isSymbol"
-  | "isRegExp"
-  | "isString"
-
 interface IAutomationBlock {
-  conditionals: IComparison[][]
-  blocks: any[]
+  conditionals?: IComparison[][]
+  blocks?: any[]
 }
 
 @Injectable()
 export class AutomationService {
-  public automationBlockExecution({ data }: { data: IAutomationBlock }) {
-    return this.getMatchingBlocks(data.conditionals, data.blocks)
+  public automationBlockExecution({
+    data: { conditionals, blocks },
+  }: {
+    data: IAutomationBlock
+  }) {
+    return this.getMatchingBlocks(conditionals, blocks)
   }
 
   private getMatchingBlocks(conditionals: IComparison[][], blocks: any[]) {
-    let isConditionalsSatisfied = false
-
-    for (let index = 0; index < conditionals.length; index++) {
-      if (isConditionalsSatisfied) {
-        break
-      }
-
+    for (const conditionalGroup of conditionals) {
       let numberOfSatisfied = 0
-
-      for (
-        let secondIndex = 0;
-        secondIndex < conditionals[index].length;
-        secondIndex++
-      ) {
-        const isSatisfied = this.conditionalVerifier(
-          conditionals[index][secondIndex]
-        )
-
-        if (!isSatisfied) {
+      for (const conditional of conditionalGroup) {
+        if (!this.isConditionalSatisfied(conditional)) {
           break
         }
-
         numberOfSatisfied++
-
-        if (numberOfSatisfied === conditionals[index].length) {
-          isConditionalsSatisfied = true
-          break
-        }
+      }
+      if (numberOfSatisfied === conditionalGroup.length) {
+        return blocks
       }
     }
-
-    return isConditionalsSatisfied ? blocks : null
+    return null
   }
 
-  private conditionalVerifier({ type, value, comparativeValue }: IComparison) {
+  private isConditionalSatisfied({
+    type,
+    value,
+    comparativeValue,
+  }: IComparison) {
     const comparisonFunctions: Record<
       ComparisonType,
       (value: any, comparativeValue?: any) => boolean
     > = {
-      equals: lodash.isEqualWith,
-      notEquals: (a, b) => !lodash.isEqualWith(a, b),
-      contains: lodash.includes,
-      notContains: (a, b) => !lodash.includes(a, b),
-      greaterThan: lodash.gt,
-      lessThan: lodash.lt,
-      startsWith: lodash.startsWith,
-      endsWith: lodash.endsWith,
-      lengthEquals: (a, b) => lodash.size(a) === b,
-      lengthGreaterThan: (a, b) => lodash.size(a) > b,
-      lengthLessThan: (a, b) => lodash.size(a) < b,
-      matchesRegex: (a, b) => lodash.isString(a) && new RegExp(b).test(a),
-      isArray: lodash.isArray,
-      isObject: lodash.isObject,
-      isTruthy: Boolean,
-      isFalsy: (a) => !Boolean(a),
-      isNumber: lodash.isNumber,
-      isBoolean: lodash.isBoolean,
-      isUndefined: lodash.isUndefined,
-      isNull: lodash.isNull,
-      isNullOrUndefined: lodash.isNil,
-      isDate: lodash.isDate,
-      isSymbol: lodash.isSymbol,
-      isRegExp: lodash.isRegExp,
-      isString: lodash.isString,
+      [ComparisonType.Equals]: lodash.isEqualWith,
+      [ComparisonType.NotEquals]: (a, b) => !lodash.isEqualWith(a, b),
+      [ComparisonType.Contains]: lodash.includes,
+      [ComparisonType.NotContains]: (a, b) => !lodash.includes(a, b),
+      [ComparisonType.GreaterThan]: lodash.gt,
+      [ComparisonType.LessThan]: lodash.lt,
+      [ComparisonType.StartsWith]: lodash.startsWith,
+      [ComparisonType.EndsWith]: lodash.endsWith,
+      [ComparisonType.LengthEquals]: (a, b) => lodash.size(a) === b,
+      [ComparisonType.LengthGreaterThan]: (a, b) => lodash.size(a) > b,
+      [ComparisonType.LengthLessThan]: (a, b) => lodash.size(a) < b,
+      [ComparisonType.MatchesRegex]: (a, b) =>
+        lodash.isString(a) && new RegExp(b).test(a),
+      [ComparisonType.IsArray]: lodash.isArray,
+      [ComparisonType.IsObject]: lodash.isObject,
+      [ComparisonType.IsTruthy]: Boolean,
+      [ComparisonType.IsFalsy]: (a) => !Boolean(a),
+      [ComparisonType.IsNumber]: lodash.isNumber,
+      [ComparisonType.IsBoolean]: lodash.isBoolean,
+      [ComparisonType.IsUndefined]: lodash.isUndefined,
+      [ComparisonType.IsNull]: lodash.isNull,
+      [ComparisonType.IsNullOrUndefined]: lodash.isNil,
+      [ComparisonType.IsDate]: lodash.isDate,
+      [ComparisonType.IsSymbol]: lodash.isSymbol,
+      [ComparisonType.IsRegExp]: lodash.isRegExp,
+      [ComparisonType.IsString]: lodash.isString,
     }
+
     const comparisonFunction = comparisonFunctions[type]
     if (!comparisonFunction) {
       return false
