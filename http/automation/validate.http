@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:5000/api/v1
+
+POST {{baseUrl}}/blocks
+Content-Type: application/json
+
+{
+  "data": {
+    "blocks": [{ "blocks": "blocks" }],
+    "conditionals": [
+    [
+      {
+        "type": "isNumber",
+        "value": 5
+      },
+      {
+        "type": "greaterThan",
+        "value": 7
+      },
+      {
+        "type": "isTruthy",
+        "value": true
+      }
+    ],
+    [
+      {
+        "type": "equals",
+        "value": "foo",
+        "comparativeValue": "foo"
+      },
+      {
+        "type": "isUndefined",
+        "value": null
+      },
+      {
+        "type": "isNull",
+        "value": null
+      }
+    ],
+    [
+      {
+        "type": "isArray",
+        "value": []
+      },
+      {
+        "type": "isObject",
+        "value": {}
+      },
+      {
+        "type": "isFalsy",
+        "value": false
+      }
+    ]
+    ]
+  }
+}
