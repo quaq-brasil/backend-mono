@@ -40,6 +40,8 @@ interface IAutomationBlock {
   blocks?: any[]
 }
 
+type ComparisonFunction = (value: any, comparativeValue?: any) => boolean
+
 @Injectable()
 export class AutomationService {
   public automationBlockExecution({
@@ -50,16 +52,16 @@ export class AutomationService {
     return this.getMatchingBlocks(conditionals, blocks)
   }
 
-  private getMatchingBlocks(conditionals: IComparison[][], blocks: any[]) {
+  private getMatchingBlocks(
+    conditionals: IComparison[][],
+    blocks: any[]
+  ): any[] | null {
     for (const conditionalGroup of conditionals) {
-      let numberOfSatisfied = 0
-      for (const conditional of conditionalGroup) {
-        if (!this.isConditionalSatisfied(conditional)) {
-          break
-        }
-        numberOfSatisfied++
-      }
-      if (numberOfSatisfied === conditionalGroup.length) {
+      const isGroupSatisfied = conditionalGroup.every((conditional) => {
+        return this.isConditionalSatisfied(conditional)
+      })
+
+      if (isGroupSatisfied) {
         return blocks
       }
     }
@@ -71,10 +73,7 @@ export class AutomationService {
     value,
     comparativeValue,
   }: IComparison) {
-    const comparisonFunctions: Record<
-      ComparisonType,
-      (value: any, comparativeValue?: any) => boolean
-    > = {
+    const comparisonFunctions: Record<ComparisonType, ComparisonFunction> = {
       [ComparisonType.Equals]: lodash.isEqualWith,
       [ComparisonType.NotEquals]: (a, b) => !lodash.isEqualWith(a, b),
       [ComparisonType.Contains]: lodash.includes,
@@ -104,10 +103,8 @@ export class AutomationService {
     }
 
     const comparisonFunction = comparisonFunctions[type]
-    if (!comparisonFunction) {
-      return false
-    }
-
-    return comparisonFunction(value, comparativeValue)
+    return comparisonFunction
+      ? comparisonFunction(value, comparativeValue)
+      : false
   }
 }
