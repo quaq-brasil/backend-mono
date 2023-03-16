@@ -48,5 +48,41 @@ describe("AutomationService", () => {
     })
   })
 
-  // Add more tests for different comparison types and cases
+  describe("additional comparison types", () => {
+    const dataTemplate: IAutomationBlock = {
+      conditionals: [],
+      blocks: ["matchedBlock"],
+    }
+
+    const createTestCase = (
+      type: ComparisonType,
+      value: any,
+      comparativeValue: any,
+      expectedResult: any[]
+    ) => {
+      const data: IAutomationBlock = {
+        ...dataTemplate,
+        conditionals: [[{ type, value, comparativeValue }]],
+      }
+
+      const result = automationService.automationBlockExecution({ data })
+      expect(result).toEqual(expectedResult)
+    }
+
+    it("should handle ComparisonType.NotEquals", () => {
+      createTestCase(ComparisonType.NotEquals, 2, 3, ["matchedBlock"])
+      createTestCase(ComparisonType.NotEquals, "abc", "def", ["matchedBlock"])
+      createTestCase(ComparisonType.NotEquals, 2, 2, null)
+    })
+
+    it("should handle ComparisonType.Contains", () => {
+      createTestCase(ComparisonType.Contains, [1, 2, 3], 2, ["matchedBlock"])
+      createTestCase(ComparisonType.Contains, "hello world", "world", [
+        "matchedBlock",
+      ])
+      createTestCase(ComparisonType.Contains, [1, 2, 3], 4, null)
+    })
+
+    // Add more test cases for other ComparisonType values.
+  })
 })
