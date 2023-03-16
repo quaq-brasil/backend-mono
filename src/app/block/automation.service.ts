@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import * as lodash from "lodash"
 
-enum ComparisonType {
+export enum ComparisonType {
   Equals = "equals",
   NotEquals = "notEquals",
   Contains = "contains",
@@ -35,7 +35,7 @@ interface IComparison {
   comparativeValue?: any
 }
 
-interface IAutomationBlock {
+export interface IAutomationBlock {
   conditionals?: IComparison[][]
   blocks?: any[]
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { BadRequestException, Injectable } from "@nestjs/common"
 import axios from "axios"
 import { PrismaService } from "src/prisma.service"
 
@@ -124,15 +124,22 @@ export class BlockService {
           extract(value[key])
         }
       } else if (typeof value === "string") {
-        const match = value.match(/{{(.*?)}}/g)
-        if (match) {
-          match.forEach((variable) => {
-            let varName = variable.replace(/[{.}]/g, "__")
-            varName = varName.substring(4, varName.length - 4)
-            if (!result[varName]) {
-              result[varName] = variable
-            }
-          })
+        const maxLength = 1000
+
+        if (value.length <= maxLength) {
+          const match = value.match(/{{((?:(?!{{|}}).)*)}}/g)
+
+          if (match) {
+            match.forEach((variable) => {
+              let varName = variable.replace(/[{.}]/g, "__")
+              varName = varName.substring(4, varName.length - 4)
+              if (!result[varName]) {
+                result[varName] = variable
+              }
+            })
+          }
+        } else {
+          throw new BadRequestException({ message: "value is too long" })
         }
       }
     }
