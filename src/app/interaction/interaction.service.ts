@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common"
 import { PrismaService } from "src/prisma.service"
+import { AutomationService } from "../block/automation.service"
 import { BlockService } from "../block/block.service"
 import { TemplateService } from "../template/template.service"
 import { CreateInteractionDto } from "./dto/create-interaction.dto"
@@ -10,7 +11,8 @@ export class InteractionService {
   constructor(
     private prismaService: PrismaService,
     private blockService: BlockService,
-    private templateService: TemplateService
+    private templateService: TemplateService,
+    private automationService: AutomationService
   ) {}
 
   async create(createInteractionDto: CreateInteractionDto) {
@@ -40,6 +42,8 @@ export class InteractionService {
         interaction_id: interaction.id,
       }
     } catch (err) {
+      console.log("err", err)
+
       throw new BadRequestException("template does not exists", err)
     }
   }

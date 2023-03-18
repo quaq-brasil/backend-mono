@@ -49,6 +49,7 @@ export class AutomationService {
   }: {
     data: IAutomationBlock
   }) {
+    console.log("aqui1")
     return this.getMatchingBlocks(conditionals, blocks)
   }
 

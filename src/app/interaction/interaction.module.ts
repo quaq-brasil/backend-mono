@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common"
 import { PrismaService } from "src/prisma.service"
 import { AbilityFactory } from "../ability/ability.factory"
+import { AutomationService } from "../block/automation.service"
 import { BlockService } from "../block/block.service"
 import { TemplateService } from "../template/template.service"
 import { VariablesService } from "../variables/variables.service"
@@ -16,6 +17,7 @@ import { InteractionService } from "./interaction.service"
     TemplateService,
     VariablesService,
     AbilityFactory,
+    AutomationService,
   ],
 })
 export class InteractionModule {}
