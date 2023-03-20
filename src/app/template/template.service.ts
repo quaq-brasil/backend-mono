@@ -71,8 +71,6 @@ export class TemplateService {
       Page: true,
     }
 
-    console.log("here")
-
     if (headers && headers.request === "logs") {
       include.Publications = {
         orderBy: {
@@ -134,11 +132,6 @@ export class TemplateService {
 
       const newBlocks = []
 
-      console.log(
-        "formattedTemplate.publication.blocks",
-        formattedTemplate.publication.blocks
-      )
-
       formattedTemplate.publication.blocks.forEach((block) => {
         if (block?.type === "automation") {
           const automationBlocks =
@@ -146,7 +139,6 @@ export class TemplateService {
               data: block.data,
             })
 
-          console.log("automationBlocks", automationBlocks)
 
           if (automationBlocks && automationBlocks.length > 0) {
             newBlocks.push(automationBlocks[0])
@@ -156,14 +148,12 @@ export class TemplateService {
         }
       })
 
-      console.log("newBlocks", newBlocks)
 
       formattedTemplate.publication.blocks = newBlocks
 
       return formattedTemplate
     }
 
-    console.log("template", template)
 
     throw new NotFoundException({ message: "template not found" })
   }

@@ -13,6 +13,7 @@ import { TemplateModule } from "./app/template/template.module"
 import { UserModule } from "./app/user/user.module"
 import { VariablesModule } from "./app/variables/variables.module"
 import { WorkspaceModule } from "./app/workspace/workspace.module"
+import { SitemapModule } from './app/sitemap/sitemap.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { WorkspaceModule } from "./app/workspace/workspace.module"
     AbilityModule,
     EntrypointModule,
     BlockModule,
+    SitemapModule,
   ],
   controllers: [],
   providers: [],

@@ -3,5 +3,5 @@
 
 # find by page slug
 
-GET http://localhost:5000/api/v1/pages/slug/quaq
+GET http://localhost:5000/api/v1/pages/slug/testinho
 Authorization: {{JWTToken}}

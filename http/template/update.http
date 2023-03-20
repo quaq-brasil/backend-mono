@@ -1,7 +1,7 @@
 @baseUrl = https://bff.quaq.me
-PUT {{baseUrl}}/api/v1/templates/63e00e52bb60a04fa845a3c9
+PUT {{baseUrl}}/api/v1/templates/64189287f2bd3371c9bee43d
 Content-Type: application/json
 
 {
-  "shortcut_image": "https://images.unsplash.com/photo-1674225636667-0e12bccc2b4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+  "visibility": "workspace"
 }

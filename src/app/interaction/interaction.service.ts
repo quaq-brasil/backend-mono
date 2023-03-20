@@ -42,7 +42,6 @@ export class InteractionService {
         interaction_id: interaction.id,
       }
     } catch (err) {
-      console.log("err", err)
 
       throw new BadRequestException("template does not exists", err)
     }
