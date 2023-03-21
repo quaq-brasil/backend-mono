@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 # Create publication
 POST {{baseUrl}}/api/v1/publications
 Content-Type: application/json

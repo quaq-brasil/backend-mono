@@ -3,5 +3,5 @@
 
 # find all
 
-GET https://bff.quaq.com.br/page
+GET https://api.quaq.com.br/page
 Authorization: {{JWTToken}}

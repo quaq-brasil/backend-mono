@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 PUT {{baseUrl}}/api/v1/templates/64189287f2bd3371c9bee43d
 Content-Type: application/json
 

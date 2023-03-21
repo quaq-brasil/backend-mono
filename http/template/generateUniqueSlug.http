@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 # Generate template unique slug
 POST {{baseUrl}}/api/v1/templates/generate_unique_slug
 Content-Type: application/json

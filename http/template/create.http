@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 POST {{baseUrl}}/api/v1/templates
 Content-Type: application/json
 

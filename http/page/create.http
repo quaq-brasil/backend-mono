@@ -4,7 +4,7 @@
 
 # create one
 
-POST https://bff.quaq.me/api/v1/pages
+POST https://api.quaq.me/api/v1/pages
 
 Content-Type: application/json
 

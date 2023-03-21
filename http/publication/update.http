@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 # Update publication by publication id
 PUT {{baseUrl}}/api/v1/publications/63d5cd37f090a8a5e12a1a5c
 Content-Type: application/json

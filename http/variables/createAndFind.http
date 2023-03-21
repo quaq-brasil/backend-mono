@@ -1,5 +1,5 @@
 # Variables
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 
 # Create and find variables
 POST {{baseUrl}}/api/v1/variables

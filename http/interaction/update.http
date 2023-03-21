@@ -1,5 +1,5 @@
 # Variables
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 
 # Update one interaction by interaction id
 PUT {{baseUrl}}/api/vi/interactions/63ee9aa429576d089a4a2c95

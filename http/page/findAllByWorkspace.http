@@ -3,4 +3,4 @@
 
 # find all by workspace
 
-GET https://bff.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72
+GET https://api.quaq.com.br/page/workspace/63b34032485edc50f1bdfa72

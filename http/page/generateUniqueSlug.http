@@ -3,7 +3,7 @@
 
 # generate unique slug
 
-POST https://bff.quaq.me/api/v1/pages/generate_unique_slug
+POST https://api.quaq.me/api/v1/pages/generate_unique_slug
 Content-Type: application/json
 
 {

@@ -1,4 +1,4 @@
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 
 # Create one interaction
 POST {{baseUrl}}/api/v1/interactions

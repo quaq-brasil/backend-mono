@@ -1,5 +1,5 @@
 
-@baseUrl = https://bff.quaq.me
+@baseUrl = https://api.quaq.me
 
 # Find one interaction by page id
 GET {{baseUrl}}/interaction/page/63b75045a43fc9f320321e9f
