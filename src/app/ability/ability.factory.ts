@@ -1,14 +1,14 @@
 import {
-	AbilityBuilder,
-	ExtractSubjectType,
-	InferSubjects,
-	PureAbility
-} from '@casl/ability'
-import { createPrismaAbility } from '@casl/prisma'
-import { Injectable } from '@nestjs/common'
-import { Page, Template, User, Workspace } from '@prisma/client'
-import { PrismaService } from 'src/prisma.service'
-import { PagesAction, TemplatesAction, WorkspaceAction } from './ability.enums'
+  AbilityBuilder,
+  ExtractSubjectType,
+  InferSubjects,
+  PureAbility,
+} from "@casl/ability"
+import { createPrismaAbility } from "@casl/prisma"
+import { Injectable } from "@nestjs/common"
+import { Page, Template, User, Workspace } from "@prisma/client"
+import { PrismaService } from "src/prisma.service"
+import { PagesAction, TemplatesAction, WorkspaceAction } from "./ability.enums"
 
 export type Action = WorkspaceAction | PagesAction | TemplatesAction
 
@@ -16,299 +16,294 @@ export type Subjects = InferSubjects<User | Workspace | Page | Template>
 
 export type AppAbility = PureAbility<Action, Subjects>
 
-type IPayloadPage = {
-	id: string
-	slug: string
+type PayloadPage = {
+  id: string
+  slug: string
 }
 
-type IPayloadWorkspace = {
-	id: string
-	slug: string
-	Page: IPayloadPage[]
+type PayloadWorkspace = {
+  id: string
+  slug: string
+  Page: PayloadPage[]
 }
 
-export type IPayloadUser = {
-	sub: string
-	email: string
-	name: string
-	avatar_url: string
-	workspaces: IPayloadWorkspace[]
+export type PayloadUser = {
+  sub: string
+  email: string
+  name: string
+  avatar_url: string
+  workspaces: PayloadWorkspace[]
 }
 
-type authProps = {
-	user: IPayloadUser
+type AuthProps = {
+  user: PayloadUser
 }
 
 export type defineAbilityProps = {
-	workspace_id?: string
-	workspace_slug?: string
-	page_id?: string
-	page_slug?: string
-	template_id?: string
-	template_slug?: string
-	publication_id?: string
-	interaction_id?: string
-} & authProps
+  workspace_id?: string
+  workspace_slug?: string
+  page_id?: string
+  page_slug?: string
+  template_id?: string
+  template_slug?: string
+  publication_id?: string
+  interaction_id?: string
+} & AuthProps
 
 @Injectable()
 export class AbilityFactory {
-	constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
-	can = undefined
-	cannot = undefined
+  can = undefined
+  cannot = undefined
 
-	async defineAbility({
-		user,
-		workspace_id,
-		workspace_slug,
-		page_id,
-		page_slug,
-		template_id,
-		template_slug,
-		publication_id,
-		interaction_id
-	}: defineAbilityProps) {
-		const { can, cannot, build } = new AbilityBuilder(createPrismaAbility)
+  async defineAbility({
+    user,
+    workspace_id,
+    workspace_slug,
+    page_id,
+    page_slug,
+    template_id,
+    template_slug,
+    publication_id,
+    interaction_id,
+  }: defineAbilityProps) {
+    const { can, cannot, build } = new AbilityBuilder(createPrismaAbility)
 
-		this.can = can
-		this.cannot = cannot
+    this.can = can
+    this.cannot = cannot
 
-		if (workspace_id) {
-			await this.verifyByWorkspaceId({ user, workspace_id })
-		}
+    await Promise.all([
+      this.verifyByWorkspaceId({ user, workspace_id }),
+      this.verifyByWorkspaceSlug({ user, workspace_slug }),
+      this.verifyByPageId({ user, page_id }),
+      this.verifyByPageSlug({ user, page_slug }),
+      this.verifyByTemplateId({ user, template_id }),
+      this.verifyByTemplateAndPageSlug({ user, page_slug, template_slug }),
+      this.verifyByPublicationId({ user, publication_id }),
+      this.verifyByInteractionId({ user, interaction_id }),
+    ])
 
-		if (workspace_slug) {
-			await this.verifyByWorkspaceSlug({ user, workspace_slug })
-		}
+    return build({
+      detectSubjectType: (item) =>
+        item.constructor as ExtractSubjectType<Subjects>,
+    })
+  }
 
-		if (page_id) {
-			await this.verifyByPageId({ user, page_id })
-		}
+  async verifyByWorkspaceId({
+    user,
+    workspace_id,
+  }: {
+    user: PayloadUser
+    workspace_id: string
+  }) {
+    if (!user || !workspace_id) return
 
-		if (page_slug) {
-			await this.verifyByPageSlug({ user, page_slug })
-		}
+    const workspace = await this.prismaService.workspaceToUser.findFirst({
+      where: {
+        user_id: user.sub,
+        workspace_id,
+      },
+    })
 
-		if (template_id) {
-			await this.verifyByTemplateId({ user, template_id })
-		}
+    if (workspace) {
+      this.can(WorkspaceAction.Manage, "Workspace")
+    }
+  }
 
-		if (template_slug && page_slug) {
-			await this.verifyByTemplateAndPageSlug({ user, page_slug, template_slug })
-		}
+  async verifyByWorkspaceSlug({
+    user,
+    workspace_slug,
+  }: {
+    user: PayloadUser
+    workspace_slug: string
+  }) {
+    if (!user || !workspace_slug) return
 
-		if (publication_id) {
-			await this.verifyByPublicationId({ user, publication_id })
-		}
+    const workspace = await this.prismaService.workspaceToUser.findFirst({
+      where: {
+        user_id: user.sub,
+        workspace: {
+          slug: workspace_slug,
+        },
+      },
+    })
 
-		if (interaction_id) {
-			await this.verifyByInteractionId({ user, interaction_id })
-		}
+    if (workspace) {
+      this.can(WorkspaceAction.Manage, "Workspace")
+    }
+  }
 
-		return build({
-			detectSubjectType: (item) =>
-				item.constructor as ExtractSubjectType<Subjects>
-		})
-	}
+  async verifyByPageId({
+    user,
+    page_id,
+  }: {
+    user: PayloadUser
+    page_id: string
+  }) {
+    if (!user || !page_id) return
 
-	async verifyByWorkspaceId({
-		user,
-		workspace_id
-	}: {
-		user: IPayloadUser
-		workspace_id: string
-	}) {
-		const workspace = await this.prismaService.workspaceToUser.findFirst({
-			where: {
-				user_id: user.sub,
-				workspace_id
-			}
-		})
+    const page = this.prismaService.page.findFirst({
+      where: {
+        id: page_id,
+        Workspace: {
+          members: {
+            some: {
+              user_id: user.sub,
+            },
+          },
+        },
+      },
+    })
 
-		if (workspace) {
-			this.can(WorkspaceAction.Manage, 'Workspace')
-		}
-	}
+    if (page) {
+      this.can(WorkspaceAction.Manage, "Page")
+    }
+  }
 
-	async verifyByWorkspaceSlug({
-		user,
-		workspace_slug
-	}: {
-		user: IPayloadUser
-		workspace_slug: string
-	}) {
-		const workspace = await this.prismaService.workspaceToUser.findFirst({
-			where: {
-				user_id: user.sub,
-				workspace: {
-					slug: workspace_slug
-				}
-			}
-		})
+  async verifyByPageSlug({
+    user,
+    page_slug,
+  }: {
+    user: PayloadUser
+    page_slug: string
+  }) {
+    if (!user || !page_slug) return
 
-		if (workspace) {
-			this.can(WorkspaceAction.Manage, 'Workspace')
-		}
-	}
+    const page = this.prismaService.page.findFirst({
+      where: {
+        slug: page_slug,
+        Workspace: {
+          members: {
+            some: {
+              user_id: user.sub,
+            },
+          },
+        },
+      },
+    })
 
-	async verifyByPageId({
-		user,
-		page_id
-	}: {
-		user: IPayloadUser
-		page_id: string
-	}) {
-		const page = this.prismaService.page.findFirst({
-			where: {
-				id: page_id,
-				Workspace: {
-					members: {
-						some: {
-							user_id: user.sub
-						}
-					}
-				}
-			}
-		})
+    if (page) {
+      this.can(WorkspaceAction.Manage, "Page")
+    }
+  }
 
-		if (page) {
-			this.can(WorkspaceAction.Manage, 'Page')
-		}
-	}
+  async verifyByTemplateId({
+    user,
+    template_id,
+  }: {
+    user: PayloadUser
+    template_id: string
+  }) {
+    if (!user || !template_id) return
 
-	async verifyByPageSlug({
-		user,
-		page_slug
-	}: {
-		user: IPayloadUser
-		page_slug: string
-	}) {
-		const page = this.prismaService.page.findFirst({
-			where: {
-				slug: page_slug,
-				Workspace: {
-					members: {
-						some: {
-							user_id: user.sub
-						}
-					}
-				}
-			}
-		})
+    const page = this.prismaService.template.findFirst({
+      where: {
+        id: template_id,
+        Page: {
+          Workspace: {
+            members: {
+              some: {
+                user_id: user.sub,
+              },
+            },
+          },
+        },
+      },
+    })
 
-		if (page) {
-			this.can(WorkspaceAction.Manage, 'Page')
-		}
-	}
+    if (page) {
+      this.can(WorkspaceAction.Manage, "Template")
+    }
+  }
 
-	async verifyByTemplateId({
-		user,
-		template_id
-	}: {
-		user: IPayloadUser
-		template_id: string
-	}) {
-		const page = this.prismaService.template.findFirst({
-			where: {
-				id: template_id,
-				Page: {
-					Workspace: {
-						members: {
-							some: {
-								user_id: user.sub
-							}
-						}
-					}
-				}
-			}
-		})
+  async verifyByTemplateAndPageSlug({
+    user,
+    template_slug,
+    page_slug,
+  }: {
+    user: PayloadUser
+    template_slug: string
+    page_slug: string
+  }) {
+    if (!user || !page_slug || !template_slug) return
 
-		if (page) {
-			this.can(WorkspaceAction.Manage, 'Template')
-		}
-	}
+    const page = this.prismaService.template.findFirst({
+      where: {
+        slug: template_slug,
+        Page: {
+          slug: page_slug,
+          Workspace: {
+            members: {
+              some: {
+                user_id: user.sub,
+              },
+            },
+          },
+        },
+      },
+    })
 
-	async verifyByTemplateAndPageSlug({
-		user,
-		template_slug,
-		page_slug
-	}: {
-		user: IPayloadUser
-		template_slug: string
-		page_slug: string
-	}) {
-		const page = this.prismaService.template.findFirst({
-			where: {
-				slug: template_slug,
-				Page: {
-					slug: page_slug,
-					Workspace: {
-						members: {
-							some: {
-								user_id: user.sub
-							}
-						}
-					}
-				}
-			}
-		})
+    if (page) {
+      this.can(WorkspaceAction.Manage, "Template")
+    }
+  }
 
-		if (page) {
-			this.can(WorkspaceAction.Manage, 'Template')
-		}
-	}
+  async verifyByPublicationId({
+    user,
+    publication_id,
+  }: {
+    user: PayloadUser
+    publication_id: string
+  }) {
+    if (!user || !publication_id) return
 
-	async verifyByPublicationId({
-		user,
-		publication_id
-	}: {
-		user: IPayloadUser
-		publication_id: string
-	}) {
-		const publication = this.prismaService.publication.findFirst({
-			where: {
-				id: publication_id,
-				Page: {
-					Workspace: {
-						members: {
-							some: {
-								user_id: user.sub
-							}
-						}
-					}
-				}
-			}
-		})
+    const publication = this.prismaService.publication.findFirst({
+      where: {
+        id: publication_id,
+        Page: {
+          Workspace: {
+            members: {
+              some: {
+                user_id: user.sub,
+              },
+            },
+          },
+        },
+      },
+    })
 
-		if (publication) {
-			this.can(WorkspaceAction.Manage, 'Publication')
-		}
-	}
+    if (publication) {
+      this.can(WorkspaceAction.Manage, "Publication")
+    }
+  }
 
-	async verifyByInteractionId({
-		user,
-		interaction_id
-	}: {
-		user: IPayloadUser
-		interaction_id: string
-	}) {
-		const publication = this.prismaService.interaction.findFirst({
-			where: {
-				id: interaction_id,
-				Page: {
-					Workspace: {
-						members: {
-							some: {
-								user_id: user.sub
-							}
-						}
-					}
-				}
-			}
-		})
+  async verifyByInteractionId({
+    user,
+    interaction_id,
+  }: {
+    user: PayloadUser
+    interaction_id: string
+  }) {
+    if (!user || !interaction_id) return
 
-		if (publication) {
-			this.can(WorkspaceAction.Manage, 'Interaction')
-		}
-	}
+    const publication = this.prismaService.interaction.findFirst({
+      where: {
+        id: interaction_id,
+        Page: {
+          Workspace: {
+            members: {
+              some: {
+                user_id: user.sub,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    if (publication) {
+      this.can(WorkspaceAction.Manage, "Interaction")
+    }
+  }
 }

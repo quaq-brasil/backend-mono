@@ -4,8 +4,7 @@
 
 # create one
 
-POST https://api.quaq.me/api/v1/pages
-
+POST https://localhost:5000/api/v1/pages
 Content-Type: application/json
 
 {
