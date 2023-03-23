@@ -1,4 +1,7 @@
 @baseUrl = http://localhost:5000
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiZmVsaXBlLnQudi5kQGdtYWlsLmNvbSIsIm5hbWUiOiJGZWxpcGUiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9xdWFxLWZpbGVzLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2U0OGNhNDUzLWJkMzMtNGYxNS1iMWRjLTMxMzFjZjA4YjZmZi1Qcm9maWxlLmpwZyIsImlhdCI6MTY3OTUzMTM2OSwiZXhwIjoxNjc5NjUxMzY5fQ.qwYMFkLcBR8D3oNZarcERY9oWBwWiB6-Whe1Kka3EG8
+
 # Find one user by auth token
 
 GET {{baseUrl}}/api/v1/users
+Authorization: {{JWTToken}}
