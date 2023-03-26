@@ -136,9 +136,11 @@ export class TemplateService {
         if (block?.type === "automation") {
           const automationBlocks =
             this.automationService.automationBlockExecution({
-              data: block.data,
+              data: {
+                blocks: block.data.automationBlocks,
+                conditionals: block.data.conditionals,
+              },
             })
-
 
           if (automationBlocks && automationBlocks.length > 0) {
             newBlocks.push(automationBlocks[0])
@@ -148,12 +150,10 @@ export class TemplateService {
         }
       })
 
-
       formattedTemplate.publication.blocks = newBlocks
 
       return formattedTemplate
     }
-
 
     throw new NotFoundException({ message: "template not found" })
   }

@@ -21,8 +21,9 @@ export class InteractionController {
   constructor(private readonly interactionService: InteractionService) {}
 
   @Post()
-  create(@Body() createInteractionDto: CreateInteractionDto) {
-    return this.interactionService.create(createInteractionDto)
+  create(@Req() req, @Body() createInteractionDto: CreateInteractionDto) {
+    const token = req?.headers?.authorization
+    return this.interactionService.create(createInteractionDto, token)
   }
 
   @UseGuards(JwtGuard, AbilitiesGuard)
@@ -61,9 +62,12 @@ export class InteractionController {
 
   @Put(":interaction_id")
   update(
+    @Req() req,
     @Param("interaction_id") id: string,
     @Body() updateInteractionDto: UpdateInteractionDto
   ) {
-    return this.interactionService.update(id, updateInteractionDto)
+    const token = req?.headers?.authorization
+
+    return this.interactionService.update(id, updateInteractionDto, token)
   }
 }
