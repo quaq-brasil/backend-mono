@@ -1,55 +1,46 @@
-@baseUrl = http://localhost:5000/api/v1
+@baseUrl = http://localhost:5000/api/v1/interactions/6420919168bd1fe7b4ad0cb0
 
-POST {{baseUrl}}/blocks
+PUT {{baseUrl}}
 Content-Type: application/json
 
 {
-  "data": {
-    "blocks": [{ "blocks": "blocks" }],
-    "conditionals": [
-    [
-      {
-        "type": "isNumber",
-        "value": 5
+  "blocks": [
+    {
+      "data": {
+        "type": "email",
+        "placeholder": "test"
       },
-      {
-        "type": "greaterThan",
-        "value": 7
+      "id": "74bd5c3e-b446-4db5-b36c-bb68715cc244",
+      "save_as": "test",
+      "type": "textentry"
+    }
+  ],
+  "data": [
+    {
+      "id": "74bd5c3e-b446-4db5-b36c-bb68715cc244",
+      "config": {
+        "id": "74bd5c3e-b446-4db5-b36c-bb68715cc244",
+        "save_as": "test",
+        "type": "textentry",
+        "data": {
+          "placeholder": "test",
+          "type": "email"
+        }
       },
-      {
-        "type": "isTruthy",
-        "value": true
+      "output": {
+        "events": {
+          "displayedAt": "Sun Mar 26 2023 15:40:14 GMT-0300 (Brasilia Standard Time)",
+          "lastInteractionAt": "Sun Mar 26 2023 15:41:28 GMT-0300 (Brasilia Standard Time)"
+        },
+        "data": {
+          "value": "test"
+        }
       }
-    ],
-    [
-      {
-        "type": "equals",
-        "value": "foo",
-        "comparativeValue": "foo"
-      },
-      {
-        "type": "isUndefined",
-        "value": null
-      },
-      {
-        "type": "isNull",
-        "value": null
-      }
-    ],
-    [
-      {
-        "type": "isArray",
-        "value": []
-      },
-      {
-        "type": "isObject",
-        "value": {}
-      },
-      {
-        "type": "isFalsy",
-        "value": false
-      }
-    ]
-    ]
-  }
+    }
+  ],
+  "events": [],
+  "template_id": "6420914368bd1fe7b4ad0caf",
+  "publication_id": "6420914268bd1fe7b4ad0cae",
+  "page_id": "64038c1bdd7a747f55a01c03",
+  "user_id": "63ffc767312a8c2cd621ab4f"
 }
