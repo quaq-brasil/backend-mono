@@ -14,8 +14,16 @@ export class InteractionService {
   ) {}
 
   async create(createInteractionDto: CreateInteractionDto, token?: string) {
+    const template = await this.templateService.findOne(
+      createInteractionDto.template_id,
+      undefined,
+      createInteractionDto.user_id,
+      createInteractionDto.data,
+      token
+    )
+
     const data = await this.blockService.webhookBlockExecution(
-      createInteractionDto.blocks,
+      template.Publications[0].blocks,
       createInteractionDto.data
     )
 
@@ -28,12 +36,8 @@ export class InteractionService {
     })
 
     try {
-      const template = await this.templateService.findOne(
-        createInteractionDto.template_id,
-        undefined,
-        createInteractionDto.user_id,
-        createInteractionDto.data,
-        token
+      template.Publications[0].blocks = template.Publications[0].blocks.filter(
+        (block) => block?.type !== "webhook"
       )
 
       return {
@@ -133,42 +137,34 @@ export class InteractionService {
     updateInteractionDto: UpdateInteractionDto,
     token?: string
   ) {
-    let executeWebhook = false
-
-    if (updateInteractionDto?.data) {
-      updateInteractionDto.data.forEach((dataBlock) => {
-        if (dataBlock.config === "button") {
-          if (dataBlock.output.data.clicked) {
-            executeWebhook = true
-          }
-        }
-      })
-    }
-
-    if (executeWebhook) {
-      const data = await this.blockService.webhookBlockExecution(
-        updateInteractionDto.blocks,
-        updateInteractionDto.data
-      )
-
-      if (data) {
-        updateInteractionDto.data = data
-      }
-    }
-
-    await this.prismaService.interaction.update({
-      where: {
-        id: id,
-      },
-      data: updateInteractionDto,
-    })
-
-    return await this.templateService.findOne(
+    const template = await this.templateService.findOne(
       updateInteractionDto.template_id,
       undefined,
       updateInteractionDto.user_id,
       updateInteractionDto.data,
       token
     )
+
+    const data = await this.blockService.webhookBlockExecution(
+      template.Publications[0].blocks,
+      updateInteractionDto.data
+    )
+
+    if (data) {
+      updateInteractionDto.data = data
+    }
+
+    await this.prismaService.interaction.update({
+      where: {
+        id,
+      },
+      data: updateInteractionDto,
+    })
+
+    template.Publications[0].blocks = template.Publications[0].blocks.filter(
+      (block) => block?.type !== "webhook"
+    )
+
+    return template
   }
 }
