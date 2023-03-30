@@ -130,7 +130,7 @@ export class TemplateService {
         variables
       )
 
-      const newBlocks = []
+      let newBlocks = []
 
       formattedTemplate.publication.blocks.forEach((block) => {
         if (block?.type === "automation") {
@@ -143,7 +143,7 @@ export class TemplateService {
             })
 
           if (automationBlocks && automationBlocks.length > 0) {
-            newBlocks.push(automationBlocks[0])
+            newBlocks = [...newBlocks, ...automationBlocks]
           }
         } else {
           newBlocks.push(block)

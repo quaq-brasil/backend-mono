@@ -1,6 +1,6 @@
-@baseUrl = http://localhost:5000/api/v1/interactions/6420919168bd1fe7b4ad0cb0
+@baseUrl = http://localhost:5000/api/v1/interactions
 
-PUT {{baseUrl}}
+PUT {{baseUrl}}/6420919168bd1fe7b4ad0cb0
 Content-Type: application/json
 
 {
