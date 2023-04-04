@@ -124,7 +124,7 @@ export class BlockService {
           extract(value[key])
         }
       } else if (typeof value === "string") {
-        const maxLength = 1000
+        const maxLength = 10000
 
         if (value.length <= maxLength) {
           const match = value.match(/{{((?:(?!{{|}}).)*)}}/g)

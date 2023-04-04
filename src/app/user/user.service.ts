@@ -1,136 +1,150 @@
 import {
-	BadRequestException,
-	ConflictException,
-	Injectable,
-	Logger,
-	NotFoundException
-} from '@nestjs/common'
-import { hashSync } from 'bcrypt'
-import { PrismaService } from 'src/prisma.service'
-import { UpdateUserDto } from './dto/update-user.dto'
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common"
+import { JwtService } from "@nestjs/jwt"
+import { hashSync } from "bcrypt"
+import { PrismaService } from "src/prisma.service"
+import { UpdateUserDto } from "./dto/update-user.dto"
 
 @Injectable()
 export class UserService {
-	private readonly logger = new Logger(UserService.name)
-	private instance: UserService
+  private readonly logger = new Logger(UserService.name)
+  private instance: UserService
 
-	constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private jwtService: JwtService
+  ) {}
 
-	getInstance() {
-		if (!this.instance) {
-			this.instance = new UserService(this.prismaService)
-		}
-		return this.instance
-	}
+  getInstance() {
+    if (!this.instance) {
+      this.instance = new UserService(this.prismaService, this.jwtService)
+    }
+    return this.instance
+  }
 
-	async create() {
-		const user = await this.prismaService.user.create({
-			data: {},
-		})
+  async create() {
+    const user = await this.prismaService.user.create({
+      data: {},
+    })
 
-		delete user.password
+    delete user.password
 
-		return user
-	}
+    const payload = {
+      sub: user.id,
+      type: user.type,
+      email: "",
+      name: "",
+      avatar_url: "",
+    }
 
-	async findOne(id: string) {
-		try {
-			const user = await this.prismaService.user.findUniqueOrThrow({
-				where: {
-					id,
-				},
-			})
+    const token = this.jwtService.sign(payload)
 
-			delete user.password
+    return { ...user, token }
+  }
 
-			return user
-		} catch (error) {
-			throw new NotFoundException(error.message)
-		}
-	}
+  async findOne(id: string) {
+    try {
+      const user = await this.prismaService.user.findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
 
-	async findOneByEmail(email: string) {
-		try {
-			const user = await this.prismaService.user.findUniqueOrThrow({
-				where: {
-					email,
-				},
-			})
+      delete user.password
 
-			delete user.password
+      return user
+    } catch (error) {
+      throw new NotFoundException(error.message)
+    }
+  }
 
-			return user
-		} catch (error) {
-			throw new NotFoundException(error.message)
-		}
-	}
+  async findOneByEmail(email: string) {
+    try {
+      const user = await this.prismaService.user.findUniqueOrThrow({
+        where: {
+          email,
+        },
+      })
 
-	async update(id: string, updateUserDto: UpdateUserDto) {
-		if (updateUserDto?.email) {
-			if (await this.isEmailTaken(updateUserDto?.email, id)) {
-				throw new ConflictException('Email is already in use')
-			}
-		}
+      delete user.password
 
-		let hashPassword: string
+      return user
+    } catch (error) {
+      throw new NotFoundException(error.message)
+    }
+  }
 
-		if (updateUserDto?.password) {
-			hashPassword = hashSync(updateUserDto.password, 10)
-		}
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto?.email) {
+      if (await this.isEmailTaken(updateUserDto?.email, id)) {
+        throw new ConflictException("Email is already in use")
+      }
+    }
 
-		try {
-			const user = await this.prismaService.user.update({
-				where: {
-					id,
-				},
-				data: {
-					...updateUserDto,
-					password: hashPassword || undefined,
-				},
-			})
+    let hashPassword: string
 
-			delete user.password
+    if (updateUserDto?.password) {
+      hashPassword = hashSync(updateUserDto.password, 10)
+    }
 
-			return user
-		} catch (error) {
-			throw new BadRequestException(error.message)
-		}
-	}
+    try {
+      const user = await this.prismaService.user.update({
+        where: {
+          id,
+        },
+        data: {
+          ...updateUserDto,
+          password: hashPassword || undefined,
+        },
+      })
 
-	async remove(id: string) {
-		await this.prismaService.user.delete({
-			where: {
-				id,
-			},
-		})
-	}
+      delete user.password
 
-	async isEmailTaken(email: string, id?: string) {
-		if (id) {
-			try {
-				const user = await this.prismaService.user.findUnique({
-					where: { email },
-				})
+      return user
+    } catch (error) {
+      throw new BadRequestException(error.message)
+    }
+  }
 
-				if (!user) {
-					return false
-				}
+  async remove(id: string) {
+    await this.prismaService.user.delete({
+      where: {
+        id,
+      },
+    })
+  }
 
-				return user.id !== id
-			} catch (error) {
-				this.logger.error(`Error checking if email is taken: ${error.message}`)
-				throw new BadRequestException({ message: error.message })
-			}
-		}
+  async isEmailTaken(email: string, id?: string) {
+    if (id) {
+      try {
+        const user = await this.prismaService.user.findUnique({
+          where: { email },
+        })
 
-		try {
-			return (
-				(await this.prismaService.user.findMany({ where: { email } })).length >
-				0
-			)
-		} catch (error) {
-			this.logger.error(`Error checking if email is taken: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+        if (!user) {
+          return false
+        }
+
+        return user.id !== id
+      } catch (error) {
+        this.logger.error(`Error checking if email is taken: ${error.message}`)
+        throw new BadRequestException({ message: error.message })
+      }
+    }
+
+    try {
+      return (
+        (await this.prismaService.user.findMany({ where: { email } })).length >
+        0
+      )
+    } catch (error) {
+      this.logger.error(`Error checking if email is taken: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 }
