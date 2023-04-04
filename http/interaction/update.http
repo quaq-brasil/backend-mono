@@ -1,15 +1,138 @@
 # Variables
-@baseUrl = https://api.quaq.me
+@baseUrl = http://localhost:5000/api/v1/interactions
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiZmVsaXBlLnQudi5kQGdtYWlsLmNvbSIsIm5hbWUiOiJGZWxpcGUiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9xdWFxLWltYWdlLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2Y0ZWE4Y2FhLWQ5NjItNDY1Ni04N2FmLWY1OTY0ZmQ0ZGVjOS1Qcm9maWxlLmpwZyIsImlhdCI6MTY4MDE0MDQ3NywiZXhwIjoxNjgwMjYwNDc3fQ.GAJ9m9W5HJeVmv5asYDSlZ32joIsw5vAQ2N-USvafEU
+
 
 # Update one interaction by interaction id
-PUT {{baseUrl}}/api/vi/interactions/63ee9aa429576d089a4a2c95
+PUT {{baseUrl}}/6424e7208eba0562dd212e9f
+Authorization: {{JWTToken}}
 Content-Type: application/json
 
 {
-    "blocks": [
-        {
-            "type": "text2",
-            "text": "Hello world2"
+  "blocks": [
+    {
+      "id": "934fb2d8-bbf4-4826-9ae4-c7d00e695598",
+      "type": "image",
+      "save_as": "Intro",
+      "data": {
+        "img_url": "https://quaq-image.s3.sa-east-1.amazonaws.com/9d512751-7f48-43cb-8492-eb0e821db782-Screenshot%202023-03-28%20191909.png",
+        "height": "200px"
+      }
+    },
+    {
+      "id": "fd7e84ba-4421-4625-8e6a-42ca4bbf606b",
+      "type": "text",
+      "data": "<h3>Opa, que bom que você está aqui…</h3><h4>Sou o Felipe, tenho um pouco mais de 8 anos de experiência de criação e gestão de empresas de tecnologia, e decidi juntar um pouco do conhecimento que tenho para te ajudar a ter (muito) mais resultado.</h4><h4>Da uma olhada no vídeo abaixo, espero conseguir te passar alguma ideias 😉</h4>",
+      "save_as": "text"
+    },
+    {
+      "data": {
+        "link": "https://www.youtube.com/embed/mY5BtnjsM-0"
+      },
+      "id": "3d74dd6b-ca98-41ad-839d-72c652bd6c85",
+      "save_as": "video",
+      "type": "embed"
+    },
+    {
+      "data": {
+        "color": "bg-black",
+        "text": "fazer parte da comunidade"
+      },
+      "id": "944e6dae-2a10-4e4b-b91e-a14d954e175d",
+      "save_as": "button",
+      "type": "button"
+    },
+    {
+      "data": "<h4>Qual é o seu nome?</h4>",
+      "id": "4e01c142-94a8-49ee-af8a-1a19a51289f2",
+      "save_as": "name",
+      "type": "text"
+    }
+  ],
+  "data": [
+    {
+      "id": "934fb2d8-bbf4-4826-9ae4-c7d00e695598",
+      "config": {
+        "id": "934fb2d8-bbf4-4826-9ae4-c7d00e695598",
+        "save_as": "Intro",
+        "type": "image",
+        "data": "https://quaq-image.s3.sa-east-1.amazonaws.com/9d512751-7f48-43cb-8492-eb0e821db782-Screenshot%202023-03-28%20191909.png"
+      },
+      "output": {
+        "events": {
+          "displayedAt": "Wed Mar 29 2023 22:34:22 GMT-0300 (Brasilia Standard Time)"
         }
-    ]
+      }
+    },
+    {
+      "id": "fd7e84ba-4421-4625-8e6a-42ca4bbf606b",
+      "config": {
+        "id": "fd7e84ba-4421-4625-8e6a-42ca4bbf606b",
+        "save_as": "text",
+        "type": "text",
+        "data": "<h3>Opa, que bom que você está aqui…</h3><h4>Sou o Felipe, tenho um pouco mais de 8 anos de experiência de criação e gestão de empresas de tecnologia, e decidi juntar um pouco do conhecimento que tenho para te ajudar a ter (muito) mais resultado.</h4><h4>Da uma olhada no vídeo abaixo, espero conseguir te passar alguma ideias 😉</h4>"
+      },
+      "output": {
+        "events": {
+          "displayedAt": "Wed Mar 29 2023 22:34:22 GMT-0300 (Brasilia Standard Time)"
+        }
+      }
+    },
+    {
+      "id": "3d74dd6b-ca98-41ad-839d-72c652bd6c85",
+      "config": {
+        "id": "3d74dd6b-ca98-41ad-839d-72c652bd6c85",
+        "save_as": "video",
+        "type": "embed",
+        "data": {
+          "link": "https://www.youtube.com/embed/mY5BtnjsM-0"
+        }
+      },
+      "output": {
+        "events": {
+          "displayedAt": "Wed Mar 29 2023 22:34:22 GMT-0300 (Brasilia Standard Time)"
+        }
+      }
+    },
+    {
+      "id": "4e01c142-94a8-49ee-af8a-1a19a51289f2",
+      "config": {
+        "id": "4e01c142-94a8-49ee-af8a-1a19a51289f2",
+        "save_as": "name",
+        "type": "text",
+        "data": "<h4>Qual é o seu nome?</h4>"
+      },
+      "output": {
+        "events": {
+          "displayedAt": "Wed Mar 29 2023 22:34:49 GMT-0300 (Brasilia Standard Time)"
+        }
+      }
+    },
+    {
+      "id": "944e6dae-2a10-4e4b-b91e-a14d954e175d",
+      "config": {
+        "id": "944e6dae-2a10-4e4b-b91e-a14d954e175d",
+        "save_as": "button",
+        "type": "button",
+        "data": {
+          "text": "fazer parte da comunidade",
+          "color": "bg-black"
+        }
+      },
+      "output": {
+        "events": {
+          "displayedAt": "2023-03-30T01:34:22.460Z",
+          "lastInteractionAt": "2023-03-30T01:35:06.559Z"
+        },
+        "data": {
+          "clicked": true
+        }
+      }
+    }
+  ],
+  "events": [],
+  "template_id": "64236e7de91494948b191d94",
+  "publication_id": "64236e7de91494948b191d93",
+  "page_id": "6401193a8952302c1966e4a4",
+  "user_id": "63ffc77f312a8c2cd621ab50"
 }

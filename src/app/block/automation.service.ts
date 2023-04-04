@@ -89,7 +89,12 @@ export class AutomationService {
         lodash.isString(a) && new RegExp(b).test(a),
       [ComparisonType.IsArray]: lodash.isArray,
       [ComparisonType.IsObject]: lodash.isObject,
-      [ComparisonType.IsTruthy]: Boolean,
+      [ComparisonType.IsTruthy]: (a) => {
+        if (lodash.isString(a) && a.toLowerCase() === "false") {
+          return false
+        }
+        return Boolean(a)
+      },
       [ComparisonType.IsFalsy]: (a) => !Boolean(a),
       [ComparisonType.IsNumber]: lodash.isNumber,
       [ComparisonType.IsBoolean]: lodash.isBoolean,
@@ -103,6 +108,7 @@ export class AutomationService {
     }
 
     const comparisonFunction = comparisonFunctions[type]
+
     return comparisonFunction
       ? comparisonFunction(value, comparativeValue)
       : false

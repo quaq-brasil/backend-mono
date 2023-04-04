@@ -50,8 +50,12 @@ export class BlockService {
   async webhookBlock(block: WebhookBlock, data: any[]) {
     let url = block.data.link
 
+    // if (block.data.parameters) {
+    //   url = `${block.data.link}/${block.data.parameters}`
+    // }
+
     if (block.data.parameters) {
-      url = `${block.data.link}/${block.data.parameters}`
+      url = `${block.data.link}`
     }
 
     const webhookData = {
@@ -62,7 +66,7 @@ export class BlockService {
         data: {
           type: block.data.type,
           link: block.data.link,
-          header: block.data.header,
+          // header: block.data.header,
           parameters: block.data.parameters,
           body: block.data.body,
         },
@@ -77,10 +81,10 @@ export class BlockService {
 
     const api = axios.create({})
 
-    if (block.data.header) {
-      const headers = JSON.parse(block.data.header)
-      api.defaults.headers = headers
-    }
+    // if (block.data.header) {
+    //   const headers = JSON.parse(block.data.header)
+    //   api.defaults.headers = headers
+    // }
 
     const body = JSON.parse(block.data.body)
 

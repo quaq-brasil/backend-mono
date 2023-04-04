@@ -130,7 +130,7 @@ export class TemplateService {
         variables
       )
 
-      const newBlocks = []
+      let newBlocks = []
 
       formattedTemplate.publication.blocks.forEach((block) => {
         if (block?.type === "automation") {
@@ -143,7 +143,7 @@ export class TemplateService {
             })
 
           if (automationBlocks && automationBlocks.length > 0) {
-            newBlocks.push(automationBlocks[0])
+            newBlocks = [...newBlocks, ...automationBlocks]
           }
         } else {
           newBlocks.push(block)
@@ -170,7 +170,8 @@ export class TemplateService {
     slug: string,
     page_slug: string,
     consumer_id?: string,
-    token?: string
+    token?: string,
+    compilation?: string
   ) {
     const templates = await this.prismaService.template.findMany({
       where: {
@@ -203,18 +204,22 @@ export class TemplateService {
         publication,
       }
 
-      const variables = await this.variablesService.findPanelVariables(
-        undefined,
-        formattedTemplate.publication.blocks,
-        formattedTemplate.id,
-        formattedTemplate.publication?.dependencies?.connected_templates || [],
-        consumer_id
-      )
+      if (compilation && compilation !== "false") {
+        const variables = await this.variablesService.findPanelVariables(
+          undefined,
+          formattedTemplate.publication.blocks,
+          formattedTemplate.id,
+          formattedTemplate.publication?.dependencies?.connected_templates ||
+            [],
+          consumer_id
+        )
 
-      formattedTemplate.publication.blocks = this.blockService.compileVariables(
-        formattedTemplate.publication.blocks,
-        variables
-      )
+        formattedTemplate.publication.blocks =
+          this.blockService.compileVariables(
+            formattedTemplate.publication.blocks,
+            variables
+          )
+      }
 
       return formattedTemplate
     }
