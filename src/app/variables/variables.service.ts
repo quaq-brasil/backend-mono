@@ -173,7 +173,15 @@ export class VariablesService {
   async formaBlocks(blocks: any[], variables: any, data?: any[]) {
     variables.blocks = {}
 
+    let allBlocks = [...blocks]
+
     blocks.forEach((block) => {
+      if (block.type === "automation") {
+        allBlocks = [...allBlocks, ...block.data.automationBlocks]
+      }
+    })
+
+    allBlocks.forEach((block) => {
       const currentData = data
         ? data.filter((cData) => cData.id === block.id)
         : undefined
