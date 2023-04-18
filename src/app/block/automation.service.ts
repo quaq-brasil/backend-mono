@@ -90,7 +90,10 @@ export class AutomationService {
       [ComparisonType.IsArray]: lodash.isArray,
       [ComparisonType.IsObject]: lodash.isObject,
       [ComparisonType.IsTruthy]: (a) => {
-        if (lodash.isString(a) && a.toLowerCase() === "false") {
+        if (
+          (lodash.isString(a) && a.toLowerCase() === "false") ||
+          (lodash.isString(a) && a.toLowerCase() === "boolean")
+        ) {
           return false
         }
         return Boolean(a)
