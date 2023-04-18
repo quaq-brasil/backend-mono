@@ -23,7 +23,9 @@ export class InteractionService {
     )
 
     const data = await this.blockService.webhookBlockExecution(
-      template.Publications[0].blocks,
+      template.Publications[0].blocks.filter(
+        (block) => block.type === "webhook"
+      ),
       createInteractionDto.data
     )
 
@@ -145,8 +147,23 @@ export class InteractionService {
       token
     )
 
+    const webhookAlreadyDone = await this.prismaService.interaction.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        events: true,
+      },
+    })
+
+    const webhooks = template.Publications[0].blocks.filter(
+      (block) =>
+        block.type === "webhook" &&
+        !webhookAlreadyDone.events.includes(block.id)
+    )
+
     const data = await this.blockService.webhookBlockExecution(
-      template.Publications[0].blocks,
+      webhooks,
       updateInteractionDto.data
     )
 
@@ -158,7 +175,10 @@ export class InteractionService {
       where: {
         id,
       },
-      data: updateInteractionDto,
+      data: {
+        ...updateInteractionDto,
+        events: [webhooks.map((webhook) => webhook.id)],
+      },
     })
 
     template.Publications[0].blocks = template.Publications[0].blocks.filter(

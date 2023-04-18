@@ -17,15 +17,6 @@ type WebhookBlock = {
 
 @Injectable()
 export class BlockService {
-  private instance: BlockService
-
-  getInstance() {
-    if (!this.instance) {
-      this.instance = new BlockService(this.prismaService)
-    }
-    return this.instance
-  }
-
   constructor(private prismaService: PrismaService) {}
 
   async webhookBlockExecution(blocks: WebhookBlock[], data: any[]) {
