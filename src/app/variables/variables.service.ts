@@ -27,6 +27,13 @@ export class VariablesService {
       maxAchievedAt: "string",
       minAchievedAt: "string",
     },
+    poll: {
+      displayed_at: "string",
+      last_interaction_at: "string",
+      first_interaction_at: "string",
+      maxAchievedAt: "string",
+      minAchievedAt: "string",
+    },
     button: {
       displayed_at: "string",
       last_interaction_at: "string",
@@ -216,6 +223,13 @@ export class VariablesService {
           value: "string",
         }
         break
+      case "poll":
+        variables.data = {
+          selected_options: "string list",
+          number_of_selections: "number",
+        }
+        break
+
       case "pool":
         variables.data = {
           selected_options: "string list",
