@@ -1,5 +1,6 @@
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
+import { inject } from "@vercel/analytics"
 import { AppModule } from "./app.module"
 import { PrismaService } from "./prisma.service"
 
@@ -17,6 +18,8 @@ async function bootstrap() {
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
   })
+
+  inject()
 
   await app.listen(5000)
 }
