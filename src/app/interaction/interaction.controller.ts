@@ -20,9 +20,13 @@ import { InteractionService } from "./interaction.service"
 export class InteractionController {
   constructor(private readonly interactionService: InteractionService) {}
 
+  @UseGuards(JwtGuard)
   @Post()
   create(@Req() req, @Body() createInteractionDto: CreateInteractionDto) {
     const token = req?.headers?.authorization
+
+    createInteractionDto.user_id = req.user.id
+
     return this.interactionService.create(createInteractionDto, token)
   }
 

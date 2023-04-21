@@ -1,7 +1,9 @@
-@baseUrl = https://api.quaq.me
+@baseUrl = http://localhost:5000/api/v1
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiZmVsaXBlLnQudi5kQGdtYWlsLmNvbSIsIm5hbWUiOiJGZWxpcGUiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9xdWFxLWltYWdlLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2Y0ZWE4Y2FhLWQ5NjItNDY1Ni04N2FmLWY1OTY0ZmQ0ZGVjOS1Qcm9maWxlLmpwZyIsImlhdCI6MTY4MDE0MDQ3NywiZXhwIjoxNjgwMjYwNDc3fQ.GAJ9m9W5HJeVmv5asYDSlZ32joIsw5vAQ2N-USvafEU
 
 # Create one interaction
-POST {{baseUrl}}/api/v1/interactions
+POST {{baseUrl}}/interactions
+Authorization: {{JWTToken}}
 Content-Type: application/json
 
 {
