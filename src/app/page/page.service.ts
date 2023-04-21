@@ -1,235 +1,252 @@
 import {
-	BadRequestException,
-	ForbiddenException,
-	Injectable,
-	Logger
-} from '@nestjs/common'
-import { PrismaService } from 'src/prisma.service'
-import { CreatePageDto } from './dto/create-page.dto'
-import { UpdatePageDto } from './dto/update-page.dto'
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from "@nestjs/common"
+import { PrismaService } from "src/prisma.service"
+import { CreatePageDto } from "./dto/create-page.dto"
+import { UpdatePageDto } from "./dto/update-page.dto"
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const getSlug = require('speakingurl')
+const getSlug = require("speakingurl")
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const uniqueSlug = require('unique-slug')
+const uniqueSlug = require("unique-slug")
 
 @Injectable()
 export class PageService {
-	private readonly logger = new Logger(PageService.name)
-	private readonly MAX_ATTEMPTS = 10
-	private instance: PageService
-	private readonly RESERVED_PAGE_SLUGS = ['me', 'workspace', 'adm', 'terms']
+  private readonly logger = new Logger(PageService.name)
+  private readonly MAX_ATTEMPTS = 10
+  private instance: PageService
+  private readonly RESERVED_PAGE_SLUGS = ["me", "workspace", "adm", "terms"]
 
-	constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
-	getInstance() {
-		if (!this.instance) {
-			this.instance = new PageService(this.prismaService)
-		}
+  getInstance() {
+    if (!this.instance) {
+      this.instance = new PageService(this.prismaService)
+    }
 
-		return this.instance
-	}
+    return this.instance
+  }
 
-	async create(createPageDto: CreatePageDto) {
-		if (createPageDto.slug) {
-			createPageDto.slug = await this.generateUniqueSlugByPageName(
-				createPageDto.slug
-			)
-		}
+  async create(createPageDto: CreatePageDto) {
+    if (createPageDto.slug) {
+      createPageDto.slug = await this.generateUniqueSlugByPageName(
+        createPageDto.slug
+      )
+    }
 
-		try {
-			return await this.prismaService.page.create({
-				data: createPageDto
-			})
-		} catch (error) {
-			this.logger.error(`Error creating page: ${error.message}`)
-			throw error
-		}
-	}
+    try {
+      return await this.prismaService.page.create({
+        data: createPageDto,
+      })
+    } catch (error) {
+      this.logger.error(`Error creating page: ${error.message}`)
+      throw error
+    }
+  }
 
-	async findAll() {
-		try {
-			return await this.prismaService.page.findMany()
-		} catch (error) {
-			this.logger.error(`Error finding all pages: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+  async findAll() {
+    try {
+      return await this.prismaService.page.findMany()
+    } catch (error) {
+      this.logger.error(`Error finding all pages: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-	async findOne(id: string, token?: string) {
-		try {
-			const found = await this.prismaService.page.findUnique({
-				where: {
-					id
-				}
-			})
+  async findOne(id: string, token?: string) {
+    try {
+      const found = await this.prismaService.page.findUnique({
+        where: {
+          id,
+        },
+      })
 
-			if (found?.visibility === 'workspace') {
-				await this.handleVisibilityAccess(id, token)
-			}
+      if (found?.visibility === "workspace") {
+        await this.handleVisibilityAccess(id, token)
+      }
 
-			return found
-		} catch (error) {
-			this.logger.error(`Error finding page by id: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+      return found
+    } catch (error) {
+      this.logger.error(`Error finding page by id: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-	async findOneBySlug(slug: string, token?: string) {
-		try {
-			const page = await this.prismaService.page.findUnique({
-				where: {
-					slug
-				},
-				include: {
-					templates: true
-				}
-			})
+  async findOneBySlug(slug: string, token?: string) {
+    try {
+      const page = await this.prismaService.page.findUnique({
+        where: {
+          slug,
+        },
+        include: {
+          templates: true,
+        },
+      })
 
-			if (page?.visibility === 'workspace') {
-				await this.handleVisibilityAccess(page.id, token)
-			}
+      if (page?.visibility === "workspace") {
+        await this.handleVisibilityAccess(page.id, token)
+      }
 
-			return page
-		} catch (error) {
-			this.logger.error(`Error finding page by slug: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+      return page
+    } catch (error) {
+      this.logger.error(`Error finding page by slug: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-	async findAllByWorkspaceId(workspace_id: string) {
-		try {
-			return await this.prismaService.page.findMany({
-				where: {
-					workspace_id
-				}
-			})
-		} catch (error) {
-			this.logger.error(`Error finding pages by workspace id: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+  async findAllByWorkspaceId(workspace_id: string, user: any) {
+    try {
+      const workspaceMember =
+        await this.prismaService.workspaceToUser.findFirst({
+          where: {
+            user_id: user.sub,
+            workspace_id: workspace_id,
+          },
+        })
 
-	async update(id: string, updatePageDto: UpdatePageDto) {
-		if (updatePageDto.slug) {
-			updatePageDto.slug = await this.generateUniqueSlugByPageName(
-				updatePageDto.slug,
-				id
-			)
-		}
+      if (workspaceMember) {
+        return await this.prismaService.page.findMany({
+          where: {
+            workspace_id,
+          },
+        })
+      } else {
+        return await this.prismaService.page.findMany({
+          where: {
+            workspace_id,
+            visibility: "public",
+          },
+        })
+      }
+    } catch (error) {
+      this.logger.error(`Error finding pages by workspace id: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-		try {
-			return await this.prismaService.page.update({
-				where: {
-					id
-				},
-				data: updatePageDto
-			})
-		} catch (error) {
-			this.logger.error(`Error updating page: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+  async update(id: string, updatePageDto: UpdatePageDto) {
+    if (updatePageDto.slug) {
+      updatePageDto.slug = await this.generateUniqueSlugByPageName(
+        updatePageDto.slug,
+        id
+      )
+    }
 
-	async delete(id: string) {
-		try {
-			return await this.prismaService.page.delete({
-				where: {
-					id
-				}
-			})
-		} catch (error) {
-			this.logger.error(`Error deleting page: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+    try {
+      return await this.prismaService.page.update({
+        where: {
+          id,
+        },
+        data: updatePageDto,
+      })
+    } catch (error) {
+      this.logger.error(`Error updating page: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-	async generateUniqueSlugByPageName(name: string, id?: string) {
-		const slug = getSlug(name)
+  async delete(id: string) {
+    try {
+      return await this.prismaService.page.delete({
+        where: {
+          id,
+        },
+      })
+    } catch (error) {
+      this.logger.error(`Error deleting page: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-		let uniqSlug = slug
+  async generateUniqueSlugByPageName(name: string, id?: string) {
+    const slug = getSlug(name)
 
-		let attempts = 0
+    let uniqSlug = slug
 
-		while (await this.isSlugTaken(uniqSlug, id)) {
-			attempts++
-			if (attempts >= this.MAX_ATTEMPTS) {
-				throw new BadRequestException('Could not generate unique Slug')
-			}
+    let attempts = 0
 
-			const randomSlug: string = uniqueSlug()
-			uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`
-		}
+    while (await this.isSlugTaken(uniqSlug, id)) {
+      attempts++
+      if (attempts >= this.MAX_ATTEMPTS) {
+        throw new BadRequestException("Could not generate unique Slug")
+      }
 
-		return uniqSlug
-	}
+      const randomSlug: string = uniqueSlug()
+      uniqSlug = `${slug}-${randomSlug.slice(0, 3)}`
+    }
 
-	async isSlugTaken(slug: string, id?: string) {
-		if (this.RESERVED_PAGE_SLUGS.includes(slug)) {
-			return true
-		}
+    return uniqSlug
+  }
 
-		if (id) {
-			try {
-				const page = await this.prismaService.page.findUnique({
-					where: { slug }
-				})
+  async isSlugTaken(slug: string, id?: string) {
+    if (this.RESERVED_PAGE_SLUGS.includes(slug)) {
+      return true
+    }
 
-				if (!page) {
-					return false
-				}
+    if (id) {
+      try {
+        const page = await this.prismaService.page.findUnique({
+          where: { slug },
+        })
 
-				return page.id !== id
-			} catch (error) {
-				this.logger.error(`Error checking if Slug is taken: ${error.message}`)
-				throw new BadRequestException({ message: error.message })
-			}
-		}
+        if (!page) {
+          return false
+        }
 
-		try {
-			return (
-				(await this.prismaService.page.findMany({ where: { slug } })).length > 0
-			)
-		} catch (error) {
-			this.logger.error(`Error checking if Slug is taken: ${error.message}`)
-			throw new BadRequestException({ message: error.message })
-		}
-	}
+        return page.id !== id
+      } catch (error) {
+        this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+        throw new BadRequestException({ message: error.message })
+      }
+    }
 
-	async handleVisibilityAccess(id: string, token: string) {
-		if (!token) {
-			throw new ForbiddenException('permission insufficiently')
-		}
-		const user = JSON.parse(
-			Buffer.from(token.split('.')[1], 'base64').toString('utf8')
-		)
+    try {
+      return (
+        (await this.prismaService.page.findMany({ where: { slug } })).length > 0
+      )
+    } catch (error) {
+      this.logger.error(`Error checking if Slug is taken: ${error.message}`)
+      throw new BadRequestException({ message: error.message })
+    }
+  }
 
-		const page = await this.prismaService.page.findUnique({
-			where: {
-				id
-			},
-			select: {
-				Workspace: {
-					select: {
-						members: {
-							select: {
-								user: {
-									select: {
-										id: true
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		})
+  async handleVisibilityAccess(id: string, token: string) {
+    if (!token) {
+      throw new ForbiddenException("permission insufficiently")
+    }
+    const user = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString("utf8")
+    )
 
-		const memberFound = page.Workspace.members.filter(
-			(member) => member.user.id === user.sub
-		)
+    const page = await this.prismaService.page.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        Workspace: {
+          select: {
+            members: {
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    })
 
-		if (!memberFound || memberFound.length < 1) {
-			throw new ForbiddenException('permission insufficiently')
-		}
-	}
+    const memberFound = page.Workspace.members.filter(
+      (member) => member.user.id === user.sub
+    )
+
+    if (!memberFound || memberFound.length < 1) {
+      throw new ForbiddenException("permission insufficiently")
+    }
+  }
 }
