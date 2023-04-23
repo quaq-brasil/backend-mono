@@ -1,4 +1,5 @@
-import { ComparisonType, IComparison } from "../automation.service"
+import { ComparisonType } from "../ComparisonType.enum"
+import { IComparison } from "../automation.service"
 
 const equals = {
   description: "Equals should return true when values are equal",

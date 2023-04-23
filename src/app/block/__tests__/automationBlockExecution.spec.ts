@@ -1,9 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
-import {
-  AutomationService,
-  ComparisonType,
-  IAutomationBlock,
-} from "../automation.service"
+import { ComparisonType } from "../ComparisonType.enum"
+import { AutomationService, IAutomationBlock } from "../automation.service"
 
 describe("automationBlockExecution", () => {
   let service: AutomationService
