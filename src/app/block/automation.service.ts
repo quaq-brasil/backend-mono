@@ -29,7 +29,7 @@ export enum ComparisonType {
   IsString = "isString",
 }
 
-interface IComparison {
+export interface IComparison {
   type: ComparisonType
   value: any
   comparativeValue?: any
@@ -52,7 +52,7 @@ export class AutomationService {
     return this.getMatchingBlocks(conditionals, blocks)
   }
 
-  private getMatchingBlocks(
+  public getMatchingBlocks(
     conditionals: IComparison[][],
     blocks: any[]
   ): any[] | null {
@@ -68,7 +68,7 @@ export class AutomationService {
     return null
   }
 
-  private isConditionalSatisfied({
+  public isConditionalSatisfied({
     type,
     value,
     comparativeValue,
