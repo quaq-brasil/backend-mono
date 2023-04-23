@@ -1,59 +1,48 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { CreateFileDto } from './dto/create-file.dto';
-import { UpdateFileDto } from './dto/update-file.dto';
+import { Injectable } from "@nestjs/common"
+import { PrismaService } from "src/prisma.service"
+import { CreateFileDto } from "./dto/create-file.dto"
+import { UpdateFileDto } from "./dto/update-file.dto"
 
 @Injectable()
 export class FileService {
-	private readonly logger = new Logger(FileService.name);
-	private readonly MAX_ATTEMPTS = 10;
-	private instance: FileService;
+  constructor(private prismaService: PrismaService) {}
 
-	getInstance() {
-		if (!this.instance) {
-			this.instance = new FileService(this.prismaService);
-		}
-		return this.instance;
-	}
+  async createOne(request: CreateFileDto) {
+    return this.prismaService.file.create({
+      data: { ...request },
+    })
+  }
 
-	constructor(private prismaService: PrismaService) {}
+  findOne(id: string) {
+    return this.prismaService.file.findUnique({
+      where: {
+        id,
+      },
+    })
+  }
 
-	async createOne(request: CreateFileDto) {
-		return this.prismaService.file.create({
-			data: { ...request },
-		});
-	}
+  findOneByUrl(url: string) {
+    return this.prismaService.file.findMany({
+      where: {
+        url,
+      },
+    })
+  }
 
-	findOne(id: string) {
-		return this.prismaService.file.findUnique({
-			where: {
-				id,
-			},
-		});
-	}
+  updateOne(id: string, request: UpdateFileDto) {
+    return this.prismaService.file.update({
+      where: {
+        id,
+      },
+      data: request,
+    })
+  }
 
-	findOneByUrl(url: string) {
-		return this.prismaService.file.findMany({
-			where: {
-				url,
-			},
-		});
-	}
-
-	updateOne(id: string, request: UpdateFileDto) {
-		return this.prismaService.file.update({
-			where: {
-				id,
-			},
-			data: request,
-		});
-	}
-
-	deleteOne(id: string) {
-		return this.prismaService.file.delete({
-			where: {
-				id,
-			},
-		});
-	}
+  deleteOne(id: string) {
+    return this.prismaService.file.delete({
+      where: {
+        id,
+      },
+    })
+  }
 }
