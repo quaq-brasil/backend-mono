@@ -16,18 +16,9 @@ const uniqueSlug = require("unique-slug")
 export class PageService {
   private readonly logger = new Logger(PageService.name)
   private readonly MAX_ATTEMPTS = 10
-  private instance: PageService
   private readonly RESERVED_PAGE_SLUGS = ["me", "workspace", "adm", "terms"]
 
   constructor(private prismaService: PrismaService) {}
-
-  getInstance() {
-    if (!this.instance) {
-      this.instance = new PageService(this.prismaService)
-    }
-
-    return this.instance
-  }
 
   async create(createPageDto: CreatePageDto) {
     if (createPageDto.slug) {

@@ -25,7 +25,6 @@ export class TemplateService {
   private readonly logger = new Logger(TemplateService.name)
   private readonly MAX_ATTEMPTS = 10
   private readonly RESERVED_TEMPLATE_SLUGS = []
-  private instance: TemplateService
 
   constructor(
     private prismaService: PrismaService,
@@ -33,18 +32,6 @@ export class TemplateService {
     private variablesService: VariablesService,
     private automationService: AutomationService
   ) {}
-
-  getInstance() {
-    if (!this.instance) {
-      this.instance = new TemplateService(
-        this.prismaService,
-        this.blockService,
-        this.variablesService,
-        this.automationService
-      )
-    }
-    return this.instance
-  }
 
   async createOne(request: CreateTemplateRequest) {
     if (request.slug && request.page_id) {

@@ -19,6 +19,8 @@ async function bootstrap() {
     credentials: true,
   })
 
+  app.useGlobalPipes(new ValidationPipe())
+
   inject()
 
   await app.listen(5000)

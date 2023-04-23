@@ -13,19 +13,11 @@ import { UpdateUserDto } from "./dto/update-user.dto"
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name)
-  private instance: UserService
 
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService
   ) {}
-
-  getInstance() {
-    if (!this.instance) {
-      this.instance = new UserService(this.prismaService, this.jwtService)
-    }
-    return this.instance
-  }
 
   async create() {
     const user = await this.prismaService.user.create({
