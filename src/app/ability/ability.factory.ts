@@ -82,6 +82,7 @@ export class AbilityFactory {
       this.verifyByTemplateAndPageSlug({ user, page_slug, template_slug }),
       this.verifyByPublicationId({ user, publication_id }),
       this.verifyByInteractionId({ user, interaction_id }),
+      this.verifyPublicPages({ user, workspace_id }),
     ])
 
     return build({
@@ -185,6 +186,27 @@ export class AbilityFactory {
 
     if (page) {
       this.can(WorkspaceAction.Manage, "Page")
+    }
+  }
+
+  async verifyPublicPages({
+    user,
+    workspace_id,
+  }: {
+    user: PayloadUser
+    workspace_id: string
+  }) {
+    if (!user || !workspace_id) return
+
+    const publicPages = await this.prismaService.page.findMany({
+      where: {
+        workspace_id,
+        visibility: "public",
+      },
+    })
+
+    if (publicPages.length > 0) {
+      this.can(PagesAction.ReadPublic, "Page")
     }
   }
 
