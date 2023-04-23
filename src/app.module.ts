@@ -1,5 +1,6 @@
-import { Module } from "@nestjs/common"
+import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common"
 import { ConfigModule } from "@nestjs/config"
+import rateLimit from "express-rate-limit"
 import { AbilityModule } from "./app/ability/ability.module"
 import { AuthModule } from "./app/auth/auth.module"
 import { BlockModule } from "./app/block/block.module"
@@ -9,11 +10,11 @@ import { InteractionModule } from "./app/interaction/interaction.module"
 import { PageModule } from "./app/page/page.module"
 import { PublicationModule } from "./app/publication/publication.module"
 import { S3FileUploadModule } from "./app/s3-upload/s3-upload.module"
+import { SitemapModule } from "./app/sitemap/sitemap.module"
 import { TemplateModule } from "./app/template/template.module"
 import { UserModule } from "./app/user/user.module"
 import { VariablesModule } from "./app/variables/variables.module"
 import { WorkspaceModule } from "./app/workspace/workspace.module"
-import { SitemapModule } from './app/sitemap/sitemap.module';
 
 @Module({
   imports: [
@@ -36,4 +37,15 @@ import { SitemapModule } from './app/sitemap/sitemap.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        rateLimit({
+          windowMs: 15 * 60 * 1000, // 15 minutes
+          max: 100, // limit each IP to 100 requests per windowMs
+        })
+      )
+      .forRoutes({ path: "*", method: RequestMethod.ALL })
+  }
+}

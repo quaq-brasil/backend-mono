@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   Post,
   Put,
   Req,
@@ -30,14 +29,10 @@ export class UserController {
     return await this.userService.findOne(req.user.sub)
   }
 
-  // @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   @Put(":user_id")
-  async update(
-    @Param("user_id") user_id: string,
-    @Req() req,
-    @Body() updateUserDto: UpdateUserDto
-  ) {
-    return await this.userService.update(user_id, updateUserDto)
+  async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(req.user.sub, updateUserDto)
   }
 
   @UseGuards(JwtGuard)
