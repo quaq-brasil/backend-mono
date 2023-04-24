@@ -25,7 +25,7 @@ export class InteractionController {
   create(@Req() req, @Body() createInteractionDto: CreateInteractionDto) {
     const token = req?.headers?.authorization
 
-    createInteractionDto.user_id = req.user.id
+    createInteractionDto.user_id = req.user.sub
 
     return this.interactionService.create(createInteractionDto, token)
   }
@@ -40,7 +40,7 @@ export class InteractionController {
   @UseGuards(JwtGuard)
   @Get("user/:user_id")
   findAllByUserId(@Req() req) {
-    return this.interactionService.findAllByUserId(req.user.id)
+    return this.interactionService.findAllByUserId(req.user.sub)
   }
 
   @UseGuards(JwtGuard, AbilitiesGuard)
