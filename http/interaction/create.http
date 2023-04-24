@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:5000/api/v1
-@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2ZmYzc3ZjMxMmE4YzJjZDYyMWFiNTAiLCJ0eXBlIjoicmVnaXN0ZXJlZCIsImVtYWlsIjoiZmVsaXBlLnQudi5kQGdtYWlsLmNvbSIsIm5hbWUiOiJGZWxpcGUiLCJhdmF0YXJfdXJsIjoiaHR0cHM6Ly9xdWFxLWltYWdlLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2Y0ZWE4Y2FhLWQ5NjItNDY1Ni04N2FmLWY1OTY0ZmQ0ZGVjOS1Qcm9maWxlLmpwZyIsImlhdCI6MTY4MDE0MDQ3NywiZXhwIjoxNjgwMjYwNDc3fQ.GAJ9m9W5HJeVmv5asYDSlZ32joIsw5vAQ2N-USvafEU
+@JWTToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDQ0NjI5N2VmMTNlMDljMDA0YmQ1MzgiLCJ0eXBlIjoidmlzaXRhbnQiLCJlbWFpbCI6IiIsIm5hbWUiOiIiLCJhdmF0YXJfdXJsIjoiIiwiaWF0IjoxNjgyMjAzMjg3LCJleHAiOjE2ODIzMjMyODd9.kQAaF1a1F8OY8X7-CF83Rh11ewSdVvkRSb1eB6kfe48
 
 # Create one interaction
 POST {{baseUrl}}/interactions
@@ -9,37 +9,16 @@ Content-Type: application/json
 {
   "blocks": [
     {
-      "id": "1",
-      "type": "text",
-      "data": "digite aqui"
-    },
-    {
-      "id": "2",
-      "type": "text",
-      "data": "<h1>{{input__placeholder}}ok</h1>"
-    },
-    {
-      "id": "3",
-      "type": "textentry",
-      "data": {
-        "type": "email",
-				"value": "dasdasdadadssa"
-      }
+      
     }
   ],
   "data": [
     {
-      "id": "3",
-      "type": "textentry",
-      "data": {
-        "type": "email",
-        "value": "deu certo"
-      }
     }
   ],
   "events": [],
-  "template_id": "63eebb65f5c834d3a9154bc0",
-  "publication_id": "63efbfa074410fc6df8e0d89",
-  "page_id": "63df08bef243bdc4870d6b09",
-  "user_id": "63d26f06ea1e68c873e97ab2"
+  "template_id": "644057a7aa8e86f617a0631e",
+  "publication_id": "644057a6aa8e86f617a0631d",
+  "page_id": "6401193a8952302c1966e4a4",
+  "user_id": "63ffc77f312a8c2cd621ab50"
 }
