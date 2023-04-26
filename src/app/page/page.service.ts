@@ -87,12 +87,12 @@ export class PageService {
     }
   }
 
-  async findAllByWorkspaceId(workspace_id: string, user: any) {
+  async findAllByWorkspaceId(workspace_id: string, user_id: any) {
     try {
       const workspaceMember =
         await this.prismaService.workspaceToUser.findFirst({
           where: {
-            user_id: user.sub,
+            user_id,
             workspace_id: workspace_id,
           },
         })

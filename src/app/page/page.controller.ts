@@ -10,8 +10,6 @@ import {
   UseGuards,
 } from "@nestjs/common"
 
-import { User } from "@prisma/client"
-import { GetUser } from "src/decorators/user.decorator"
 import { CheckAbilities } from "../ability/abilities.decorator"
 import { WorkspaceAction } from "../ability/ability.enums"
 import { JwtGuard } from "../auth/jwt.guard"
@@ -54,9 +52,9 @@ export class PageController {
   @Get("workspace/:workspace_id")
   findAllByWorkspaceId(
     @Param("workspace_id") workspace_id: string,
-    @GetUser() user: User
+    @Req() req
   ) {
-    return this.pageService.findAllByWorkspaceId(workspace_id, user)
+    return this.pageService.findAllByWorkspaceId(workspace_id, req.user.sub)
   }
 
   @UseGuards(JwtGuard, AbilitiesGuard)
