@@ -1,5 +1,5 @@
 
-@baseUrl = http://localhost:5000/api/v1
+@baseUrl = https://api.quaq.me/api/v1
 
 # get a raffle winner
 GET  {{baseUrl}}/raffle

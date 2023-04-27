@@ -35,15 +35,29 @@ export class RaffleService {
 
     const winner = raffleCandidates[randomIndex]
 
-    await this.prismaService.raffle.updateMany({
+    await this.prismaService.raffle.update({
       where: {
-        candidate: true,
+        id: winner.id,
       },
       data: {
+        winner: true,
         candidate: false,
       },
     })
 
-    return winner
+    // await this.prismaService.raffle.updateMany({
+    //   where: {
+    //     candidate: true,
+    //   },
+    //   data: {
+    //     candidate: false,
+    //   },
+    // })
+
+    return {
+      code: winner.code,
+      name: winner.name,
+      email: winner.email,
+    }
   }
 }

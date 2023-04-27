@@ -20,6 +20,7 @@ export class BlockService {
   constructor(private prismaService: PrismaService) {}
 
   async webhookBlockExecution(blocks: WebhookBlock[], data: any[]) {
+    console.log("blocks", blocks)
     if (blocks) {
       try {
         await Promise.all(
@@ -77,12 +78,14 @@ export class BlockService {
     //   api.defaults.headers = headers
     // }
 
-    const body = JSON.parse(block.data.body)
+    const jsonString = "{" + block.data.body + "}"
+
+    const body = JSON.parse(jsonString)
 
     try {
       switch (block.data.type) {
         case "GET":
-          const getResponse = await api.get(url, body)
+          const getResponse = await api.get(url)
 
           webhookData.output.data = getResponse.data
           return webhookData
@@ -100,7 +103,7 @@ export class BlockService {
           return webhookData
 
         case "DELETE":
-          const DeleteResponse = await api.delete(url, body)
+          const DeleteResponse = await api.delete(url)
 
           webhookData.output.data = DeleteResponse.data
           return webhookData
