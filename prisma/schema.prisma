@@ -206,3 +206,16 @@ model WorkspaceToUser {
   workspace    Workspace @relation(fields: [workspace_id], references: [id])
   workspace_id String    @db.ObjectId
 }
+
+// microservices
+
+model Raffle {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  code      Int?     @unique
+  email     String?
+  name      String?
+  candidate Boolean? @default(true)
+  winner    Boolean? @default(false)
+
+  @@map("raffle")
+}

@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:5000/api/v1
+
+
+# create one
+
+POST {{baseUrl}}/raffle
+Content-Type: application/json
+
+{
+    "name": "carlos daniel",
+    "email": "icarlosrigoni@gmail.com"
+}
