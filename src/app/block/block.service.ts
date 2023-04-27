@@ -20,7 +20,6 @@ export class BlockService {
   constructor(private prismaService: PrismaService) {}
 
   async webhookBlockExecution(blocks: WebhookBlock[], data: any[]) {
-    console.log("blocks", blocks)
     if (blocks) {
       try {
         await Promise.all(

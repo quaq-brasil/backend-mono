@@ -185,6 +185,63 @@ export class InteractionService {
       (block) => block?.type !== "webhook"
     )
 
+    // console.log("template", template.publication.blocks)
+
+    console.log("data", data[1])
+
+    if (template.publication.blocks[1]) {
+      function substituirNome(array, name) {
+        array.forEach(function (elemento) {
+          if (elemento.data && elemento.data.text === "sortear") {
+            // Não faz nada quando encontra o botão "sortear"
+          } else if (elemento.data && elemento.data.text) {
+            // Se o elemento tem um campo "data.text", não é um texto formatado e não precisa ser processado
+          } else if (elemento.data) {
+            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
+            const novoTexto = elemento.data.replace(
+              "{{blocks.webhook.data.output.data.name}}",
+              name
+            )
+
+            // const newText = novoTexto.data.replace(
+            //   "{{blocks.webhook.data.output.data.email}}",
+            //   email
+            // )
+            elemento.data = novoTexto
+          }
+        })
+
+        return array
+      }
+
+      function substituirEmail(array, name) {
+        array.forEach(function (elemento) {
+          if (elemento.data && elemento.data.text === "sortear") {
+            // Não faz nada quando encontra o botão "sortear"
+          } else if (elemento.data && elemento.data.text) {
+            // Se o elemento tem um campo "data.text", não é um texto formatado e não precisa ser processado
+          } else if (elemento.data) {
+            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
+            const novoTexto = elemento.data.replace(
+              "{{blocks.webhook.data.output.data.email}}",
+              name
+            )
+
+            // const newText = novoTexto.data.replace(
+            //   "{{blocks.webhook.data.output.data.email}}",
+            //   email
+            // )
+            elemento.data = novoTexto
+          }
+        })
+
+        return array
+      }
+
+      substituirNome(template.publication.blocks, data[1].output.data.name)
+      substituirEmail(template.publication.blocks, data[1].output.data.email)
+    }
+
     return template
   }
 }
