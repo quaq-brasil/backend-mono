@@ -185,8 +185,6 @@ export class InteractionService {
       (block) => block?.type !== "webhook"
     )
 
-    console.log("blocks", template?.publication?.blocks)
-
     if (
       template?.publication?.blocks &&
       template?.publication?.blocks.length > 2 &&

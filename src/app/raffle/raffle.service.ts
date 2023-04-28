@@ -18,11 +18,13 @@ export class RaffleService {
 
     const api = axios.create({})
 
-    api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
-      code: raffle.code,
-      name: raffle.name,
-      email: raffle.email,
+    const test = await api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
+      code: code,
+      name: createRaffleDto.name,
+      email: createRaffleDto.email,
     })
+
+    console.log("test", test)
 
     return raffle
   }
@@ -56,7 +58,7 @@ export class RaffleService {
 
     const api = axios.create({})
 
-    api.post("https://eoo78tlwpu8g9bd.m.pipedream.net/", {
+    await api.post("https://eoo78tlwpu8g9bd.m.pipedream.net/", {
       code: winner.code,
       name: winner.name,
       email: winner.email,
