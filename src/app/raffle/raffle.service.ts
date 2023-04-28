@@ -18,13 +18,11 @@ export class RaffleService {
 
     const api = axios.create({})
 
-    const test = await api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
+    await api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
       code: code,
       name: createRaffleDto.name,
       email: createRaffleDto.email,
     })
-
-    console.log("test", test)
 
     return raffle
   }
