@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from "@nestjs/common"
+import axios from "axios"
 import { PrismaService } from "src/prisma.service"
 import { CreateRaffleDto } from "./dto/create-raffle.dto"
 @Injectable()
@@ -13,6 +14,14 @@ export class RaffleService {
         ...createRaffleDto,
         code,
       },
+    })
+
+    const api = axios.create({})
+
+    api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
+      code: raffle.code,
+      name: raffle.name,
+      email: raffle.email,
     })
 
     return raffle
@@ -43,6 +52,14 @@ export class RaffleService {
         winner: true,
         candidate: false,
       },
+    })
+
+    const api = axios.create({})
+
+    api.post("https://eoo78tlwpu8g9bd.m.pipedream.net/", {
+      code: winner.code,
+      name: winner.name,
+      email: winner.email,
     })
 
     // await this.prismaService.raffle.updateMany({

@@ -185,18 +185,20 @@ export class InteractionService {
       (block) => block?.type !== "webhook"
     )
 
-    // console.log("template", template.publication.blocks)
+    console.log("blocks", template?.publication?.blocks)
 
-    console.log("data", data[1])
-
-    if (template.publication.blocks[1]) {
+    if (
+      template?.publication?.blocks &&
+      template?.publication?.blocks.length > 2 &&
+      template?.publication?.blocks[2] &&
+      template?.publication?.blocks[2].type === "text" &&
+      template?.publication?.blocks[2]?.data?.includes(
+        "{{blocks.webhook.data.output.data.name}}"
+      )
+    ) {
       function substituirNome(array, name) {
         array.forEach(function (elemento) {
-          if (elemento.data && elemento.data.text === "sortear") {
-            // Não faz nada quando encontra o botão "sortear"
-          } else if (elemento.data && elemento.data.text) {
-            // Se o elemento tem um campo "data.text", não é um texto formatado e não precisa ser processado
-          } else if (elemento.data) {
+          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
             // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
             const novoTexto = elemento.data.replace(
               "{{blocks.webhook.data.output.data.name}}",
@@ -214,14 +216,29 @@ export class InteractionService {
         return array
       }
 
+      function substituirCode(array, name) {
+        array.forEach(function (elemento) {
+          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
+            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
+            const novoTexto = elemento.data.replace(
+              "{{blocks.webhook.data.output.data.code}}",
+              name
+            )
+
+            // const newText = novoTexto.data.replace(
+            //   "{{blocks.webhook.data.output.data.email}}",
+            //   email
+            // )
+            elemento.data = novoTexto
+          }
+        })
+
+        return array
+      }
+
       function substituirEmail(array, name) {
         array.forEach(function (elemento) {
-          if (elemento.data && elemento.data.text === "sortear") {
-            // Não faz nada quando encontra o botão "sortear"
-          } else if (elemento.data && elemento.data.text) {
-            // Se o elemento tem um campo "data.text", não é um texto formatado e não precisa ser processado
-          } else if (elemento.data) {
-            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
+          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
             const novoTexto = elemento.data.replace(
               "{{blocks.webhook.data.output.data.email}}",
               name
@@ -238,8 +255,9 @@ export class InteractionService {
         return array
       }
 
-      substituirNome(template.publication.blocks, data[1].output.data.name)
-      substituirEmail(template.publication.blocks, data[1].output.data.email)
+      substituirNome(template.publication.blocks, data[2].output.data.name)
+      substituirEmail(template.publication.blocks, data[2].output.data.email)
+      substituirCode(template.publication.blocks, data[2].output.data.code)
     }
 
     return template
