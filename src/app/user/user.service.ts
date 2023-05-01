@@ -21,7 +21,9 @@ export class UserService {
 
   async create() {
     const user = await this.prismaService.user.create({
-      data: {},
+      data: {
+        name: `User ${Math.floor(Math.random() * 10000)}`,
+      },
     })
 
     delete user.password
@@ -30,7 +32,7 @@ export class UserService {
       sub: user.id,
       type: user.type,
       email: "",
-      name: "",
+      name: user.name,
       avatar_url: "",
     }
 
