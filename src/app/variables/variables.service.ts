@@ -69,6 +69,11 @@ export class VariablesService {
       last_interaction_at: "string",
       first_interaction_at: "string",
     },
+    dropdownmenu: {
+      displayed_at: "string",
+      last_interaction_at: "string",
+      first_interaction_at: "string",
+    },
   }
 
   async findPanelVariables(
@@ -230,10 +235,9 @@ export class VariablesService {
         }
         break
 
-      case "pool":
+      case "dropdownmenu":
         variables.data = {
-          selected_options: "string list",
-          number_of_selections: "number",
+          selected_option: "string",
         }
         break
 
