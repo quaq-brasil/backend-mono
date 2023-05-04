@@ -150,6 +150,9 @@ export class TemplateService {
       where: {
         page_id,
       },
+      orderBy: {
+        index: "asc",
+      },
     })
   }
 

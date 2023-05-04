@@ -110,6 +110,7 @@ model Template {
   id                         String   @id @default(auto()) @map("_id") @db.ObjectId
   title                      String
   slug                       String
+  index                      Int?
   shortcut_image             String
   shortcut_size              String   @default("small")
   visibility                 String?  @default("public")

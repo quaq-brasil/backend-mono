@@ -76,6 +76,14 @@ export class PageService {
         },
       })
 
+      page.templates = page.templates.sort((a, b) => {
+        const indexA =
+          a.index === undefined || a.index === null ? Infinity : a.index
+        const indexB =
+          b.index === undefined || b.index === null ? Infinity : b.index
+        return indexA - indexB
+      })
+
       if (page?.visibility === "workspace") {
         await this.handleVisibilityAccess(page.id, token)
       }
