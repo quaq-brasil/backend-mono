@@ -74,6 +74,10 @@ export class VariablesService {
       last_interaction_at: "string",
       first_interaction_at: "string",
     },
+    whatsapp: {
+      phone_number: "string",
+      data: "string",
+    },
   }
 
   async findPanelVariables(
@@ -277,6 +281,12 @@ export class VariablesService {
           description: "string",
           off_label: "string",
           on_label: "string",
+        }
+        break
+      case "whatsapp":
+        variables.data = {
+          phone_number: "string",
+          data: "string",
         }
         break
 
