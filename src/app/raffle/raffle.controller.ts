@@ -15,4 +15,9 @@ export class RaffleController {
   drawAWinner() {
     return this.raffleService.drawAWinner()
   }
+
+  @Get("winners")
+  getWinners() {
+    return this.raffleService.getWinners()
+  }
 }

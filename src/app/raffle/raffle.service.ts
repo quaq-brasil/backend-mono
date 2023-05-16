@@ -18,10 +18,17 @@ export class RaffleService {
 
     const api = axios.create({})
 
-    await api.post("https://eo6j2du0goe7ubq.m.pipedream.net/", {
-      code: code,
-      name: createRaffleDto.name,
-      email: createRaffleDto.email,
+    await api.post("https://mail.quaq.me/api/v1/send-email", {
+      to: createRaffleDto.email,
+      subject: "Raffle subscription successful",
+      text: `Your code is ${code}`,
+      html: `
+      <h1>Raffle subscription successful ${createRaffleDto.name}</h1>
+      <p>Thank you for subscribing to the raffle</p>
+      <p>Your code is ${code}</p>`,
+      // code: code,
+      // name: createRaffleDto.name,
+      // email: createRaffleDto.email,
     })
 
     return raffle
@@ -54,14 +61,6 @@ export class RaffleService {
       },
     })
 
-    const api = axios.create({})
-
-    await api.post("https://eoo78tlwpu8g9bd.m.pipedream.net/", {
-      code: winner.code,
-      name: winner.name,
-      email: winner.email,
-    })
-
     // await this.prismaService.raffle.updateMany({
     //   where: {
     //     candidate: true,
@@ -76,5 +75,15 @@ export class RaffleService {
       name: winner.name,
       email: winner.email,
     }
+  }
+
+  async getWinners() {
+    const winners = await this.prismaService.raffle.findMany({
+      where: {
+        winner: true,
+      },
+    })
+
+    return winners
   }
 }
