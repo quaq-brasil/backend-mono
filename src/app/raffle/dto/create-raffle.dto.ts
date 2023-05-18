@@ -7,4 +7,8 @@ export class CreateRaffleDto {
   @IsString()
   @IsOptional()
   name: string
+
+  team: string
+
+  user_consent: boolean
 }

@@ -7,31 +7,52 @@ export class RaffleService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createRaffleDto: CreateRaffleDto) {
-    const code = Math.floor(Math.random() * 1000000)
+    try {
+      const code = Math.floor(Math.random() * 1000000)
 
-    const raffle = await this.prismaService.raffle.create({
-      data: {
-        ...createRaffleDto,
-        code,
-      },
-    })
+      const raffle = await this.prismaService.raffle.create({
+        data: {
+          ...createRaffleDto,
+          user_consent: true,
+          code,
+        },
+      })
 
-    const api = axios.create({})
+      const api = axios.create({})
 
-    await api.post("https://mail.quaq.me/api/v1/send-email", {
-      to: createRaffleDto.email,
-      subject: "Raffle subscription successful",
-      text: `Your code is ${code}`,
-      html: `
-      <h1>Raffle subscription successful ${createRaffleDto.name}</h1>
-      <p>Thank you for subscribing to the raffle</p>
-      <p>Your code is ${code}</p>`,
-      // code: code,
-      // name: createRaffleDto.name,
-      // email: createRaffleDto.email,
-    })
+      await api.post("http://localhost:5001/api/v1/send-email", {
+        sender: {
+          name: "quaq",
+          email: "hello@quaq.me",
+        },
+        to: [
+          {
+            name: raffle.name,
+            email: raffle.email,
+          },
+        ],
+        subject: "אתה בתוך! הנה מזהה הייחודי שלך למשיכת הנסיעה לספרד.",
+        html: `<p>יקירי ${raffle.name},</p>      <p>מזל טוב! אתה רשמית משתתף בהגרלה שלנו לנסיעה לספרד. המספר הזיהוי הייחודי שלך הוא ${raffle.code}. שמור על מספר זה בבטחה, מאחר שהוא יהיה הכרטיס שלך לקבלת הפרס אם תבחר כזוכה.  </p>  <p>בעודך מחכה לראות אם אתה הזוכה המאושר, למה לא ללמוד יותר על הקבוצות המרגשות של לה ליגה? בדוק את מגזין "ברוכים הבאים ללה ליגה" שלנו עבור מידע פרטני ובלעדי.  </p>  <p>    תודה שהשתתפת בהגרלה שלנו. אנחנו לא יכולים לחכות לראות מי ינצח ויחווה את הרגש של התרבות הספרדית וכדורגל מקרוב.  </p><p><a href="https://quaq-image.s3.sa-east-1.amazonaws.com/laliga+magazine.pdf">לחץ כאן לגישה</a></p>`,
+      })
 
-    return raffle
+      await api.post("http://localhost:5002/api/v1", {
+        spreadsheetId: "1mW3wY0CNacTI6A8VVAXizHwNQihy2qr7T2unBp3QaMY",
+        range: "Sheet1!A1:E2",
+        values: [
+          [
+            raffle.name,
+            raffle.email,
+            raffle.code,
+            createRaffleDto.team,
+            createRaffleDto.user_consent,
+          ],
+        ],
+      })
+
+      return raffle
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async drawAWinner() {

@@ -283,6 +283,11 @@ export class VariablesService {
           on_label: "string",
         }
         break
+      case "checkbox_raffle":
+        variables.data = {
+          current_state: "boolean",
+        }
+        break
       case "whatsapp":
         variables.data = {
           phone_number: "string",

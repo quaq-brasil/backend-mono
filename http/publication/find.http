@@ -1,4 +1,4 @@
 @baseUrl = https://api.quaq.me
 
 # Find one publication by publication id
-GET  {{baseUrl}}/api/v1/publications/63eebb65f5c834d3a9154bbf
+GET  {{baseUrl}}/api/v1/publications/6464e1009afc6646c32f3f83

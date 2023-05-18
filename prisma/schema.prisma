@@ -211,12 +211,14 @@ model WorkspaceToUser {
 // microservices
 
 model Raffle {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  code      Int?     @unique
-  email     String?
-  name      String?
-  candidate Boolean? @default(true)
-  winner    Boolean? @default(false)
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  code         Int?     @unique
+  team         String?
+  user_consent Boolean? @default(true)
+  email        String?
+  name         String?
+  candidate    Boolean? @default(true)
+  winner       Boolean? @default(false)
 
   @@map("raffle")
 }
