@@ -20,7 +20,7 @@ export class RaffleService {
 
       const api = axios.create({})
 
-      await api.post("http://localhost:5001/api/v1/send-email", {
+      await api.post("https://mail.quaq.me/api/v1/send-email", {
         sender: {
           name: "quaq",
           email: "hello@quaq.me",
@@ -35,7 +35,7 @@ export class RaffleService {
         html: `<p>יקירי ${raffle.name},</p>      <p>מזל טוב! אתה רשמית משתתף בהגרלה שלנו לנסיעה לספרד. המספר הזיהוי הייחודי שלך הוא ${raffle.code}. שמור על מספר זה בבטחה, מאחר שהוא יהיה הכרטיס שלך לקבלת הפרס אם תבחר כזוכה.  </p>  <p>בעודך מחכה לראות אם אתה הזוכה המאושר, למה לא ללמוד יותר על הקבוצות המרגשות של לה ליגה? בדוק את מגזין "ברוכים הבאים ללה ליגה" שלנו עבור מידע פרטני ובלעדי.  </p>  <p>    תודה שהשתתפת בהגרלה שלנו. אנחנו לא יכולים לחכות לראות מי ינצח ויחווה את הרגש של התרבות הספרדית וכדורגל מקרוב.  </p><p><a href="https://quaq-image.s3.sa-east-1.amazonaws.com/laliga+magazine.pdf">לחץ כאן לגישה</a></p>`,
       })
 
-      await api.post("http://localhost:5002/api/v1", {
+      await api.post("https://gsheets.quaq.me/api/v1", {
         spreadsheetId: "1mW3wY0CNacTI6A8VVAXizHwNQihy2qr7T2unBp3QaMY",
         range: "Sheet1!A1:E2",
         values: [
