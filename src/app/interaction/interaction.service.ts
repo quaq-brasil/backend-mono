@@ -185,78 +185,38 @@ export class InteractionService {
       (block) => block?.type !== "webhook"
     )
 
-    if (
-      template?.publication?.blocks &&
-      template?.publication?.blocks.length > 2 &&
-      template?.publication?.blocks[2] &&
-      template?.publication?.blocks[2].type === "text" &&
-      template?.publication?.blocks[2]?.data?.includes(
-        "{{blocks.webhook.data.output.data.name}}"
-      )
-    ) {
-      function substituirNome(array, name) {
-        array.forEach(function (elemento) {
-          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
-            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
-            const novoTexto = elemento.data.replace(
-              "{{blocks.webhook.data.output.data.name}}",
-              name
-            )
+    return this.raffleCreateFunction({ template, data })
 
-            // const newText = novoTexto.data.replace(
-            //   "{{blocks.webhook.data.output.data.email}}",
-            //   email
-            // )
-            elemento.data = novoTexto
-          }
-        })
+    // return template
+  }
 
-        return array
+  raffleCreateFunction({ template, data }: { template: any; data: any }) {
+    let isAlreadyParticipating = false
+    let participatingData = null
+
+    data.forEach((d) => {
+      if (d?.config?.id === "07f82cc5-a513-4065-b48f-6ff426878033") {
+        if (d.output.data?.message) {
+          isAlreadyParticipating = true
+        }
+        participatingData = d.output.data
+      }
+    })
+
+    const newBlocks = template.publication.blocks.map((block) => {
+      if (block.id === "2a5f9b6b-c418-4b7d-900e-7089339bfd56") {
+        return {
+          ...block,
+          data: isAlreadyParticipating
+            ? `<h3>תודה שנרשמת שוב, כבר רשמנו את ההרשמה הראשונה שלך, המספר שלך להגרלה נשאר אותו הדבר.</h3><p>${participatingData.code}</p>`
+            : "<h3>ברוכים הבאים לסירה! נשלח לכם מייל עם המספר המזל שלכם בעוד כמה דקות.</h3>",
+        }
       }
 
-      function substituirCode(array, name) {
-        array.forEach(function (elemento) {
-          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
-            // Se o elemento tem um campo "data", é um texto formatado e precisa ser processado
-            const novoTexto = elemento.data.replace(
-              "{{blocks.webhook.data.output.data.code}}",
-              name
-            )
+      return block
+    })
 
-            // const newText = novoTexto.data.replace(
-            //   "{{blocks.webhook.data.output.data.email}}",
-            //   email
-            // )
-            elemento.data = novoTexto
-          }
-        })
-
-        return array
-      }
-
-      function substituirEmail(array, name) {
-        array.forEach(function (elemento) {
-          if (elemento.id === "093f19e2-63af-402f-98bd-45cda07abaa8") {
-            const novoTexto = elemento.data.replace(
-              "{{blocks.webhook.data.output.data.email}}",
-              name
-            )
-
-            // const newText = novoTexto.data.replace(
-            //   "{{blocks.webhook.data.output.data.email}}",
-            //   email
-            // )
-            elemento.data = novoTexto
-          }
-        })
-
-        return array
-      }
-
-      substituirNome(template.publication.blocks, data[2].output.data.name)
-      substituirEmail(template.publication.blocks, data[2].output.data.email)
-      substituirCode(template.publication.blocks, data[2].output.data.code)
-    }
+    template.publication.blocks = newBlocks
 
     return template
   }

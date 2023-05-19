@@ -8,6 +8,19 @@ export class RaffleService {
 
   async create(createRaffleDto: CreateRaffleDto) {
     try {
+      const raffleCandidates = await this.prismaService.raffle.findMany({
+        where: {
+          email: createRaffleDto.email,
+        },
+      })
+
+      if (raffleCandidates.length > 0) {
+        return {
+          message: "You have already participated in the raffle",
+          ...raffleCandidates[0],
+        }
+      }
+
       const code = Math.floor(Math.random() * 1000000)
 
       const raffle = await this.prismaService.raffle.create({
