@@ -162,54 +162,49 @@ export class InteractionService {
         !webhookAlreadyDone.events.includes(block.id)
     )
 
-    const data = await this.blockService.webhookBlockExecution(
-      webhooks,
-      updateInteractionDto.data
-    )
+    this.blockService.webhookBlockExecution(webhooks, updateInteractionDto.data)
 
-    if (data) {
-      updateInteractionDto.data = data
-    }
+    // if (data) {
+    //   updateInteractionDto.data = data
+    // }
 
-    await this.prismaService.interaction.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateInteractionDto,
-        events: [webhooks.map((webhook) => webhook.id)],
-      },
-    })
+    // await this.prismaService.interaction.update({
+    //   where: {
+    //     id,
+    //   },
+    //   data: {
+    //     ...updateInteractionDto,
+    //     events: [webhooks.map((webhook) => webhook.id)],
+    //   },
+    // })
 
     template.Publications[0].blocks = template.Publications[0].blocks.filter(
       (block) => block?.type !== "webhook"
     )
 
-    return this.raffleCreateFunction({ template, data })
+    return this.raffleCreateFunction({ template })
 
     // return template
   }
 
-  raffleCreateFunction({ template, data }: { template: any; data: any }) {
-    let isAlreadyParticipating = false
-    let participatingData = null
+  raffleCreateFunction({ template }: { template: any }) {
+    // let isAlreadyParticipating = false
+    // let participatingData = null
 
-    data.forEach((d) => {
-      if (d?.config?.id === "07f82cc5-a513-4065-b48f-6ff426878033") {
-        if (d.output.data?.message) {
-          isAlreadyParticipating = true
-        }
-        participatingData = d.output.data
-      }
-    })
+    // data.forEach((d) => {
+    //   if (d?.config?.id === "07f82cc5-a513-4065-b48f-6ff426878033") {
+    //     if (d.output.data?.message) {
+    //       isAlreadyParticipating = true
+    //     }
+    //     participatingData = d.output.data
+    //   }
+    // })
 
     const newBlocks = template.publication.blocks.map((block) => {
       if (block.id === "2a5f9b6b-c418-4b7d-900e-7089339bfd56") {
         return {
           ...block,
-          data: isAlreadyParticipating
-            ? `<h3>תודה שנרשמת שוב, כבר רשמנו את ההרשמה הראשונה שלך, המספר שלך להגרלה נשאר אותו הדבר.</h3><p>${participatingData.code}</p>`
-            : "<h3>ברוכים הבאים לסירה! נשלח לכם מייל עם המספר המזל שלכם בעוד כמה דקות.</h3>",
+          data: "<h3>.ברוכים הבאים לסירה! נשלח לכם מייל עם המספר המזל שלכם בעוד כמה דקות</h3>",
         }
       }
 

@@ -36,7 +36,7 @@ export class RaffleService {
       await api.post("https://mail.quaq.me/api/v1/send-email", {
         sender: {
           name: "quaq",
-          email: "hello@quaq.me",
+          email: "laliga@quaq.me",
         },
         to: [
           {
