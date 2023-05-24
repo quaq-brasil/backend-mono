@@ -1,8 +1,7 @@
 {
   "regions": ["gru1"],
   "version": 2,
-  "outputDirectory": "dist",
-  "buildCommand": "npx prisma generate && npm run build",
+
   "builds": [
     {
       "src": "src/main.ts",
