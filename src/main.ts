@@ -21,6 +21,6 @@ async function bootstrap() {
 
   inject()
 
-  await app.listen(5000)
+  await app.listen(process.env.PORT || 8080)
 }
 bootstrap()

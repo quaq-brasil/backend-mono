@@ -1,0 +1,11 @@
+runtime: nodejs18
+instance_class: F4
+env_variables:
+  DATABASE_URL: "mongodb+srv://quaq:bILOEQ73vWnm2VyI@cluster0.rq41f.mongodb.net/templates?retryWrites=true&w=majority"
+  JWT_SECRET_KEY: "WpcZ+Ixhr1epeCF6mPE8pUtIE//VehXH/xp22T+PcJE="
+  AWS_REGION: "sa-east-1"
+  AWS_ACCESS_KEY_ID: "AKIAQQ7NXKUXTPZLZPZZ"
+  AWS_SECRET_ACCESS_KEY: "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"
+  AWS_BUCKET_NAME: "quaq-image"
+  SECRET: "Az%OxA&qDiR7XlNHqSpWICdeWC4wN2#AVOT$IeD!JrzttfFlHU1gGX5Pz35Y"
+  EXPIRES_IN: "120000s"
