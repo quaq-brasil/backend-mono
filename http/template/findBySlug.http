@@ -1,5 +1,5 @@
 # @baseUrl = http://localhost:5000/api/v1
-@baseUrl = https://api.quaq.me/api/v1
+@baseUrl = https://https://backend-o6mqvdkr2-helloquaq.vercel.app/api/v1
 
 # Find one template by template slug
 GET {{baseUrl}}/templates/laliga/win-a-trip-to-spain
